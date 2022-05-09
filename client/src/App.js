@@ -20,6 +20,10 @@ function App() {
         const caver = new Caver(window.klaytn);
         const balance = await caver.klay.getBalance(account);
         console.log(balance);
+
+        // emit 이벤트
+        // 두번째 인자값에 캐릭터 이미지 파일 이름이 들어가면된다.
+        game.events.emit("start", "dragon");
       } catch (err) {
         console.log(err);
       }

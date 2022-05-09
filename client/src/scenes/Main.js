@@ -7,8 +7,20 @@ export default class Main extends Phaser.Scene {
     this.kingOverlapped = false;
   }
 
+  init(data) {
+    this.characterName = data.characterName;
+    this.king = data.king;
+    this.wallslayer = data.wallslayer;
+    console.log(data);
+  }
+
   preload() {
     this.cursors = this.input.keyboard.createCursorKeys();
+
+    this.load.spritesheet("player", `assets/${this.characterName}.png`, {
+      frameWidth: 16,
+      frameHeight: 32,
+    });
   }
 
   createAnims() {
@@ -41,17 +53,16 @@ export default class Main extends Phaser.Scene {
     const tileset = map.addTilesetImage("dungeon", "tiles");
 
     map.createLayer("Grounds", tileset);
-    const wallslayer = map.createLayer("Walls", tileset);
+    this.wallslayer = map.createLayer("Walls", tileset);
 
-    wallslayer.setCollisionByProperty({ collides: true });
+    this.wallslayer.setCollisionByProperty({ collides: true });
 
     const debugGraphics = this.add.graphics().setAlpha(0.7);
-    wallslayer.renderDebug(debugGraphics, {
+    this.wallslayer.renderDebug(debugGraphics, {
       tileColor: null,
       collidingTileColor: new Phaser.Display.Color(243, 234, 48, 255),
       faceColor: new Phaser.Display.Color(40, 39, 37, 255),
     });
-
     // 캐릭터 생성
     this.player = this.physics.add.sprite(
       100,
@@ -78,7 +89,7 @@ export default class Main extends Phaser.Scene {
     });
 
     // 캐릭터와 벽 Collider
-    this.physics.add.collider(this.player, wallslayer);
+    this.physics.add.collider(this.player, this.wallslayer);
 
     // 카메라 세팅
     this.cameras.main.setBounds(0, 0, window.innerWidth, window.innerHeight);
