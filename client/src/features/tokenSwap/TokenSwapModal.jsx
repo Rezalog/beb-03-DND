@@ -73,53 +73,64 @@ const TokenSwapModal = () => {
   return (
     <div
       style={{
-        width: "300px",
-        height: "300px",
-        backgroundColor: "black",
-        zIndex: 10,
-        color: "white",
+        position: "relative",
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      Token Swap Coming Soon!!!
-      <button
-        onClick={() => {
-          dispatch(closeTokenSwapModal());
-          dispatch(clearState());
+      <div
+        style={{
+          position: "absolute",
+          width: "300px",
+          height: "300px",
+          backgroundColor: "black",
+          zIndex: 10,
+          color: "white",
         }}
       >
-        X
-      </button>
-      <button onClick={connectToWallet}>잔액조회</button>
-      <input placeholder='0.0' ref={token0InputRef} />
-      <button
-        onClick={() => {
-          dispatch(openSubModal());
-          setSelectedToken(0);
-        }}
-      >
-        {tokens[token0].symbol}
-      </button>
-      <p>
-        잔액: {Number(balance).toFixed(2)} {tokens[token0].symbol}
-        <button onClick={inputMaxToken}>Max</button>
-      </p>
-      <input placeholder='0.0' />
-      <button
-        onClick={() => {
-          dispatch(openSubModal());
-          setSelectedToken(1);
-        }}
-      >
-        {token1 < 0 ? "토큰선택" : tokens[token1].symbol}
-      </button>
-      <p>
-        잔액:{" "}
-        {token1 < 0
-          ? "0.0"
-          : `${Number(balance1).toFixed(2)} ${tokens[token1].symbol}`}
-      </p>
-      <button>교환</button>
-      {isSubModalOpen && <SubModal selectedToken={selectedToken} />}
+        Token Swap Coming Soon!!!
+        <button
+          onClick={() => {
+            dispatch(closeTokenSwapModal());
+            dispatch(clearState());
+          }}
+        >
+          X
+        </button>
+        <button onClick={connectToWallet}>잔액조회</button>
+        <input placeholder='0.0' ref={token0InputRef} />
+        <button
+          onClick={() => {
+            dispatch(openSubModal());
+            setSelectedToken(0);
+          }}
+        >
+          {tokens[token0].symbol}
+        </button>
+        <p>
+          잔액: {Number(balance).toFixed(2)} {tokens[token0].symbol}
+          <button onClick={inputMaxToken}>Max</button>
+        </p>
+        <input placeholder='0.0' disabled />
+        <button
+          onClick={() => {
+            dispatch(openSubModal());
+            setSelectedToken(1);
+          }}
+        >
+          {token1 < 0 ? "토큰선택" : tokens[token1].symbol}
+        </button>
+        <p>
+          잔액:{" "}
+          {token1 < 0
+            ? "0.0"
+            : `${Number(balance1).toFixed(2)} ${tokens[token1].symbol}`}
+        </p>
+        <button>교환</button>
+        {isSubModalOpen && <SubModal selectedToken={selectedToken} />}
+      </div>
     </div>
   );
 };
