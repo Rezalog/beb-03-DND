@@ -1,0 +1,374 @@
+{
+  "contractName": "HelloWorld",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "hello",
+      "outputs": [
+        {
+          "name": "greeting",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.6+commit.b259423e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[],\"name\":\"hello\",\"outputs\":[{\"name\":\"greeting\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/baekdonghyun/Desktop/beb-03-DND/contract/contracts/HelloWorld.sol\":\"HelloWorld\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/baekdonghyun/Desktop/beb-03-DND/contract/contracts/HelloWorld.sol\":{\"keccak256\":\"0x95801e85a584c557415f132b649bc1865135f8e319d42e5456682fb75d1a2c16\",\"urls\":[\"bzzr://87817ac4ce346af858fcbcd01f329cdf1969f8825af29a9b770e1013ec72ece1\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50610114806100206000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c806319ff1d2114602d575b600080fd5b603360ab565b6040518080602001828103825283818151815260200191508051906020019080838360005b8381101560715780820151818401526020810190506058565b50505050905090810190601f168015609d5780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b60606040518060400160405280601f81526020017fec9588eb8595ed9598ec84b8ec9a9420ec9588eb8595ed9598ec84b8ec9a940081525090509056fea165627a7a723058205c2b1b69529e8a3e6b0985a1fa01d9ca4bf35cfe8e9a6129c80bc3be498250680029",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060285760003560e01c806319ff1d2114602d575b600080fd5b603360ab565b6040518080602001828103825283818151815260200191508051906020019080838360005b8381101560715780820151818401526020810190506058565b50505050905090810190601f168015609d5780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b60606040518060400160405280601f81526020017fec9588eb8595ed9598ec84b8ec9a9420ec9588eb8595ed9598ec84b8ec9a940081525090509056fea165627a7a723058205c2b1b69529e8a3e6b0985a1fa01d9ca4bf35cfe8e9a6129c80bc3be498250680029",
+  "sourceMap": "24:145:0:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;24:145:0;;;;;;;",
+  "deployedSourceMap": "24:145:0:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;24:145:0;;;;;;;;;;;;;;;;;;;50:117;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:10;8:100;;;99:1;94:3;90:11;84:18;80:1;75:3;71:11;64:39;52:2;49:1;45:10;40:15;;8:100;;;12:14;50:117:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;89:22;117:44;;;;;;;;;;;;;;;;;;;50:117;:::o",
+  "source": "pragma solidity 0.5.6;\n\ncontract HelloWorld {\n    function hello () public pure returns (string memory greeting){\n\t\t\tgreeting = \"안녕하세요 안녕하세요\"; \n\t\t}\n} ",
+  "sourcePath": "/Users/baekdonghyun/Desktop/beb-03-DND/contract/contracts/HelloWorld.sol",
+  "ast": {
+    "absolutePath": "/Users/baekdonghyun/Desktop/beb-03-DND/contract/contracts/HelloWorld.sol",
+    "exportedSymbols": {
+      "HelloWorld": [
+        12
+      ]
+    },
+    "id": 13,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1,
+        "literals": [
+          "solidity",
+          "0.5",
+          ".6"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:22:0"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 12,
+        "linearizedBaseContracts": [
+          12
+        ],
+        "name": "HelloWorld",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 10,
+              "nodeType": "Block",
+              "src": "112:55:0",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 8,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 6,
+                      "name": "greeting",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4,
+                      "src": "117:8:0",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_string_memory_ptr",
+                        "typeString": "string memory"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "hexValue": "ec9588eb8595ed9598ec84b8ec9a9420ec9588eb8595ed9598ec84b8ec9a94",
+                      "id": 7,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "string",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "128:33:0",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_stringliteral_951fad0f4287a60199728d96ea9accb08391257f8bd86227fc26324c54193855",
+                        "typeString": "literal_string \"안녕하세요 안녕하세요\""
+                      },
+                      "value": "안녕하세요 안녕하세요"
+                    },
+                    "src": "117:44:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_memory_ptr",
+                      "typeString": "string memory"
+                    }
+                  },
+                  "id": 9,
+                  "nodeType": "ExpressionStatement",
+                  "src": "117:44:0"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 11,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "hello",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "65:2:0"
+            },
+            "returnParameters": {
+              "id": 5,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4,
+                  "name": "greeting",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 11,
+                  "src": "89:22:0",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 3,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "89:6:0",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "88:24:0"
+            },
+            "scope": 12,
+            "src": "50:117:0",
+            "stateMutability": "pure",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 13,
+        "src": "24:145:0"
+      }
+    ],
+    "src": "0:170:0"
+  },
+  "legacyAST": {
+    "attributes": {
+      "absolutePath": "/Users/baekdonghyun/Desktop/beb-03-DND/contract/contracts/HelloWorld.sol",
+      "exportedSymbols": {
+        "HelloWorld": [
+          12
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "0.5",
+            ".6"
+          ]
+        },
+        "id": 1,
+        "name": "PragmaDirective",
+        "src": "0:22:0"
+      },
+      {
+        "attributes": {
+          "baseContracts": [
+            null
+          ],
+          "contractDependencies": [
+            null
+          ],
+          "contractKind": "contract",
+          "documentation": null,
+          "fullyImplemented": true,
+          "linearizedBaseContracts": [
+            12
+          ],
+          "name": "HelloWorld",
+          "scope": 13
+        },
+        "children": [
+          {
+            "attributes": {
+              "documentation": null,
+              "implemented": true,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "hello",
+              "scope": 12,
+              "stateMutability": "pure",
+              "superFunction": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 2,
+                "name": "ParameterList",
+                "src": "65:2:0"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "greeting",
+                      "scope": 11,
+                      "stateVariable": false,
+                      "storageLocation": "memory",
+                      "type": "string",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "string",
+                          "type": "string"
+                        },
+                        "id": 3,
+                        "name": "ElementaryTypeName",
+                        "src": "89:6:0"
+                      }
+                    ],
+                    "id": 4,
+                    "name": "VariableDeclaration",
+                    "src": "89:22:0"
+                  }
+                ],
+                "id": 5,
+                "name": "ParameterList",
+                "src": "88:24:0"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "=",
+                          "type": "string memory"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 4,
+                              "type": "string memory",
+                              "value": "greeting"
+                            },
+                            "id": 6,
+                            "name": "Identifier",
+                            "src": "117:8:0"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "hexvalue": "ec9588eb8595ed9598ec84b8ec9a9420ec9588eb8595ed9598ec84b8ec9a94",
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "lValueRequested": false,
+                              "subdenomination": null,
+                              "token": "string",
+                              "type": "literal_string \"안녕하세요 안녕하세요\"",
+                              "value": "안녕하세요 안녕하세요"
+                            },
+                            "id": 7,
+                            "name": "Literal",
+                            "src": "128:33:0"
+                          }
+                        ],
+                        "id": 8,
+                        "name": "Assignment",
+                        "src": "117:44:0"
+                      }
+                    ],
+                    "id": 9,
+                    "name": "ExpressionStatement",
+                    "src": "117:44:0"
+                  }
+                ],
+                "id": 10,
+                "name": "Block",
+                "src": "112:55:0"
+              }
+            ],
+            "id": 11,
+            "name": "FunctionDefinition",
+            "src": "50:117:0"
+          }
+        ],
+        "id": 12,
+        "name": "ContractDefinition",
+        "src": "24:145:0"
+      }
+    ],
+    "id": 13,
+    "name": "SourceUnit",
+    "src": "0:170:0"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.6+commit.b259423e.Emscripten.clang"
+  },
+  "networks": {
+    "1001": {
+      "events": {},
+      "links": {},
+      "address": "0x150772F87EffA11245E00730Bb1C6C056669A349",
+      "transactionHash": "0xc6d86d81b8b49b5e6698d69115869cddc1ae7dc736ed9f46b1b1c8a4ddbb00cc"
+    }
+  },
+  "schemaVersion": "3.3.3",
+  "updatedAt": "2022-05-09T11:33:42.902Z",
+  "networkType": "ethereum",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}
