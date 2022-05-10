@@ -5,13 +5,11 @@ export default class Main extends Phaser.Scene {
   constructor() {
     super("main");
     this.kingOverlapped = false;
+    this.princessOverlapped = false;
   }
 
   init(data) {
     this.characterName = data.characterName;
-    this.king = data.king;
-    this.wallslayer = data.wallslayer;
-    console.log(data);
   }
 
   preload() {
@@ -40,6 +38,12 @@ export default class Main extends Phaser.Scene {
     this.anims.create({
       key: "king_idle",
       frames: this.anims.generateFrameNumbers("king"),
+      frameRate: 5,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: "princess_idle",
+      frames: this.anims.generateFrameNumbers("princess"),
       frameRate: 5,
       repeat: -1,
     });
@@ -79,13 +83,39 @@ export default class Main extends Phaser.Scene {
     this.king.setScale(2);
 
     this.nameTag = this.add.sprite(this.king.x, this.king.y - 16, "nametag");
-    this.text = this.add.text(0, 0, "왕", { color: "black", fontSize: "10px" });
-    this.text.x = this.nameTag.x - this.text.width / 2;
-    this.text.y = this.nameTag.y - this.text.height / 2;
+    this.kingText = this.add.text(0, 0, "왕", {
+      color: "black",
+      fontSize: "10px",
+    });
+    this.kingText.x = this.nameTag.x - this.kingText.width / 2;
+    this.kingText.y = this.nameTag.y - this.kingText.height / 2;
+
+    // 공주 NPC 생성
+    this.princess = this.physics.add.sprite(
+      200,
+      game.config.height / 6,
+      "princess"
+    );
+    this.princess.setScale(2);
+
+    this.nameTag = this.add.sprite(
+      this.princess.x,
+      this.princess.y - 16,
+      "nametag"
+    );
+    this.princessText = this.add.text(0, 0, "공주", {
+      color: "black",
+      fontSize: "10px",
+    });
+    this.princessText.x = this.nameTag.x - this.princessText.width / 2;
+    this.princessText.y = this.nameTag.y - this.princessText.height / 2;
 
     // 캐릭터와 NPC overlap 이벤트
     this.physics.add.overlap(this.player, this.king, () => {
       this.kingOverlapped = true;
+    });
+    this.physics.add.overlap(this.player, this.princess, () => {
+      this.princessOverlapped = true;
     });
 
     // 캐릭터와 벽 Collider
@@ -101,6 +131,7 @@ export default class Main extends Phaser.Scene {
     // 애니메이션 실행
     this.player.play("player_idle");
     this.king.play("king_idle");
+    this.princess.play("princess_idle");
 
     this.spacebar = this.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.SPACE
@@ -125,6 +156,7 @@ export default class Main extends Phaser.Scene {
     if (this.cursors.down.isDown) this.player.setVelocityY(moveAmt);
     if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
       if (this.kingOverlapped) game.events.emit("enter", "1");
+      if (this.princessOverlapped) game.events.emit("enter", "2");
     }
 
     if (
@@ -146,5 +178,6 @@ export default class Main extends Phaser.Scene {
     }
 
     this.kingOverlapped = false;
+    this.princessOverlapped = false;
   }
 }
