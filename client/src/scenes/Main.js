@@ -5,10 +5,20 @@ export default class Main extends Phaser.Scene {
   constructor() {
     super("main");
     this.kingOverlapped = false;
+    this.princessOverlapped = false;
+  }
+
+  init(data) {
+    this.characterName = data.characterName;
   }
 
   preload() {
     this.cursors = this.input.keyboard.createCursorKeys();
+
+    this.load.spritesheet("player", `assets/${this.characterName}.png`, {
+      frameWidth: 16,
+      frameHeight: 32,
+    });
   }
 
   createAnims() {
@@ -31,6 +41,12 @@ export default class Main extends Phaser.Scene {
       frameRate: 5,
       repeat: -1,
     });
+    this.anims.create({
+      key: "princess_idle",
+      frames: this.anims.generateFrameNumbers("princess"),
+      frameRate: 5,
+      repeat: -1,
+    });
   }
 
   create() {
@@ -41,17 +57,16 @@ export default class Main extends Phaser.Scene {
     const tileset = map.addTilesetImage("dungeon", "tiles");
 
     map.createLayer("Grounds", tileset);
-    const wallslayer = map.createLayer("Walls", tileset);
+    this.wallslayer = map.createLayer("Walls", tileset);
 
-    wallslayer.setCollisionByProperty({ collides: true });
+    this.wallslayer.setCollisionByProperty({ collides: true });
 
     const debugGraphics = this.add.graphics().setAlpha(0.7);
-    wallslayer.renderDebug(debugGraphics, {
+    this.wallslayer.renderDebug(debugGraphics, {
       tileColor: null,
       collidingTileColor: new Phaser.Display.Color(243, 234, 48, 255),
       faceColor: new Phaser.Display.Color(40, 39, 37, 255),
     });
-
     // 캐릭터 생성
     this.player = this.physics.add.sprite(
       100,
@@ -68,17 +83,43 @@ export default class Main extends Phaser.Scene {
     this.king.setScale(2);
 
     this.nameTag = this.add.sprite(this.king.x, this.king.y - 16, "nametag");
-    this.text = this.add.text(0, 0, "왕", { color: "black", fontSize: "10px" });
-    this.text.x = this.nameTag.x - this.text.width / 2;
-    this.text.y = this.nameTag.y - this.text.height / 2;
+    this.kingText = this.add.text(0, 0, "왕", {
+      color: "black",
+      fontSize: "10px",
+    });
+    this.kingText.x = this.nameTag.x - this.kingText.width / 2;
+    this.kingText.y = this.nameTag.y - this.kingText.height / 2;
+
+    // 공주 NPC 생성
+    this.princess = this.physics.add.sprite(
+      200,
+      game.config.height / 6,
+      "princess"
+    );
+    this.princess.setScale(2);
+
+    this.nameTag = this.add.sprite(
+      this.princess.x,
+      this.princess.y - 16,
+      "nametag"
+    );
+    this.princessText = this.add.text(0, 0, "공주", {
+      color: "black",
+      fontSize: "10px",
+    });
+    this.princessText.x = this.nameTag.x - this.princessText.width / 2;
+    this.princessText.y = this.nameTag.y - this.princessText.height / 2;
 
     // 캐릭터와 NPC overlap 이벤트
     this.physics.add.overlap(this.player, this.king, () => {
       this.kingOverlapped = true;
     });
+    this.physics.add.overlap(this.player, this.princess, () => {
+      this.princessOverlapped = true;
+    });
 
     // 캐릭터와 벽 Collider
-    this.physics.add.collider(this.player, wallslayer);
+    this.physics.add.collider(this.player, this.wallslayer);
 
     // 카메라 세팅
     this.cameras.main.setBounds(0, 0, window.innerWidth, window.innerHeight);
@@ -90,6 +131,7 @@ export default class Main extends Phaser.Scene {
     // 애니메이션 실행
     this.player.play("player_idle");
     this.king.play("king_idle");
+    this.princess.play("princess_idle");
 
     this.spacebar = this.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.SPACE
@@ -114,6 +156,7 @@ export default class Main extends Phaser.Scene {
     if (this.cursors.down.isDown) this.player.setVelocityY(moveAmt);
     if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
       if (this.kingOverlapped) game.events.emit("enter", "1");
+      if (this.princessOverlapped) game.events.emit("enter", "2");
     }
 
     if (
@@ -135,5 +178,6 @@ export default class Main extends Phaser.Scene {
     }
 
     this.kingOverlapped = false;
+    this.princessOverlapped = false;
   }
 }

@@ -1,18 +1,21 @@
 import Phaser from "phaser";
+import game from "../PhaserGame";
 
 export default class Preloader extends Phaser.Scene {
   constructor() {
     super("preloader");
   }
 
+  createAnims() {}
+
   preload() {
     this.load.image("tiles", "assets/DungeonTileset.png");
     this.load.tilemapTiledJSON("dungeon", "assets/dungeon.json");
-    this.load.spritesheet("player", "assets/knight.png", {
+    this.load.spritesheet("king", "assets/king.png", {
       frameWidth: 16,
       frameHeight: 32,
     });
-    this.load.spritesheet("king", "assets/king.png", {
+    this.load.spritesheet("princess", "assets/princess.png", {
       frameWidth: 16,
       frameHeight: 32,
     });
@@ -23,6 +26,10 @@ export default class Preloader extends Phaser.Scene {
   }
 
   create() {
-    this.scene.start("main");
+    game.events.on("start", (name) => {
+      this.scene.start("main", {
+        characterName: name,
+      });
+    });
   }
 }
