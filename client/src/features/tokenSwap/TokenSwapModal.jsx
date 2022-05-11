@@ -66,11 +66,11 @@ const TokenSwapModal = () => {
 
   const swapToken = async () => {
     const caver = new Caver(window.klaytn);
+    dispatch(startLoading());
     if (token0 > 0) {
       const tokenAddress = tokens[token0].address;
       const kip7 = new caver.klay.KIP7(tokenAddress);
       const allowed = await kip7.allowance(account, address);
-      dispatch(startLoading());
       if (allowed.toString() === "0") {
         try {
           await kip7.approve(address, caver.utils.toPeb("100000000"), {
@@ -88,6 +88,7 @@ const TokenSwapModal = () => {
           caver.utils.toPeb(minOutput.toString())
         )
         .send({ from: account, gas: 20000000 });
+      dispatch(stopLoading());
     } else {
       const input = token0InputRef.current.value;
       await exchange.methods
@@ -97,8 +98,39 @@ const TokenSwapModal = () => {
           value: caver.utils.toPeb(input),
           gas: 20000000,
         });
+
+      dispatch(stopLoading());
+      console.log(tokens[token0].symbol);
+      if (tokens[token1].symbol === "URU") {
+        const tokenAdded = localStorage.getItem("tokenAdded");
+        console.log(tokenAdded);
+        if (!tokenAdded) {
+          window.klaytn.sendAsync(
+            {
+              method: "wallet_watchAsset",
+              params: {
+                type: "ERC20", // Initially only supports ERC20, but eventually more!
+                options: {
+                  address: tokens[3].address, // The address that the token is at.
+                  symbol: tokens[3].symbol, // A ticker symbol or shorthand, up to 5 chars.
+                  decimals: 18, // The number of decimals in the token
+                  image: "", // A string url of the token logo
+                },
+              },
+              id: Math.round(Math.random() * 100000),
+            },
+            (err, added) => {
+              if (added) {
+                console.log("Thanks for your interest!");
+              } else {
+                console.log("Your loss!");
+              }
+            }
+          );
+          localStorage.setItem("tokenAdded", "false");
+        }
+      }
     }
-    dispatch(stopLoading());
     getToken0();
     getToken1();
     token0InputRef.current.value = 0;
