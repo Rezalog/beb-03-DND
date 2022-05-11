@@ -3,11 +3,12 @@ pragma solidity ^0.5.6;
 
 import "@klaytn/contracts/token/KIP7/KIP7.sol";
 import "@klaytn/contracts/token/KIP7/IKIP7.sol";
+import "@klaytn/contracts/token/KIP7/KIP7Metadata.sol";
 
-contract Exchange is KIP7 {
+contract Exchange is KIP7, KIP7Metadata {
   address public tokenAddress;
 
-  constructor(address _token) public KIP7()  {
+  constructor(address _token) public KIP7Metadata("klay-uru-LP-token", "LP", 18)  {
     require(_token != address(0), "invalid token address");
     tokenAddress = _token;
 }
@@ -77,7 +78,7 @@ contract Exchange is KIP7 {
 ) private pure returns (uint256) {
     require(inputReserve > 0 && outputReserve > 0, "invalid reserves");
 
-    uint256 inputAmountWithFee = inputAmount * 30; // 수수료를 제한다.
+    uint256 inputAmountWithFee = inputAmount * 99; // 수수료를 제한다.
     uint256 numerator = inputAmountWithFee * outputReserve;
     uint256 denominator = (inputReserve * 100) + inputAmountWithFee;
 
