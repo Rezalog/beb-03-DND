@@ -1994,8 +1994,8 @@
     "version": "0.5.6+commit.b259423e.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.4.5",
-  "updatedAt": "2022-05-11T04:02:03.146Z",
+  "schemaVersion": "3.4.7",
+  "updatedAt": "2022-05-11T06:16:40.293Z",
   "devdoc": {
     "details": "Optional functions from the KIP7 standard. See http://kips.klaytn.com/KIPs/kip-7-fungible_token",
     "methods": {

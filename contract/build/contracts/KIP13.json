@@ -1378,8 +1378,8 @@
     "version": "0.5.6+commit.b259423e.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.4.5",
-  "updatedAt": "2022-05-11T04:02:03.142Z",
+  "schemaVersion": "3.4.7",
+  "updatedAt": "2022-05-11T06:16:40.277Z",
   "devdoc": {
     "details": "Implementation of the `IKIP13` interface. * Contracts may inherit from this and call `_registerInterface` to declare their support of an interface.",
     "methods": {
