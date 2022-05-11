@@ -4,6 +4,7 @@ import Caver from "caver-js";
 import { closeTokenSwapModal } from "../modal/tokenSwapModalSlice";
 import SubModal from "./SubModal";
 import { openSubModal, clearState } from "./tokenSwapSlice";
+import { startLoading, stopLoading } from "../loading/loadingSlice";
 
 import { abi, address } from "./exchangeContract";
 
@@ -69,6 +70,7 @@ const TokenSwapModal = () => {
       const tokenAddress = tokens[token0].address;
       const kip7 = new caver.klay.KIP7(tokenAddress);
       const allowed = await kip7.allowance(account, address);
+      dispatch(startLoading());
       if (allowed.toString() === "0") {
         try {
           await kip7.approve(address, caver.utils.toPeb("100000000"), {
@@ -96,8 +98,11 @@ const TokenSwapModal = () => {
           gas: 20000000,
         });
     }
+    dispatch(stopLoading());
     getToken0();
     getToken1();
+    token0InputRef.current.value = 0;
+    token1InputRef.current.value = 0;
   };
   const getToken0 = async () => {
     const caver = new Caver(window.klaytn);

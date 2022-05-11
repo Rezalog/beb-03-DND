@@ -7,12 +7,14 @@ import DexModal from "./features/dex/DexModal";
 import TokenSwapModal from "./features/tokenSwap/TokenSwapModal";
 import { openDexModal } from "./features/modal/dexModalSlice";
 import { openTokenSwapModal } from "./features/modal/tokenSwapModalSlice";
+import Loading from "./features/loading/Loading";
 
 function App() {
   const { isOpen: isDexOpen } = useSelector((state) => state.dexModal);
   const { isOpen: isTokenSwapOpen } = useSelector(
     (state) => state.tokenSwapModal
   );
+  const { isLoading } = useSelector((state) => state.loading);
   const dispatch = useDispatch();
 
   const connectToWallet = async () => {
@@ -59,6 +61,7 @@ function App() {
       <button onClick={connectToWallet}>지갑 연결</button>
       {isDexOpen && <DexModal />}
       {isTokenSwapOpen && <TokenSwapModal />}
+      {isLoading && <Loading />}
     </div>
   );
 }
