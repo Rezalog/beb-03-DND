@@ -3,18 +3,21 @@ pragma solidity ^0.5.6;
 
 import "@klaytn/contracts/token/KIP7/KIP7.sol";
 import "@klaytn/contracts/token/KIP7/IKIP7.sol";
+import "@klaytn/contracts/token/KIP7/KIP7Metadata.sol";
 
-contract Exchange {
+contract Exchange is KIP7, KIP7Metadata {
   address public tokenAddress;
 
-  constructor(address _token) public {
+  constructor(address _token) public KIP7Metadata("klay-uru-LP-token", "LP", 18)  {
     require(_token != address(0), "invalid token address");
     tokenAddress = _token;
 }
-
     function addLiquidity(uint256 _tokenAmount) public payable {
     KIP7 token = KIP7(tokenAddress);
     token.transferFrom(msg.sender, address(this), _tokenAmount);
+
+    uint256 liquidity = address(this).balance;
+    _mint(msg.sender, liquidity);
 }
 
     function getklay() public view returns (uint256 balance) {
@@ -40,7 +43,7 @@ contract Exchange {
     return getAmount(_tokenSold, tokenReserve, address(this).balance);
 }
 
-    function klayToTokenSwap(uint256 _minTokens) public payable {
+    function klayToTokenSwap(uint256 _minTokens) public payable { // 교환해 줄 토큰의 양을 미리 알고 있다는 이상한 가정
     uint256 tokenReserve = getReserve(); // 풀의 토큰 잔액
     uint256 tokensBought = getAmount(
     msg.value, // 입금한 klay
@@ -48,7 +51,7 @@ contract Exchange {
     tokenReserve // 풀에 있는 토큰의 양
   );
 
-    require(tokensBought >= _minTokens, "insufficient output amount"); // 교환해 줄 토큰이 모자라면 안된다!
+    require(tokensBought >= _minTokens, "insufficient output amount"); // 교환해 줄 토큰이 모자라면 안된다
 
     KIP7(tokenAddress).transfer(msg.sender, tokensBought); // tokenBought = 교환해 줄 토큰의 양을 msg.sender에게 보내 준다.
 }
@@ -69,13 +72,19 @@ contract Exchange {
 }
 
     function getAmount( // x(지불할 토큰)의 양을 넣으면 교환해 줄 y의 양을 출력하는 함수
-    uint256 inputAmount,
-    uint256 inputReserve,
-    uint256 outputReserve
+    uint256 inputAmount, 
+    uint256 inputReserve, 
+    uint256 outputReserve 
 ) private pure returns (uint256) {
     require(inputReserve > 0 && outputReserve > 0, "invalid reserves");
 
-    return (inputAmount * outputReserve) / (inputReserve + inputAmount);
+    uint256 inputAmountWithFee = inputAmount * 99; // 수수료를 제한다.
+    uint256 numerator = inputAmountWithFee * outputReserve;
+    uint256 denominator = (inputReserve * 100) + inputAmountWithFee;
+
+    return numerator / denominator;
+
+    // return (inputAmount * outputReserve) / (inputReserve + inputAmount); 수수료 없을 때의 경우
 }
 
 }

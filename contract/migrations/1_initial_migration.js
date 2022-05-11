@@ -6,6 +6,6 @@ const value = "10000000000000000000000";
 
 module.exports = function (deployer) {
   deployer.deploy(Migrations);
-  deployer.deploy(Token, "URUtoken", "URU", 18, value);
+  // deployer.deploy(Token, "URUtoken", "URU", 18, value);
   deployer.deploy(Exchange, process.env.TOKEN_CONTRACT);
 };
