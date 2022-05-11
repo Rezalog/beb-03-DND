@@ -18,6 +18,11 @@ const initialState = {
       name: "Token",
       address: "0xefd020d682856994ad4fbf842e38301065479310",
     },
+    {
+      symbol: "URU",
+      name: "URU Token",
+      address: "0xBf67648411457Dc88F20B8eAE26dF6563ec68067",
+    },
   ],
   token0: 0,
   token1: -1,
