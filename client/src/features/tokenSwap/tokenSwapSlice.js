@@ -9,16 +9,6 @@ const initialState = {
       address: null,
     },
     {
-      symbol: "RTN",
-      name: "Real Token",
-      address: "0x1dd21f8f850f39286bf1ca27e8d59358e0eeaeb2",
-    },
-    {
-      symbol: "TKN",
-      name: "Token",
-      address: "0xefd020d682856994ad4fbf842e38301065479310",
-    },
-    {
       symbol: "URU",
       name: "URU Token",
       address: "0xBf67648411457Dc88F20B8eAE26dF6563ec68067",
