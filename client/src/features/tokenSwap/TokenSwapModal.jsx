@@ -6,6 +6,8 @@ import SubModal from "./SubModal";
 import { openSubModal, clearState } from "./tokenSwapSlice";
 import { startLoading, stopLoading } from "../loading/loadingSlice";
 
+import { factoryABI, factoryAddress, exchangeABI } from "../dex/contractInfo";
+
 import { abi, address } from "./exchangeContract";
 
 const TokenSwapModal = () => {
@@ -32,7 +34,6 @@ const TokenSwapModal = () => {
 
         const caver = new Caver(window.klaytn);
         const _balance = await caver.klay.getBalance(_account);
-        setExchange(new caver.klay.Contract(abi, address));
         setBalance(caver.utils.fromPeb(_balance));
       } catch (err) {
         console.log(err);
@@ -45,22 +46,24 @@ const TokenSwapModal = () => {
   };
 
   const getOutputAmount = async () => {
-    const caver = new Caver(window.klaytn);
-    const input = token0InputRef.current.value || 0;
-    if (input > 0) {
-      let output;
-      if (token0 > 0) {
-        output = await exchange.methods
-          .getklayAmount(caver.utils.toPeb(input))
-          .call();
-        //console.log(caver.utils.fromPeb(output));
-      } else {
-        output = await exchange.methods
-          .getTokenAmount(caver.utils.toPeb(input))
-          .call();
+    if (Object.keys(exchange).length !== 0) {
+      const caver = new Caver(window.klaytn);
+      const input = token0InputRef.current.value || 0;
+      if (input > 0) {
+        let output;
+        if (token0 > 0) {
+          output = await exchange.methods
+            .getklayAmount(caver.utils.toPeb(input))
+            .call();
+          //console.log(caver.utils.fromPeb(output));
+        } else {
+          output = await exchange.methods
+            .getTokenAmount(caver.utils.toPeb(input))
+            .call();
+        }
+        token1InputRef.current.value = caver.utils.fromPeb(output);
+        setMinOutput(caver.utils.fromPeb(output) * 0.99);
       }
-      token1InputRef.current.value = caver.utils.fromPeb(output);
-      setMinOutput(caver.utils.fromPeb(output) * 0.99);
     }
   };
 
@@ -111,8 +114,8 @@ const TokenSwapModal = () => {
               params: {
                 type: "ERC20", // Initially only supports ERC20, but eventually more!
                 options: {
-                  address: tokens[3].address, // The address that the token is at.
-                  symbol: tokens[3].symbol, // A ticker symbol or shorthand, up to 5 chars.
+                  address: tokens[token1].address, // The address that the token is at.
+                  symbol: tokens[token1].symbol, // A ticker symbol or shorthand, up to 5 chars.
                   decimals: 18, // The number of decimals in the token
                   image: "", // A string url of the token logo
                 },
@@ -158,6 +161,13 @@ const TokenSwapModal = () => {
       const symbol = await kip7.symbol();
       const _balance = await kip7.balanceOf(account);
       setBalance1(caver.utils.fromPeb(_balance));
+
+      const factory = new caver.klay.Contract(factoryABI, factoryAddress);
+      const exchangeAddress = await factory.methods.getExchange(address).call();
+
+      if (exchangeAddress !== "0x0000000000000000000000000000000000000000") {
+        setExchange(new caver.klay.Contract(exchangeABI, exchangeAddress));
+      }
     } else {
       const _balance = await caver.klay.getBalance(account);
       setBalance1(caver.utils.fromPeb(_balance));
