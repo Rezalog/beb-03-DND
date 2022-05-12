@@ -4,10 +4,16 @@ import { closeSignUpModal } from "../modal/signUpModalSlice";
 import styled from "styled-components";
 import axios from "axios";
 
-const SignUpModal = () => {
+const SignUpModal = ({
+  nickname,
+  setNickname,
+  characterIndex,
+  setCharacterIndex,
+}) => {
   const dispatch = useDispatch();
-  const [nickname, SetNickname] = useState("");
-  const [characterIndex, SetCharacterIndex] = useState("");
+  // const [nickname, setNickname] = useState("");
+  // const [characterIndex, setCharacterIndex] = useState("");
+  const account = window.klaytn.selectedAddress;
 
   const signUp = async () => {
     let networkId = await window.klaytn.networkVersion;
@@ -17,26 +23,29 @@ const SignUpModal = () => {
       alert("Please Connect Baobab TestNet");
       return;
     }
-    // try {
-    //   await axios
-    //     .post("/user", {
-    //       user_address: account,
-    //       nickname: nickname,
-    //       chracter_index: characterIndex,
-    //     })
-    //     .then((response) => {
-    //       console.log(response);
-    //     });
-    // } catch (error) {
-    //   console.error(error);
-    // }
+    // 닉네임 중복확인 구현 필요
+    try {
+      await axios
+        .post("/user", {
+          // 수정필요
+          user_address: account,
+          nickname: nickname,
+          chracter_index: characterIndex,
+        })
+        .then((response) => {
+          console.log(response);
+          dispatch(closeSignUpModal());
+        });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <div
       style={{
-        width: "800px",
-        height: "800px",
+        width: "100vw",
+        height: "150vh",
         backgroundColor: "black",
         zIndex: 10,
         color: "white",
@@ -48,7 +57,7 @@ const SignUpModal = () => {
           <div>Input Nickname</div>
           <input
             value={nickname}
-            onChange={(event) => SetNickname(event.target.value)}
+            onChange={(event) => setNickname(event.target.value)}
             required
           />
           <div>Choose your Character</div>
@@ -65,7 +74,7 @@ const SignUpModal = () => {
                 src="assets/1.png"
                 alt="elf_f"
                 width="40"
-                onClick={() => SetCharacterIndex("1")}
+                onClick={() => setCharacterIndex("1")}
               />
             </label>
             <input
@@ -80,7 +89,7 @@ const SignUpModal = () => {
                 src="assets/2.png"
                 alt="elf_m"
                 width="40"
-                onClick={() => SetCharacterIndex("2")}
+                onClick={() => setCharacterIndex("2")}
               />
             </label>
 
@@ -96,7 +105,7 @@ const SignUpModal = () => {
                 src="assets/3.png"
                 alt="knight"
                 width="40"
-                onClick={() => SetCharacterIndex("3")}
+                onClick={() => setCharacterIndex("3")}
               />
             </label>
             <input
@@ -111,7 +120,7 @@ const SignUpModal = () => {
                 src="assets/4.png"
                 alt="dragon"
                 width="40"
-                onClick={() => SetCharacterIndex("4")}
+                onClick={() => setCharacterIndex("4")}
               />
             </label>
             <input
@@ -126,7 +135,7 @@ const SignUpModal = () => {
                 src="assets/5.png"
                 alt="dark_mage"
                 width="40"
-                onClick={() => SetCharacterIndex("5")}
+                onClick={() => setCharacterIndex("5")}
               />
             </label>
             <input
@@ -141,7 +150,7 @@ const SignUpModal = () => {
                 src="assets/6.png"
                 alt="wizard"
                 width="40"
-                onClick={() => SetCharacterIndex("6")}
+                onClick={() => setCharacterIndex("6")}
               />
             </label>
             <input
@@ -156,7 +165,7 @@ const SignUpModal = () => {
                 src="assets/7.png"
                 alt="archer"
                 width="40"
-                onClick={() => SetCharacterIndex("7")}
+                onClick={() => setCharacterIndex("7")}
               />
             </label>
             <input
@@ -171,7 +180,7 @@ const SignUpModal = () => {
                 src="assets/8.png"
                 alt="theif"
                 width="50"
-                onClick={() => SetCharacterIndex("8")}
+                onClick={() => setCharacterIndex("8")}
               />
             </label>
             <input
@@ -186,7 +195,7 @@ const SignUpModal = () => {
                 src="assets/9.png"
                 alt="mage"
                 width="40"
-                onClick={() => SetCharacterIndex("9")}
+                onClick={() => setCharacterIndex("9")}
               />
             </label>
             <input
@@ -201,7 +210,7 @@ const SignUpModal = () => {
                 src="assets/10.png"
                 alt="blacksmith"
                 width="40"
-                onClick={() => SetCharacterIndex("10")}
+                onClick={() => setCharacterIndex("10")}
               />
             </label>
           </div>
@@ -210,6 +219,7 @@ const SignUpModal = () => {
 
         <button
           onClick={() => {
+            console.log(account);
             console.log(nickname);
             console.log(characterIndex);
           }}

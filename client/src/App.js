@@ -16,9 +16,11 @@ function App() {
   const { isOpen: isTokenSwapOpen } = useSelector(
     (state) => state.tokenSwapModal
   );
-  // const { isOpen: isSignUpOpen } = useSelector((state) => state.SignUpModal);
+  const { isOpen: isSignUpOpen } = useSelector((state) => state.signUpModal);
   const dispatch = useDispatch();
-  const [isSignIn, SetIsSignIn] = useState(false);
+  const [isSignIn, setIsSignIn] = useState(false);
+  const [nickname, setNickname] = useState("");
+  const [characterIndex, setCharacterIndex] = useState("");
 
   const connectToWallet = async () => {
     if (typeof window.klaytn !== "undefined") {
@@ -30,6 +32,7 @@ function App() {
         const caver = new Caver(window.klaytn);
         const balance = await caver.klay.getBalance(account);
         console.log(balance);
+        // dispatch(openSignUpModal());
 
         // 서버에 get요청을 보내 해당 어카운트가 있으면 접속(isSignIn = true)
         // get 요청을 통해 받아온 유저 닉네임과 이미지 받아와 적용하기
@@ -42,11 +45,15 @@ function App() {
             },
           })
           .then((response) => {
-            if (response === true) {
-              SetIsSignIn(true);
+            if (response.status === 200) {
+              // 수정필요
+              setNickname(response.nickname);
+              setCharacterIndex(response.characterIndex);
+              setIsSignIn(true);
             } else {
               {
-                SetIsSignIn(false);
+                setIsSignIn(false);
+                dispatch(openSignUpModal());
               }
             }
           });
@@ -81,10 +88,23 @@ function App() {
 
   return (
     <div className="App">
-      <button onClick={connectToWallet}>지갑 연결</button>
+      {isSignIn ? null : (
+        <div>
+          <h1>Dungeon & Defi</h1>
+          <button onClick={connectToWallet}>지갑 연결</button>
+        </div>
+      )}
+
       {isDexOpen && <DexModal />}
       {isTokenSwapOpen && <TokenSwapModal />}
-      <SignUpModal />
+      {isSignUpOpen && (
+        <SignUpModal
+          nickname={nickname}
+          setNickname={setNickname}
+          characterIndex={characterIndex}
+          setCharacterIndex={setCharacterIndex}
+        />
+      )}
     </div>
   );
 }
