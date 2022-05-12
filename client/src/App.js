@@ -49,9 +49,10 @@ function App() {
           .then((response) => {
             if (response.status === 200) {
               // 수정필요
-              setNickname(response.nickname);
+              dispatch(setNickname({ nickname: response.nickname })); // 디스패치 활용 SetNickname 예시
               setCharacterIndex(response.characterIndex);
               setIsSignIn(true);
+              // game.events.emit("start", "dragon");
             } else {
               {
                 setIsSignIn(false);
@@ -62,7 +63,7 @@ function App() {
 
         // emit 이벤트
         // 두번째 인자값에 캐릭터 이미지 파일 이름이 들어가면된다.
-        game.events.emit("start", "dragon");
+        game.events.emit("start", "dragon"); // 서버와 연동 후 삭제 예정
       } catch (err) {
         console.log(err);
       }
