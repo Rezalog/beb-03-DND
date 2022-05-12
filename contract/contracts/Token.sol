@@ -16,7 +16,4 @@ contract Token is KIP7, KIP7Metadata {
   function mint(address to, uint256 amount) public {
     _mint(to, amount);
   }
-  function _transferOwnership(address newOwner) public {
-    _transferOwnership(newOwner);
-  }
 }

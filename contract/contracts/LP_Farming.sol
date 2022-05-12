@@ -25,9 +25,8 @@ contract LP_Farming {
     constructor (
         Token _token
         ) public {
-            LP_Token = 0x21e262db15568CfEe89C4A78E0306C8C4eaD5b57; // lp 토큰 주소 (예치)
+            LP_Token = 0x87E8Df6A461B0451A09bbc1FCc053b47d2dB5A4d; // lp 토큰 주소 (예치)
             token = _token;
-            // URU = 0xF9c00537247Db2331Dd62C73cb4e1C5e1D7502E3; // URU 토큰 주소 (보상)
         }
 
     function stake(uint256 amount) public {
@@ -73,10 +72,15 @@ contract LP_Farming {
         return totalTime;
     }
 
+    function calculateContribute(address user) public view returns(uint256){
+        uint contribution = stakingBalance[user] / KIP7(LP_Token).balanceOf(address(this)) * 10**18;
+        return contribution;
+    }
 
     function calculateYieldTotal(address user) public view returns(uint256) {
-        uint256 time = calculateYieldTime(user) * 10**18;
-        uint256 rawYield = (time * 25) / 10**18;
+        uint256 time = calculateYieldTime(user);
+        uint256 contribution = calculateContribute(user);
+        uint256 rawYield = (time * contribution * 25);
         return rawYield;
     } 
 
@@ -96,7 +100,7 @@ contract LP_Farming {
         }
 
         startTime[msg.sender] = block.timestamp;
-        token.mint(msg.sender, 10000);
+        token.mint(msg.sender, toTransfer);
         emit YieldWithdraw(msg.sender, toTransfer);
     } 
 }
