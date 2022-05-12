@@ -17,7 +17,7 @@ const userInfoSlice = createSlice({
       state.characterIndex = action.payload.characterIndex;
     },
     setAddress: (state, action) => {
-      state.address = action.payload.address;
+      state.address = action.payload.address; // or state.address = action.payload
     },
   },
 });

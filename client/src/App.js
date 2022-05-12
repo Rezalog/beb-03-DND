@@ -11,6 +11,10 @@ import SignUpModal from "./features/signup/SignUpModal";
 import { openSignUpModal } from "./features/modal/signUpModalSlice";
 import axios from "axios";
 import Loading from "./features/loading/Loading";
+import {
+  setCharacterIndex,
+  setNickname,
+} from "./features/userinfo/userInfoSlice";
 
 function App() {
   const { isOpen: isDexOpen } = useSelector((state) => state.dexModal);
@@ -21,8 +25,9 @@ function App() {
   const { isLoading } = useSelector((state) => state.loading);
   const dispatch = useDispatch();
   const [isSignIn, setIsSignIn] = useState(false);
-  const [nickname, setNickname] = useState("");
-  const [characterIndex, setCharacterIndex] = useState("");
+
+  // const nickname = useSelector((state) => state.userInfo.nickname);
+  // const characterIndex = useSelector((state) => state.userInfo.characterIndex);
 
   const connectToWallet = async () => {
     if (typeof window.klaytn !== "undefined") {
@@ -50,7 +55,9 @@ function App() {
             if (response.status === 200) {
               // 수정필요
               dispatch(setNickname({ nickname: response.nickname })); // 디스패치 활용 SetNickname 예시
-              setCharacterIndex(response.characterIndex);
+              dispatch(
+                setCharacterIndex({ characterIndex: response.characterIndex })
+              );
               setIsSignIn(true);
               // game.events.emit("start", "dragon");
             } else {
@@ -100,14 +107,8 @@ function App() {
 
       {isDexOpen && <DexModal />}
       {isTokenSwapOpen && <TokenSwapModal />}
-      {isSignUpOpen && (
-        <SignUpModal
-          nickname={nickname}
-          setNickname={setNickname}
-          characterIndex={characterIndex}
-          setCharacterIndex={setCharacterIndex}
-        />
-      )}
+      {/* {isSignUpOpen && <SignUpModal />} */}
+      <SignUpModal />
       {isLoading && <Loading />}
     </div>
   );

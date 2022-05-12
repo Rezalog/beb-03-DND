@@ -3,17 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { closeSignUpModal } from "../modal/signUpModalSlice";
 import styled from "styled-components";
 import axios from "axios";
+import { setCharacterIndex, setNickname } from "../userinfo/userInfoSlice";
 
-const SignUpModal = ({
-  nickname,
-  setNickname,
-  characterIndex,
-  setCharacterIndex,
-}) => {
+const SignUpModal = ({}) => {
   const dispatch = useDispatch();
-  // const [nickname, setNickname] = useState("");
-  // const [characterIndex, setCharacterIndex] = useState("");
   const account = window.klaytn.selectedAddress;
+  const nickname = useSelector((state) => state.userInfo.nickname);
+  const characterIndex = useSelector((state) => state.userInfo.characterIndex);
 
   const signUp = async () => {
     let networkId = await window.klaytn.networkVersion;
@@ -57,7 +53,9 @@ const SignUpModal = ({
           <div>Input Nickname</div>
           <input
             value={nickname}
-            onChange={(event) => setNickname(event.target.value)}
+            onChange={(event) =>
+              dispatch(setNickname({ nickname: event.target.value }))
+            }
             required
           />
           <div>Choose your Character</div>
@@ -74,7 +72,9 @@ const SignUpModal = ({
                 src="assets/1.png"
                 alt="elf_f"
                 width="40"
-                onClick={() => setCharacterIndex("1")}
+                onClick={() =>
+                  dispatch(setCharacterIndex({ characterIndex: "1" }))
+                }
               />
             </label>
             <input
@@ -89,7 +89,9 @@ const SignUpModal = ({
                 src="assets/2.png"
                 alt="elf_m"
                 width="40"
-                onClick={() => setCharacterIndex("2")}
+                onClick={() =>
+                  dispatch(setCharacterIndex({ characterIndex: "2" }))
+                }
               />
             </label>
 
@@ -105,7 +107,9 @@ const SignUpModal = ({
                 src="assets/3.png"
                 alt="knight"
                 width="40"
-                onClick={() => setCharacterIndex("3")}
+                onClick={() =>
+                  dispatch(setCharacterIndex({ characterIndex: "3" }))
+                }
               />
             </label>
             <input
@@ -120,7 +124,9 @@ const SignUpModal = ({
                 src="assets/4.png"
                 alt="dragon"
                 width="40"
-                onClick={() => setCharacterIndex("4")}
+                onClick={() =>
+                  dispatch(setCharacterIndex({ characterIndex: "4" }))
+                }
               />
             </label>
             <input
@@ -135,7 +141,9 @@ const SignUpModal = ({
                 src="assets/5.png"
                 alt="dark_mage"
                 width="40"
-                onClick={() => setCharacterIndex("5")}
+                onClick={() =>
+                  dispatch(setCharacterIndex({ characterIndex: "5" }))
+                }
               />
             </label>
             <input
@@ -150,7 +158,9 @@ const SignUpModal = ({
                 src="assets/6.png"
                 alt="wizard"
                 width="40"
-                onClick={() => setCharacterIndex("6")}
+                onClick={() =>
+                  dispatch(setCharacterIndex({ characterIndex: "6" }))
+                }
               />
             </label>
             <input
@@ -165,7 +175,9 @@ const SignUpModal = ({
                 src="assets/7.png"
                 alt="archer"
                 width="40"
-                onClick={() => setCharacterIndex("7")}
+                onClick={() =>
+                  dispatch(setCharacterIndex({ characterIndex: "7" }))
+                }
               />
             </label>
             <input
@@ -180,7 +192,9 @@ const SignUpModal = ({
                 src="assets/8.png"
                 alt="theif"
                 width="50"
-                onClick={() => setCharacterIndex("8")}
+                onClick={() =>
+                  dispatch(setCharacterIndex({ characterIndex: "8" }))
+                }
               />
             </label>
             <input
@@ -195,7 +209,9 @@ const SignUpModal = ({
                 src="assets/9.png"
                 alt="mage"
                 width="40"
-                onClick={() => setCharacterIndex("9")}
+                onClick={() =>
+                  dispatch(setCharacterIndex({ characterIndex: "9" }))
+                }
               />
             </label>
             <input
@@ -210,7 +226,9 @@ const SignUpModal = ({
                 src="assets/10.png"
                 alt="blacksmith"
                 width="40"
-                onClick={() => setCharacterIndex("10")}
+                onClick={() =>
+                  dispatch(setCharacterIndex({ characterIndex: "10" }))
+                }
               />
             </label>
           </div>
