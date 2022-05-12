@@ -3,13 +3,16 @@ import Caver from "caver-js";
 import { factoryABI, exchangeABI, factoryAddress } from "../contractInfo";
 import { useDispatch, useSelector } from "react-redux";
 import { addExchange } from "../dexSlice";
+import { addNewToken } from "../../tokenSwap/tokenSwapSlice";
 
 const AddPool = ({ account }) => {
   const [klayBalance, setKlayBalance] = useState(0);
   const [tokenBalance, setTokenBalance] = useState(0);
   const [selectedToken, setSelectedToken] = useState("");
+  const [currentTokenSymbol, setCurrentTokenSymbol] = useState("URU");
   const klayAmount = useRef(null);
   const tokenAmount = useRef(null);
+  const newTokenAddress = useRef(null);
 
   const { tokens } = useSelector((state) => state.tokenSwap);
   const dispatch = useDispatch();
@@ -100,6 +103,22 @@ const AddPool = ({ account }) => {
     );
   };
 
+  const addToken = async () => {
+    const caver = new Caver(window.klaytn);
+
+    const kip7 = new caver.klay.KIP7(newTokenAddress.current.value);
+    const name = await kip7.name();
+    const symbol = await kip7.symbol();
+    const balance = await kip7.balanceOf(account);
+
+    dispatch(
+      addNewToken({ symbol, name, address: newTokenAddress.current.value })
+    );
+    setCurrentTokenSymbol(symbol);
+    setTokenBalance(caver.utils.fromPeb(balance));
+    setSelectedToken(newTokenAddress.current.value);
+  };
+
   return (
     <div>
       <input placeholder='0.0' ref={klayAmount} />
@@ -109,8 +128,11 @@ const AddPool = ({ account }) => {
         <button>Max</button>
       </p>
       <input placeholder='0.0' ref={tokenAmount} />
-      <button>URU</button>
+      <button>{currentTokenSymbol}</button>
       <p>잔액:{Number(tokenBalance).toFixed(6)} </p>
+      <input placeholder='주소' ref={newTokenAddress} />
+      <button onClick={addToken}>추가</button>
+      <br></br>
       <button onClick={addPool}>풀 추가</button>
     </div>
   );

@@ -39,6 +39,13 @@ const tokenSwapSlice = createSlice({
       //그래서 Object.assign 을 사용해서 초기화 진행함
       Object.assign(state, initialState);
     },
+    addNewToken: (state, action) => {
+      state.tokens.push({
+        symbol: action.payload.symbol,
+        name: action.payload.name,
+        address: action.payload.address,
+      });
+    },
   },
 });
 
@@ -48,6 +55,7 @@ export const {
   changeToken0,
   changeToken1,
   clearState,
+  addNewToken,
 } = tokenSwapSlice.actions;
 
 export default tokenSwapSlice.reducer;

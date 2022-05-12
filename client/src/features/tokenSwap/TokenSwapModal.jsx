@@ -206,7 +206,6 @@ const TokenSwapModal = () => {
         <button
           onClick={() => {
             dispatch(closeTokenSwapModal());
-            dispatch(clearState());
           }}
         >
           X
