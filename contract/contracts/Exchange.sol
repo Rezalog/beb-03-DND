@@ -14,7 +14,7 @@ interface IExchange {
 }
 
 interface IFactory {
-    function getExchange(address _tokenAddress) external returns (address);
+    function getExchange(address _tokenAddress) external view returns (address);
 }
 
 contract Exchange is KIP7, KIP7Metadata {
@@ -193,7 +193,7 @@ contract Exchange is KIP7, KIP7Metadata {
 
         // 3. 구입한 klayBought 만큼  
         // msg.sender : exchangeAddress
-        IExchange(exchangeAddress).klayToTokenTransfer{value: klayBought}(
+        IExchange(exchangeAddress).klayToTokenTransfer.value(klayBought)(
             _minTokensBought,
             msg.sender
         );

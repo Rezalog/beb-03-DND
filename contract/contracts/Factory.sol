@@ -30,7 +30,7 @@ contract Factory is IFactory {
         return address(exchange);
     }
 
-    function getExchange(address _tokenAddress) public view returns (address) {
+    function getExchange(address _tokenAddress) external view returns (address) {
         return tokenToExchange[_tokenAddress];
     }
 }
