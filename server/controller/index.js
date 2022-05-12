@@ -1,3 +1,3 @@
-exports.main = (req, res) => {
-    console.log(main);
-}
+module.exports = {
+  usersController: require('./users'),
+};
