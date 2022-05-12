@@ -3,6 +3,7 @@
 ## 환경변수 설정
 
 PRIVATE_KEY=배포할 kaikas 계정의 개인 키
+TOKEN_CONTRACT=배포한 kip-7 주소
 
 ## 사용법
 
@@ -24,4 +25,7 @@ truffle console --network baobab
 
 으로 배포한 컨트랙트에 접근 가능
 
-HelloWorld.sol에서 간단한 함수 호출을 해볼 수 있습니다.
+### 주의사항
+
+Exchange.sol에서 토큰 컨트랙트 주소를 인자로 받고 있으므로<br>
+Token.sol을 먼저 배포하여 환경변수 설정을 한 후 Exchange.sol을 배포합니다.

@@ -10,6 +10,7 @@ import { openTokenSwapModal } from "./features/modal/tokenSwapModalSlice";
 import SignUpModal from "./features/signup/SignUpModal";
 import { openSignUpModal } from "./features/modal/signUpModalSlice";
 import axios from "axios";
+import Loading from "./features/loading/Loading";
 
 function App() {
   const { isOpen: isDexOpen } = useSelector((state) => state.dexModal);
@@ -17,6 +18,7 @@ function App() {
     (state) => state.tokenSwapModal
   );
   const { isOpen: isSignUpOpen } = useSelector((state) => state.signUpModal);
+  const { isLoading } = useSelector((state) => state.loading);
   const dispatch = useDispatch();
   const [isSignIn, setIsSignIn] = useState(false);
   const [nickname, setNickname] = useState("");
@@ -105,6 +107,7 @@ function App() {
           setCharacterIndex={setCharacterIndex}
         />
       )}
+      {isLoading && <Loading />}
     </div>
   );
 }

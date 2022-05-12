@@ -5,6 +5,7 @@ import dexSlice from "./features/dex/dexSlice";
 import tokenSwapSlice from "./features/tokenSwap/tokenSwapSlice";
 import signUpModalReducer from "./features/modal/signUpModalSlice";
 import signUpSlice from "./features/signup/signUpSlice";
+import loadingSlice from "./features/loading/loadingSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     dex: dexSlice,
     tokenSwap: tokenSwapSlice,
     signUp: signUpSlice,
+    loading: loadingSlice,
   },
 });
