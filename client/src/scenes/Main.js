@@ -6,6 +6,7 @@ export default class Main extends Phaser.Scene {
     super("main");
     this.kingOverlapped = false;
     this.princessOverlapped = false;
+    this.merchantOverlapped = false;
   }
 
   init(data) {
@@ -44,6 +45,12 @@ export default class Main extends Phaser.Scene {
     this.anims.create({
       key: "princess_idle",
       frames: this.anims.generateFrameNumbers("princess"),
+      frameRate: 5,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: "merchant_idle",
+      frames: this.anims.generateFrameNumbers("merchant"),
       frameRate: 5,
       repeat: -1,
     });
@@ -110,12 +117,35 @@ export default class Main extends Phaser.Scene {
     this.princessText.x = this.nameTag.x - this.princessText.width / 2;
     this.princessText.y = this.nameTag.y - this.princessText.height / 2;
 
+    // 상인 NPC 생성
+    this.merchant = this.physics.add.sprite(
+      400,
+      game.config.height / 6,
+      "princess"
+    );
+    this.merchant.setScale(2);
+
+    this.nameTag = this.add.sprite(
+      this.merchant.x,
+      this.merchant.y - 16,
+      "nametag"
+    );
+    this.merchantText = this.add.text(0, 0, "상인", {
+      color: "black",
+      fontSize: "10px",
+    });
+    this.merchantText.x = this.nameTag.x - this.merchantText.width / 2;
+    this.merchantText.y = this.nameTag.y - this.merchantText.height / 2;
+
     // 캐릭터와 NPC overlap 이벤트
     this.physics.add.overlap(this.player, this.king, () => {
       this.kingOverlapped = true;
     });
     this.physics.add.overlap(this.player, this.princess, () => {
       this.princessOverlapped = true;
+    });
+    this.physics.add.overlap(this.player, this.merchant, () => {
+      this.merchantOverlapped = true;
     });
 
     // 캐릭터와 벽 Collider
@@ -132,6 +162,7 @@ export default class Main extends Phaser.Scene {
     this.player.play("player_idle");
     this.king.play("king_idle");
     this.princess.play("princess_idle");
+    this.merchant.play("merchant_idle");
 
     this.spacebar = this.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.SPACE
@@ -157,6 +188,7 @@ export default class Main extends Phaser.Scene {
     if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
       if (this.kingOverlapped) game.events.emit("enter", "1");
       if (this.princessOverlapped) game.events.emit("enter", "2");
+      if (this.merchantOverlapped) game.events.emit("enter", "3");
     }
 
     if (
@@ -179,5 +211,6 @@ export default class Main extends Phaser.Scene {
 
     this.kingOverlapped = false;
     this.princessOverlapped = false;
+    this.merchantOverlapped = false;
   }
 }

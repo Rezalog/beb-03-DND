@@ -66,6 +66,8 @@ const Exchange = ({ address, name, tokenAddress, account }) => {
 
     const kip7 = new caver.klay.KIP7(tokenAddress);
     const allowed = await kip7.allowance(account, address);
+    // 변경해야함
+    // if allowed <= caver.utils.toPeb(input2.current.value)
     if (allowed.toString() === "0") {
       try {
         await kip7.approve(address, caver.utils.toPeb("100000000"), {
@@ -95,6 +97,39 @@ const Exchange = ({ address, name, tokenAddress, account }) => {
     setLp(caver.utils.fromPeb(balance));
   };
 
+  const removeLiquidity = async () => {
+    const caver = new Caver(window.klaytn);
+    const exchange = new caver.klay.Contract(exchangeABI, address);
+
+    const kip7 = new caver.klay.KIP7(address);
+    const allowed = await kip7.allowance(account, address);
+    if (allowed.toString() === "0") {
+      try {
+        await kip7.approve(address, caver.utils.toPeb("100000000"), {
+          from: account,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    await exchange.methods
+      .removeLiquidity(caver.utils.toPeb(removeLp.current.value))
+      .send({
+        from: account,
+        gas: 2000000,
+      });
+
+    const klayInExchange = await exchange.methods.getKlay().call();
+    const tokenInExchange = await exchange.methods.getReserve().call();
+    const balance = await kip7.balanceOf(account);
+
+    setReservedKlay(caver.utils.fromPeb(klayInExchange));
+    setReservedToken(caver.utils.fromPeb(tokenInExchange));
+
+    setLp(caver.utils.fromPeb(balance));
+  };
+
   return (
     <div>
       <p>{name}</p>
@@ -108,7 +143,7 @@ const Exchange = ({ address, name, tokenAddress, account }) => {
       <div>
         <input placeholder='0.0' ref={removeLp}></input>
         <p>{Number(lp).toFixed(6)} LP</p>
-        <button>출금</button>
+        <button onClick={removeLiquidity}>출금</button>
       </div>
     </div>
   );
