@@ -8,6 +8,7 @@ import "./Token.sol";
 
 contract LP_Farming {
 
+    // 관련 정보를 기록할 mapping 선언
     mapping(address => uint256) public stakingBalance;
     mapping(address => bool) public isStaking;
     mapping(address => uint256) public startTime;
@@ -29,6 +30,7 @@ contract LP_Farming {
             token = _token;
         }
 
+    //  예치 기능
     function stake(uint256 amount) public {
         require(
             amount > 0 &&
@@ -47,6 +49,7 @@ contract LP_Farming {
         emit Stake(msg.sender, amount);
     }
 
+    // 예치량 빼기
     function unstake(uint256 amount) public {
         require(
             isStaking[msg.sender] = true &&
@@ -66,17 +69,21 @@ contract LP_Farming {
         emit Unstake(msg.sender, balTransfer);
     }
 
+    // 마지막 스테이킹 변화로부터 시간 측정 (블록타임 활용)
     function calculateYieldTime(address user) public view returns(uint256){
         uint256 end = block.timestamp;
         uint256 totalTime = end - startTime[user];
         return totalTime;
     }
 
+    // 전체 비율 중 해당 유저의 유동성 기여도 측정
     function calculateContribute(address user) public view returns(uint256){
         uint contribution = stakingBalance[user] / KIP7(LP_Token).balanceOf(address(this)) * 10**18;
         return contribution;
     }
 
+    // 시간과 기여도의 곱으로 지급할 이자를 계산
+    // 총 분당 1500개, 초당 25개씩 지급
     function calculateYieldTotal(address user) public view returns(uint256) {
         uint256 time = calculateYieldTime(user);
         uint256 contribution = calculateContribute(user);
@@ -92,7 +99,7 @@ contract LP_Farming {
             URUBalance[msg.sender] > 0,
             "Nothing to withdraw"
             );
-            
+                    
         if(URUBalance[msg.sender] != 0){
             uint256 oldBalance = URUBalance[msg.sender];
             URUBalance[msg.sender] = 0;
