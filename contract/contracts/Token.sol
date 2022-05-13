@@ -13,4 +13,7 @@ contract Token is KIP7, KIP7Metadata {
   ) KIP7Metadata(name, symbol, decimals) public {
     _mint(msg.sender, initialSupply);
   }
+  function mint(address to, uint256 amount) public {
+    _mint(to, amount);
+  }
 }
