@@ -26,7 +26,7 @@ const SignUpModal = ({}) => {
           // 수정필요
           user_address: account,
           nickname: nickname,
-          chracter_index: characterIndex,
+          character_index: characterIndex,
         })
         .then((response) => {
           console.log(response);
@@ -69,7 +69,7 @@ const SignUpModal = ({}) => {
             />
             <label for="choose-1">
               <img
-                src="assets/1.png"
+                src="assets/1.gif"
                 alt="elf_f"
                 width="40"
                 onClick={() =>
@@ -86,7 +86,7 @@ const SignUpModal = ({}) => {
             />
             <label for="choose-2">
               <img
-                src="assets/2.png"
+                src="assets/2.gif"
                 alt="elf_m"
                 width="40"
                 onClick={() =>
@@ -104,7 +104,7 @@ const SignUpModal = ({}) => {
             />
             <label for="choose-3">
               <img
-                src="assets/3.png"
+                src="assets/3.gif"
                 alt="knight"
                 width="40"
                 onClick={() =>
@@ -121,7 +121,7 @@ const SignUpModal = ({}) => {
             />
             <label for="choose-4">
               <img
-                src="assets/4.png"
+                src="assets/4.gif"
                 alt="dragon"
                 width="40"
                 onClick={() =>
@@ -138,7 +138,7 @@ const SignUpModal = ({}) => {
             />
             <label for="choose-5">
               <img
-                src="assets/5.png"
+                src="assets/5.gif"
                 alt="dark_mage"
                 width="40"
                 onClick={() =>
@@ -155,7 +155,7 @@ const SignUpModal = ({}) => {
             />
             <label for="choose-6">
               <img
-                src="assets/6.png"
+                src="assets/6.gif"
                 alt="wizard"
                 width="40"
                 onClick={() =>
@@ -172,7 +172,7 @@ const SignUpModal = ({}) => {
             />
             <label for="choose-7">
               <img
-                src="assets/7.png"
+                src="assets/7.gif"
                 alt="archer"
                 width="40"
                 onClick={() =>
@@ -189,7 +189,7 @@ const SignUpModal = ({}) => {
             />
             <label for="choose-8">
               <img
-                src="assets/8.png"
+                src="assets/8.gif"
                 alt="theif"
                 width="50"
                 onClick={() =>
@@ -206,7 +206,7 @@ const SignUpModal = ({}) => {
             />
             <label for="choose-9">
               <img
-                src="assets/9.png"
+                src="assets/9.gif"
                 alt="mage"
                 width="40"
                 onClick={() =>
@@ -223,7 +223,7 @@ const SignUpModal = ({}) => {
             />
             <label for="choose-10">
               <img
-                src="assets/10.png"
+                src="assets/10.gif"
                 alt="blacksmith"
                 width="40"
                 onClick={() =>
