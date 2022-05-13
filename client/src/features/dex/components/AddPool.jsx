@@ -52,6 +52,8 @@ const AddPool = ({ account }) => {
 
     const kip7 = new caver.klay.KIP7(selectedToken);
     const allowed = await kip7.allowance(account, exchangeAddress);
+    // 변경해야함
+    // if allowed <= caver.utils.toPeb(input2.current.value)
     if (allowed.toString() === "0") {
       try {
         await kip7.approve(exchangeAddress, caver.utils.toPeb("100000000"), {
@@ -129,7 +131,9 @@ const AddPool = ({ account }) => {
       </p>
       <input placeholder='0.0' ref={tokenAmount} />
       <button>{currentTokenSymbol}</button>
-      <p>잔액:{Number(tokenBalance).toFixed(6)} </p>
+      <p>
+        잔액:{Number(tokenBalance).toFixed(6)} {currentTokenSymbol}
+      </p>
       <input placeholder='주소' ref={newTokenAddress} />
       <button onClick={addToken}>추가</button>
       <br></br>

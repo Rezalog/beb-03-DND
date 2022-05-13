@@ -66,6 +66,8 @@ const Exchange = ({ address, name, tokenAddress, account }) => {
 
     const kip7 = new caver.klay.KIP7(tokenAddress);
     const allowed = await kip7.allowance(account, address);
+    // 변경해야함
+    // if allowed <= caver.utils.toPeb(input2.current.value)
     if (allowed.toString() === "0") {
       try {
         await kip7.approve(address, caver.utils.toPeb("100000000"), {

@@ -15,6 +15,7 @@ const TokenSwapModal = () => {
   const { isSubModalOpen, tokens, token0, token1 } = useSelector(
     (state) => state.tokenSwap
   );
+  const { exchanges } = useSelector((state) => state.dex);
   const [balance, setBalance] = useState(0);
   const [balance1, setBalance1] = useState(1);
   const [account, setAccount] = useState(null);
@@ -46,24 +47,22 @@ const TokenSwapModal = () => {
   };
 
   const getOutputAmount = async () => {
-    if (Object.keys(exchange).length !== 0) {
-      const caver = new Caver(window.klaytn);
-      const input = token0InputRef.current.value || 0;
-      if (input > 0) {
-        let output;
-        if (token0 > 0) {
-          output = await exchange.methods
-            .getklayAmount(caver.utils.toPeb(input))
-            .call();
-          //console.log(caver.utils.fromPeb(output));
-        } else {
-          output = await exchange.methods
-            .getTokenAmount(caver.utils.toPeb(input))
-            .call();
-        }
-        token1InputRef.current.value = caver.utils.fromPeb(output);
-        setMinOutput(caver.utils.fromPeb(output) * 0.99);
+    const caver = new Caver(window.klaytn);
+    const input = token0InputRef.current.value || 0;
+    if (input > 0) {
+      let output;
+      if (token0 > 0) {
+        output = await exchange.methods
+          .getKlayAmount(caver.utils.toPeb(input))
+          .call();
+        //console.log(caver.utils.fromPeb(output));
+      } else {
+        output = await exchange.methods
+          .getTokenAmount(caver.utils.toPeb(input))
+          .call();
       }
+      token1InputRef.current.value = caver.utils.fromPeb(output);
+      setMinOutput(caver.utils.fromPeb(output) * 0.99);
     }
   };
 
@@ -157,16 +156,17 @@ const TokenSwapModal = () => {
     const caver = new Caver(window.klaytn);
     if (token1 > 0) {
       const address = tokens[token1].address;
+
       const kip7 = new caver.klay.KIP7(address);
-      const symbol = await kip7.symbol();
       const _balance = await kip7.balanceOf(account);
       setBalance1(caver.utils.fromPeb(_balance));
 
-      const factory = new caver.klay.Contract(factoryABI, factoryAddress);
-      const exchangeAddress = await factory.methods.getExchange(address).call();
-
-      if (exchangeAddress !== "0x0000000000000000000000000000000000000000") {
-        setExchange(new caver.klay.Contract(exchangeABI, exchangeAddress));
+      for (let i = 0; i < exchanges.length; i++) {
+        if (exchanges[i].tokenAddress.toLowerCase() === address.toLowerCase()) {
+          setExchange(
+            new caver.klay.Contract(exchangeABI, exchanges[i].address)
+          );
+        }
       }
     } else {
       const _balance = await caver.klay.getBalance(account);
