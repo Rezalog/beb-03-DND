@@ -9,6 +9,8 @@ import { openDexModal } from "./features/modal/dexModalSlice";
 import { openTokenSwapModal } from "./features/modal/tokenSwapModalSlice";
 import SignUpModal from "./features/signup/SignUpModal";
 import { openSignUpModal } from "./features/modal/signUpModalSlice";
+import { openLpFarmModal } from "./features/modal/lpFarmingModalSlice";
+import LPFarmModal from "./features/lpFarming/LPFarmModal";
 import axios from "axios";
 import Loading from "./features/loading/Loading";
 
@@ -18,6 +20,7 @@ function App() {
     (state) => state.tokenSwapModal
   );
   const { isOpen: isSignUpOpen } = useSelector((state) => state.signUpModal);
+  const { isOpen: isLpFarmOpen } = useSelector((state) => state.lpFarmModal);
   const { isLoading } = useSelector((state) => state.loading);
   const dispatch = useDispatch();
   const [isSignIn, setIsSignIn] = useState(false);
@@ -82,6 +85,10 @@ function App() {
           dispatch(openTokenSwapModal());
           break;
         }
+        case "3": {
+          dispatch(openLpFarmModal());
+          break;
+        }
         default: {
           break;
         }
@@ -90,7 +97,7 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <div className='App'>
       {isSignIn ? null : (
         <div>
           <h1>Dungeon & Defi</h1>
@@ -100,6 +107,7 @@ function App() {
 
       {isDexOpen && <DexModal />}
       {isTokenSwapOpen && <TokenSwapModal />}
+      {isLpFarmOpen && <LPFarmModal />}
       {isSignUpOpen && (
         <SignUpModal
           nickname={nickname}

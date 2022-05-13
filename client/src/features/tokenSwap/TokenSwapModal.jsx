@@ -8,8 +8,6 @@ import { startLoading, stopLoading } from "../loading/loadingSlice";
 
 import { factoryABI, factoryAddress, exchangeABI } from "../dex/contractInfo";
 
-import { abi, address } from "./exchangeContract";
-
 const TokenSwapModal = () => {
   const dispatch = useDispatch();
   const { isSubModalOpen, tokens, token0, token1 } = useSelector(
@@ -57,6 +55,7 @@ const TokenSwapModal = () => {
           .call();
         //console.log(caver.utils.fromPeb(output));
       } else {
+        console.log(exchange);
         output = await exchange.methods
           .getTokenAmount(caver.utils.toPeb(input))
           .call();
@@ -72,10 +71,20 @@ const TokenSwapModal = () => {
     if (token0 > 0) {
       const tokenAddress = tokens[token0].address;
       const kip7 = new caver.klay.KIP7(tokenAddress);
-      const allowed = await kip7.allowance(account, address);
+      let exchangeAddress;
+
+      for (let i = 0; i < exchanges.length; i++) {
+        if (
+          exchanges[i].tokenAddress.toLowerCase() === tokenAddress.toLowerCase()
+        ) {
+          exchangeAddress = exchanges[i].address;
+        }
+      }
+      const allowed = await kip7.allowance(account, exchangeAddress);
+      // allowed가 적을경우에 approve 다시한다.
       if (allowed.toString() === "0") {
         try {
-          await kip7.approve(address, caver.utils.toPeb("100000000"), {
+          await kip7.approve(exchangeAddress, caver.utils.toPeb("100000000"), {
             from: account,
           });
         } catch (err) {
@@ -206,6 +215,7 @@ const TokenSwapModal = () => {
         <button
           onClick={() => {
             dispatch(closeTokenSwapModal());
+            dispatch(clearState());
           }}
         >
           X

@@ -3,9 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   exchanges: [
     {
-      address: "0x50a292Fe9d1D134D8A93BC5CB3df1BEe680E5f4c",
+      address: "0xf4Ff858D64a45b84237a74f413F6A67805e9A76C",
       name: "klay-uru-LP-token",
-      tokenAddress: "0xBf67648411457Dc88F20B8eAE26dF6563ec68067",
+      tokenAddress: "0xA935449F20f0e6867FF23dbFC627e4300bf011b3",
     },
   ],
 };
