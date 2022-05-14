@@ -4,14 +4,20 @@ import { closeSignUpModal } from "../modal/signUpModalSlice";
 import styled from "styled-components";
 import axios from "axios";
 import { setCharacterIndex, setNickname } from "../userinfo/userInfoSlice";
+import game from "../../PhaserGame"; // 맞는지 확인 필요
 
-const SignUpModal = ({}) => {
+const SignUpModal = () => {
   const dispatch = useDispatch();
   const account = window.klaytn.selectedAddress;
   const nickname = useSelector((state) => state.userInfo.nickname);
   const characterIndex = useSelector((state) => state.userInfo.characterIndex);
+  // const closeSignUpModal = useSelector((state) => state.signUpModal);
 
-  const signUp = async () => {
+  const signUp = async (event) => {
+    // form 제출버튼 클릭시 페이지 자동 새로고침 방지
+    event.preventDefault();
+
+    // 테스트넷 네크워크인지 확인
     let networkId = await window.klaytn.networkVersion;
     if (networkId !== 1001) {
       // Baobab(TestNet) newworkId = 1001
@@ -19,21 +25,32 @@ const SignUpModal = ({}) => {
       alert("Please Connect Baobab TestNet");
       return;
     }
-    // 닉네임 중복확인 구현 필요
+
     try {
       await axios
-        .post("/user", {
+        .post(`http://localhost:8080/users/signup/${account}`, {
           // 수정필요
           user_address: account,
-          nickname: nickname,
+          user_nickname: nickname,
           character_index: characterIndex,
         })
-        .then((response) => {
-          console.log(response);
+        .then((res) => {
+          console.log(res);
           dispatch(closeSignUpModal());
+          game.events.emit("start", characterIndex); // 맞는지 확인 필요
         });
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      // 에러 발생시, 해당 내용 팝업 알림
+      if (err.response.data === "nickname already exists") {
+        alert("이미 등록된 닉네임입니다");
+      }
+      if (err.response.data === "wallet not found") {
+        alert("지갑 연결을 확인해주세요");
+      }
+      if (err.response.data === "Bad Request") {
+        alert("닉네임 입력과 캐릭터 선택을 모두 완료해주세요");
+      }
+      console.log(err);
     }
   };
 
@@ -49,7 +66,7 @@ const SignUpModal = ({}) => {
     >
       Sign Up
       <div>
-        <form>
+        <form onSubmit={signUp}>
           <div>Input Nickname</div>
           <input
             value={nickname}
@@ -67,7 +84,7 @@ const SignUpModal = ({}) => {
               value="1"
               required
             />
-            <label for="choose-1">
+            <label htmlFor="choose-1">
               <img
                 src="assets/1.gif"
                 alt="elf_f"
@@ -84,7 +101,7 @@ const SignUpModal = ({}) => {
               value="2"
               required
             />
-            <label for="choose-2">
+            <label htmlFor="choose-2">
               <img
                 src="assets/2.gif"
                 alt="elf_m"
@@ -102,7 +119,7 @@ const SignUpModal = ({}) => {
               value="3"
               required
             />
-            <label for="choose-3">
+            <label htmlFor="choose-3">
               <img
                 src="assets/3.gif"
                 alt="knight"
@@ -119,7 +136,7 @@ const SignUpModal = ({}) => {
               value="4"
               required
             />
-            <label for="choose-4">
+            <label htmlFor="choose-4">
               <img
                 src="assets/4.gif"
                 alt="dragon"
@@ -136,7 +153,7 @@ const SignUpModal = ({}) => {
               value="5"
               required
             />
-            <label for="choose-5">
+            <label htmlFor="choose-5">
               <img
                 src="assets/5.gif"
                 alt="dark_mage"
@@ -153,7 +170,7 @@ const SignUpModal = ({}) => {
               value="6"
               required
             />
-            <label for="choose-6">
+            <label htmlFor="choose-6">
               <img
                 src="assets/6.gif"
                 alt="wizard"
@@ -170,7 +187,7 @@ const SignUpModal = ({}) => {
               value="7"
               required
             />
-            <label for="choose-7">
+            <label htmlFor="choose-7">
               <img
                 src="assets/7.gif"
                 alt="archer"
@@ -187,11 +204,11 @@ const SignUpModal = ({}) => {
               value="8"
               required
             />
-            <label for="choose-8">
+            <label htmlFor="choose-8">
               <img
                 src="assets/8.gif"
                 alt="theif"
-                width="50"
+                width="40"
                 onClick={() =>
                   dispatch(setCharacterIndex({ characterIndex: "8" }))
                 }
@@ -204,7 +221,7 @@ const SignUpModal = ({}) => {
               value="9"
               required
             />
-            <label for="choose-9">
+            <label htmlFor="choose-9">
               <img
                 src="assets/9.gif"
                 alt="mage"
@@ -221,7 +238,7 @@ const SignUpModal = ({}) => {
               value="10"
               required
             />
-            <label for="choose-10">
+            <label htmlFor="choose-10">
               <img
                 src="assets/10.gif"
                 alt="blacksmith"
@@ -232,7 +249,9 @@ const SignUpModal = ({}) => {
               />
             </label>
           </div>
-          <button onClick={() => signUp}>Sign Up</button>
+          <button type="submit" onClick={() => signUp}>
+            Sign Up
+          </button>
         </form>
 
         <button

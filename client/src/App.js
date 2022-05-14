@@ -9,6 +9,8 @@ import { openDexModal } from "./features/modal/dexModalSlice";
 import { openTokenSwapModal } from "./features/modal/tokenSwapModalSlice";
 import SignUpModal from "./features/signup/SignUpModal";
 import { openSignUpModal } from "./features/modal/signUpModalSlice";
+import { openLpFarmModal } from "./features/modal/lpFarmingModalSlice";
+import LPFarmModal from "./features/lpFarming/LPFarmModal";
 import axios from "axios";
 import Loading from "./features/loading/Loading";
 import {
@@ -22,12 +24,13 @@ function App() {
     (state) => state.tokenSwapModal
   );
   const { isOpen: isSignUpOpen } = useSelector((state) => state.signUpModal);
+  const { isOpen: isLpFarmOpen } = useSelector((state) => state.lpFarmModal);
   const { isLoading } = useSelector((state) => state.loading);
   const dispatch = useDispatch();
   const [isSignIn, setIsSignIn] = useState(false);
 
-  // const nickname = useSelector((state) => state.userInfo.nickname);
-  // const characterIndex = useSelector((state) => state.userInfo.characterIndex);
+  const nickname = useSelector((state) => state.userInfo.nickname);
+  const characterIndex = useSelector((state) => state.userInfo.characterIndex);
 
   const connectToWallet = async () => {
     if (typeof window.klaytn !== "undefined") {
@@ -45,34 +48,34 @@ function App() {
         // get 요청을 통해 받아온 유저 닉네임과 이미지 받아와 적용하기
         // 없으면 signUp 모달창
         // signUp 이 완료되면 isSignIn = true 상태로 바꾸어 접속
-        axios
-          .get("/user", {
-            params: {
-              user_address: account,
-            },
+        await axios
+          .get(`http://localhost:8080/users/signin/${account}`, {
+            // params: {
+            //   user_address: account,
+            // }, //params 를 보낼 때
           })
-          .then((response) => {
-            if (response.status === 200) {
+          .then((res) => {
+            if (res.status === 200) {
               // 수정필요
-              dispatch(setNickname({ nickname: response.nickname })); // 디스패치 활용 SetNickname 예시
+              dispatch(setNickname({ nickname: res.nickname })); // 디스패치 활용 SetNickname 예시
               dispatch(
-                setCharacterIndex({ characterIndex: response.characterIndex })
+                setCharacterIndex({ characterIndex: res.characterIndex })
               );
               setIsSignIn(true);
-              // game.events.emit("start", "dragon");
-            } else {
-              {
-                setIsSignIn(false);
-                dispatch(openSignUpModal());
-              }
+              // emit 이벤트
+              // 두번째 인자값에 캐릭터 이미지 파일 이름이 들어가면된다.
+              game.events.emit("start", "dragon");
             }
           });
-
-        // emit 이벤트
-        // 두번째 인자값에 캐릭터 이미지 파일 이름이 들어가면된다.
-        game.events.emit("start", "dragon"); // 서버와 연동 후 삭제 예정
       } catch (err) {
-        console.log(err);
+        // 저장된 지갑주소가 없어서 HTTP 상태코드 400을 받으면 사인업 모달창을 연다.
+        if (err.response.status === 400) {
+          console.log("You have to sign up! ");
+          setIsSignIn(true);
+          dispatch(openSignUpModal());
+        } else {
+          console.log(err);
+        }
       }
     }
   };
@@ -87,6 +90,10 @@ function App() {
         }
         case "2": {
           dispatch(openTokenSwapModal());
+          break;
+        }
+        case "3": {
+          dispatch(openLpFarmModal());
           break;
         }
         default: {
@@ -107,8 +114,9 @@ function App() {
 
       {isDexOpen && <DexModal />}
       {isTokenSwapOpen && <TokenSwapModal />}
-      {/* {isSignUpOpen && <SignUpModal />} */}
-      <SignUpModal />
+      {isLpFarmOpen && <LPFarmModal />}
+      {isSignUpOpen && <SignUpModal />}
+      {/* <SignUpModal /> */}
       {isLoading && <Loading />}
     </div>
   );
