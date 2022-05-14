@@ -31,6 +31,7 @@ const TokenSwapModal = () => {
   const token1InputRef = useRef(null);
   const [exchange, setExchange] = useState({});
   const [minOutput, setMinOutput] = useState(0);
+  const [price, setPrice] = useState("");
 
   const connectToWallet = async () => {
     if (typeof window.klaytn !== "undefined") {
@@ -73,7 +74,11 @@ const TokenSwapModal = () => {
         caver.utils.fromPeb(output)
       ).toFixed(6);
       setMinOutput(caver.utils.fromPeb(output) * 0.99);
+    } else {
+      token1InputRef.current.value = "";
+      setMinOutput(0);
     }
+    getPrice();
   };
 
   const swapToken = async () => {
@@ -202,6 +207,16 @@ const TokenSwapModal = () => {
     }
   };
 
+  const getPrice = () => {
+    const t0 = token0InputRef.current.value;
+    const t1 = token1InputRef.current.value;
+    if (t0 === "" || t1 === "") {
+      setPrice("");
+    } else {
+      setPrice((Number(t1) / Number(t0)).toFixed(6));
+    }
+  };
+
   useEffect(() => {
     if (account) getToken0();
   }, [token0]);
@@ -269,6 +284,14 @@ const TokenSwapModal = () => {
               </BalanceContainer>
             </InputContainer>
             <SwapInfoContainer>
+              {price && (
+                <InfoContainer>
+                  <span>가격</span>
+                  <span>
+                    {price} {tokens[token1].symbol} per {tokens[token0].symbol}{" "}
+                  </span>
+                </InfoContainer>
+              )}
               <InfoContainer>
                 <span>Slippage 허용</span>
                 <span>1%</span>
