@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Caver from "caver-js";
 import { closeTokenSwapModal } from "../modal/tokenSwapModalSlice";
-import SubModal from "./SubModal";
+import TokenSelectModal from "./TokenSelectModal";
 import { openSubModal, clearState } from "./tokenSwapSlice";
 import { startLoading, stopLoading } from "../loading/loadingSlice";
 import { Modal, Container, Header, Button } from "../../styles/Modal.styled";
@@ -11,7 +11,10 @@ import {
   InputContainer,
   BalanceContainer,
 } from "../../styles/InputContainer.styled";
-import { SwapInfoContainer } from "../../styles/TokenSwap.styled";
+import {
+  SwapInfoContainer,
+  InfoContainer,
+} from "../../styles/TokenSwap.styled";
 import { factoryABI, factoryAddress, exchangeABI } from "../dex/contractInfo";
 
 const TokenSwapModal = () => {
@@ -66,7 +69,9 @@ const TokenSwapModal = () => {
           .getTokenAmount(caver.utils.toPeb(input))
           .call();
       }
-      token1InputRef.current.value = caver.utils.fromPeb(output);
+      token1InputRef.current.value = Number(
+        caver.utils.fromPeb(output)
+      ).toFixed(6);
       setMinOutput(caver.utils.fromPeb(output) * 0.99);
     }
   };
@@ -207,72 +212,77 @@ const TokenSwapModal = () => {
 
   return (
     <ModalCenter>
-      <Modal>
-        <Container>
-          <Header>
-            <h2>토큰 교환</h2>
-            <button
-              onClick={() => {
-                dispatch(closeTokenSwapModal());
-                dispatch(clearState());
-              }}
-            >
-              X
-            </button>
-          </Header>
-          <button onClick={connectToWallet}>잔액조회</button>
-          <InputContainer>
-            <button
-              onClick={() => {
-                dispatch(openSubModal());
-                setSelectedToken(0);
-              }}
-            >
-              {tokens[token0].symbol}
-              <img src='assets/arrowDown.png' />
-            </button>
-            <input
-              placeholder='0.0'
-              ref={token0InputRef}
-              onChange={getOutputAmount}
-            />
-            <BalanceContainer>
-              <div onClick={inputMaxToken}>Max</div>
-              <span>
-                잔액: {Number(balance).toFixed(2)} {tokens[token0].symbol}
-              </span>
-            </BalanceContainer>
-          </InputContainer>
-          <InputContainer>
-            <button
-              onClick={() => {
-                dispatch(openSubModal());
-                setSelectedToken(1);
-              }}
-            >
-              {token1 < 0 ? "토큰선택" : tokens[token1].symbol}
-              <img src='assets/arrowDown.png' />
-            </button>
-            <input placeholder='0.0' disabled ref={token1InputRef} />
+      {!isSubModalOpen && (
+        <Modal>
+          <Container>
+            <Header>
+              <h1>토큰 교환</h1>
+              <button
+                onClick={() => {
+                  dispatch(closeTokenSwapModal());
+                  dispatch(clearState());
+                }}
+              ></button>
+            </Header>
+            <button onClick={connectToWallet}>잔액조회</button>
+            <InputContainer>
+              <button
+                onClick={() => {
+                  dispatch(openSubModal());
+                  setSelectedToken(0);
+                }}
+              >
+                {tokens[token0].symbol}
+                <img src='assets/arrowDown.png' />
+              </button>
+              <input
+                placeholder='0.0'
+                ref={token0InputRef}
+                onChange={getOutputAmount}
+              />
+              <BalanceContainer>
+                <div onClick={inputMaxToken}>Max</div>
+                <span>
+                  잔액: {Number(balance).toFixed(2)} {tokens[token0].symbol}
+                </span>
+              </BalanceContainer>
+            </InputContainer>
+            <InputContainer>
+              <button
+                onClick={() => {
+                  dispatch(openSubModal());
+                  setSelectedToken(1);
+                }}
+              >
+                {token1 < 0 ? "토큰선택" : tokens[token1].symbol}
+                <img src='assets/arrowDown.png' />
+              </button>
+              <input placeholder='0.0' disabled ref={token1InputRef} />
 
-            <BalanceContainer>
-              <span>
-                잔액:{" "}
-                {token1 < 0
-                  ? "0.0"
-                  : `${Number(balance1).toFixed(2)} ${tokens[token1].symbol}`}
-              </span>
-            </BalanceContainer>
-          </InputContainer>
-          <SwapInfoContainer>
-            <span>Slippage 허용</span>
-            <span>1%</span>
-          </SwapInfoContainer>
-          <p>최소 교환 금액 (Slippage 1%): {minOutput.toFixed(6)}</p>
-          <Button onClick={swapToken}>교환</Button>
-          {isSubModalOpen && <SubModal selectedToken={selectedToken} />}
-        </Container>
-      </Modal>
+              <BalanceContainer>
+                <span>
+                  잔액:{" "}
+                  {token1 < 0
+                    ? "0.0"
+                    : `${Number(balance1).toFixed(2)} ${tokens[token1].symbol}`}
+                </span>
+              </BalanceContainer>
+            </InputContainer>
+            <SwapInfoContainer>
+              <InfoContainer>
+                <span>Slippage 허용</span>
+                <span>1%</span>
+              </InfoContainer>
+              <InfoContainer>
+                <span>최소 수령</span>
+                <span>{minOutput.toFixed(6)}</span>
+              </InfoContainer>
+            </SwapInfoContainer>
+            <Button onClick={swapToken}>교환</Button>
+          </Container>
+        </Modal>
+      )}
+      {isSubModalOpen && <TokenSelectModal selectedToken={selectedToken} />}
     </ModalCenter>
   );
 };

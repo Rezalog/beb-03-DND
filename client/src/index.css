@@ -6,6 +6,17 @@
   font-style: normal;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
 body {
   margin: 0;
   font-family: "DungGeunMo", -apple-system, BlinkMacSystemFont, "Segoe UI",
