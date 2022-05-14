@@ -21,3 +21,10 @@ button {
   font-family: "DungGeunMo", source-code-pro, Menlo, Monaco, Consolas,
     "Courier New", monospace;
 }
+
+div:hover {
+  cursor: default;
+}
+*:focus {
+  outline: none;
+}
