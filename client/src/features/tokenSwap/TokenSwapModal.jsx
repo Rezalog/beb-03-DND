@@ -24,7 +24,7 @@ const TokenSwapModal = () => {
   );
   const { exchanges } = useSelector((state) => state.dex);
   const [balance, setBalance] = useState(0);
-  const [balance1, setBalance1] = useState(1);
+  const [balance1, setBalance1] = useState(0);
   const [account, setAccount] = useState(null);
   const [selectedToken, setSelectedToken] = useState(0);
   const token0InputRef = useRef(null);
@@ -50,22 +50,31 @@ const TokenSwapModal = () => {
     }
   };
 
+  /*
+   * 현재 보유중인 전체 수량을 input으로 넣어준다.
+   */
   const inputMaxToken = () => {
     token0InputRef.current.value = balance;
   };
 
+  /*
+   *
+   */
   const getOutputAmount = async () => {
     const caver = new Caver(window.klaytn);
     const input = token0InputRef.current.value || 0;
+    // input field가 비어있는지 확인하고
+    // 비어있지 않으면 블록체인에서 output amount를 가져온다.
+    // 비어있다면 초기화한다.
     if (input > 0) {
       let output;
+      // 토큰을 지불하려 한다면 output이 klay이기 때문에 getKlayAmount를 호출하고
+      // 클레이를 지불하려 하면 output이 토큰이기 때문에 getTokenAmount를 호출한다.
       if (token0 > 0) {
         output = await exchange.methods
           .getKlayAmount(caver.utils.toPeb(input))
           .call();
-        //console.log(caver.utils.fromPeb(output));
       } else {
-        console.log(exchange);
         output = await exchange.methods
           .getTokenAmount(caver.utils.toPeb(input))
           .call();
@@ -81,9 +90,14 @@ const TokenSwapModal = () => {
     getPrice();
   };
 
+  /*
+   * 클레이와 토큰을 교환한다.
+   */
   const swapToken = async () => {
     const caver = new Caver(window.klaytn);
     dispatch(startLoading());
+    //만약 지불하는게 토큰이면 tokenToKlay 함수를 호출하고
+    // 클레이를 지불한다면 klayToToken 함수를 호출한다.
     if (token0 > 0) {
       const tokenAddress = tokens[token0].address;
       const kip7 = new caver.klay.KIP7(tokenAddress);
@@ -127,7 +141,8 @@ const TokenSwapModal = () => {
         });
 
       dispatch(stopLoading());
-      console.log(tokens[token0].symbol);
+      //만약 URU 토큰으로 교환을 한다면
+      //카이카스에 URU 토큰을 등록해준다.
       if (tokens[token1].symbol === "URU") {
         const tokenAdded = localStorage.getItem("tokenAdded");
         console.log(tokenAdded);
@@ -154,7 +169,7 @@ const TokenSwapModal = () => {
               }
             }
           );
-          localStorage.setItem("tokenAdded", "false");
+          localStorage.setItem("tokenAdded", "true");
         }
       }
     }
@@ -163,6 +178,7 @@ const TokenSwapModal = () => {
     token0InputRef.current.value = 0;
     token1InputRef.current.value = 0;
   };
+
   const getToken0 = async () => {
     const caver = new Caver(window.klaytn);
     if (token0 > 0) {
@@ -171,14 +187,7 @@ const TokenSwapModal = () => {
       const symbol = await kip7.symbol();
       const _balance = await kip7.balanceOf(account);
       setBalance(caver.utils.fromPeb(_balance));
-
-      for (let i = 0; i < exchanges.length; i++) {
-        if (exchanges[i].tokenAddress.toLowerCase() === address.toLowerCase()) {
-          setExchange(
-            new caver.klay.Contract(exchangeABI, exchanges[i].address)
-          );
-        }
-      }
+      setExchangeContract(address);
     } else {
       const _balance = await caver.klay.getBalance(account);
       setBalance(caver.utils.fromPeb(_balance));
@@ -189,21 +198,22 @@ const TokenSwapModal = () => {
     const caver = new Caver(window.klaytn);
     if (token1 > 0) {
       const address = tokens[token1].address;
-
       const kip7 = new caver.klay.KIP7(address);
       const _balance = await kip7.balanceOf(account);
       setBalance1(caver.utils.fromPeb(_balance));
-
-      for (let i = 0; i < exchanges.length; i++) {
-        if (exchanges[i].tokenAddress.toLowerCase() === address.toLowerCase()) {
-          setExchange(
-            new caver.klay.Contract(exchangeABI, exchanges[i].address)
-          );
-        }
-      }
+      setExchangeContract(address);
     } else {
       const _balance = await caver.klay.getBalance(account);
       setBalance1(caver.utils.fromPeb(_balance));
+    }
+  };
+
+  const setExchangeContract = (address) => {
+    const caver = new Caver(window.klaytn);
+    for (let i = 0; i < exchanges.length; i++) {
+      if (exchanges[i].tokenAddress.toLowerCase() === address.toLowerCase()) {
+        setExchange(new caver.klay.Contract(exchangeABI, exchanges[i].address));
+      }
     }
   };
 
@@ -218,12 +228,11 @@ const TokenSwapModal = () => {
   };
 
   useEffect(() => {
-    if (account) getToken0();
-  }, [token0]);
-
-  useEffect(() => {
-    if (account) getToken1();
-  }, [token1]);
+    if (account) {
+      getToken0();
+      getToken1();
+    }
+  }, [account, token0, token1]);
 
   return (
     <ModalCenter>
@@ -240,7 +249,7 @@ const TokenSwapModal = () => {
               ></button>
             </Header>
             <button onClick={connectToWallet}>잔액조회</button>
-            <InputContainer>
+            <InputContainer type='number'>
               <button
                 onClick={() => {
                   dispatch(openSubModal());
@@ -262,14 +271,15 @@ const TokenSwapModal = () => {
                 </span>
               </BalanceContainer>
             </InputContainer>
-            <InputContainer>
+            <button>스왑</button>
+            <InputContainer type='number'>
               <button
                 onClick={() => {
                   dispatch(openSubModal());
                   setSelectedToken(1);
                 }}
               >
-                {token1 < 0 ? "토큰선택" : tokens[token1].symbol}
+                {tokens[token1].symbol}
                 <img src='assets/arrowDown.png' />
               </button>
               <input placeholder='0.0' disabled ref={token1InputRef} />
@@ -305,7 +315,12 @@ const TokenSwapModal = () => {
           </Container>
         </Modal>
       )}
-      {isSubModalOpen && <TokenSelectModal selectedToken={selectedToken} />}
+      {isSubModalOpen && (
+        <TokenSelectModal
+          selectedToken={selectedToken}
+          setExchangeContract={setExchangeContract}
+        />
+      )}
     </ModalCenter>
   );
 };

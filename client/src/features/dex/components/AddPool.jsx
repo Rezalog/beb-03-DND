@@ -63,46 +63,49 @@ const AddPool = ({ account }) => {
         console.log(err);
       }
     }
+    try {
+      await exchange.methods.addLiquidity(tokenAmountInPeb).send({
+        from: account,
+        value: klayAmountInPeb,
+        gas: 2000000,
+      });
 
-    await exchange.methods.addLiquidity(tokenAmountInPeb).send({
-      from: account,
-      value: klayAmountInPeb,
-      gas: 2000000,
-    });
+      const lpKip7 = new caver.klay.KIP7(exchangeAddress);
+      const lpSymbol = await lpKip7.symbol();
+      const lpName = await lpKip7.name();
 
-    const lpKip7 = new caver.klay.KIP7(exchangeAddress);
-    const lpSymbol = await lpKip7.symbol();
-    const lpName = await lpKip7.name();
-
-    dispatch(
-      addExchange({
-        address: exchangeAddress,
-        name: lpName,
-        tokenAddress: selectedToken,
-      })
-    );
-    window.klaytn.sendAsync(
-      {
-        method: "wallet_watchAsset",
-        params: {
-          type: "ERC20", // Initially only supports ERC20, but eventually more!
-          options: {
-            address: exchangeAddress, // The address that the token is at.
-            symbol: lpSymbol, // A ticker symbol or shorthand, up to 5 chars.
-            decimals: 18, // The number of decimals in the token
-            image: "", // A string url of the token logo
+      dispatch(
+        addExchange({
+          address: exchangeAddress,
+          name: lpName,
+          tokenAddress: selectedToken,
+        })
+      );
+      window.klaytn.sendAsync(
+        {
+          method: "wallet_watchAsset",
+          params: {
+            type: "ERC20", // Initially only supports ERC20, but eventually more!
+            options: {
+              address: exchangeAddress, // The address that the token is at.
+              symbol: lpSymbol, // A ticker symbol or shorthand, up to 5 chars.
+              decimals: 18, // The number of decimals in the token
+              image: "", // A string url of the token logo
+            },
           },
+          id: Math.round(Math.random() * 100000),
         },
-        id: Math.round(Math.random() * 100000),
-      },
-      (err, added) => {
-        if (added) {
-          console.log("Thanks for your interest!");
-        } else {
-          console.log("Your loss!");
+        (err, added) => {
+          if (added) {
+            console.log("Thanks for your interest!");
+          } else {
+            console.log("Your loss!");
+          }
         }
-      }
-    );
+      );
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const addToken = async () => {
