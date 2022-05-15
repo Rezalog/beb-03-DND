@@ -3,7 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import Caver from "caver-js";
 import { closeTokenSwapModal } from "../modal/tokenSwapModalSlice";
 import TokenSelectModal from "./TokenSelectModal";
-import { openSubModal, clearState } from "./tokenSwapSlice";
+import {
+  openSubModal,
+  clearState,
+  changeToken0,
+  changeToken1,
+} from "./tokenSwapSlice";
 import { startLoading, stopLoading } from "../loading/loadingSlice";
 import { Modal, Container, Header, Button } from "../../styles/Modal.styled";
 import { ModalCenter } from "../../styles/ModalCenter.styled";
@@ -184,7 +189,6 @@ const TokenSwapModal = () => {
     if (token0 > 0) {
       const address = tokens[token0].address;
       const kip7 = new caver.klay.KIP7(address);
-      const symbol = await kip7.symbol();
       const _balance = await kip7.balanceOf(account);
       setBalance(caver.utils.fromPeb(_balance));
       setExchangeContract(address);
@@ -225,6 +229,17 @@ const TokenSwapModal = () => {
     } else {
       setPrice((Number(t1) / Number(t0)).toFixed(6));
     }
+  };
+
+  const swapToken0AndToken1 = () => {
+    const currentToken0 = token0;
+    const currentToken1 = token1;
+    const currentToken1Value = token1InputRef.current.value;
+    token1InputRef.current.value = token0InputRef.current.value;
+    token0InputRef.current.value = currentToken1Value;
+    getPrice();
+    dispatch(changeToken0({ index: currentToken1 }));
+    dispatch(changeToken1({ index: currentToken0 }));
   };
 
   useEffect(() => {
@@ -271,7 +286,7 @@ const TokenSwapModal = () => {
                 </span>
               </BalanceContainer>
             </InputContainer>
-            <button>스왑</button>
+            <button onClick={swapToken0AndToken1}>스왑</button>
             <InputContainer type='number'>
               <button
                 onClick={() => {
