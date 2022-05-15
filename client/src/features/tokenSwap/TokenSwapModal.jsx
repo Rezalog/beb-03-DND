@@ -191,7 +191,7 @@ const TokenSwapModal = () => {
       const kip7 = new caver.klay.KIP7(address);
       const _balance = await kip7.balanceOf(account);
       setBalance(caver.utils.fromPeb(_balance));
-      setExchangeContract(address);
+      getExchangeContract(address);
     } else {
       const _balance = await caver.klay.getBalance(account);
       setBalance(caver.utils.fromPeb(_balance));
@@ -205,14 +205,14 @@ const TokenSwapModal = () => {
       const kip7 = new caver.klay.KIP7(address);
       const _balance = await kip7.balanceOf(account);
       setBalance1(caver.utils.fromPeb(_balance));
-      setExchangeContract(address);
+      getExchangeContract(address);
     } else {
       const _balance = await caver.klay.getBalance(account);
       setBalance1(caver.utils.fromPeb(_balance));
     }
   };
 
-  const setExchangeContract = (address) => {
+  const getExchangeContract = (address) => {
     const caver = new Caver(window.klaytn);
     for (let i = 0; i < exchanges.length; i++) {
       if (exchanges[i].tokenAddress.toLowerCase() === address.toLowerCase()) {
@@ -336,7 +336,7 @@ const TokenSwapModal = () => {
       {isSubModalOpen && (
         <TokenSelectModal
           selectedToken={selectedToken}
-          setExchangeContract={setExchangeContract}
+          getExchangeContract={getExchangeContract}
         />
       )}
     </ModalCenter>

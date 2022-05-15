@@ -5,7 +5,7 @@ import { closeSubModal, changeToken0, changeToken1 } from "./tokenSwapSlice";
 import { Modal, Container, Header } from "../../styles/Modal.styled";
 import { TokenList, TokenContainer } from "../../styles/TokenList.styled";
 
-const TokenSelectModal = ({ selectedToken, setExchangeContract }) => {
+const TokenSelectModal = ({ selectedToken, getExchangeContract }) => {
   const dispatch = useDispatch();
   const { tokens, token0, token1 } = useSelector((state) => state.tokenSwap);
   return (
@@ -34,7 +34,10 @@ const TokenSelectModal = ({ selectedToken, setExchangeContract }) => {
                   <li
                     key={index}
                     onClick={() => {
-                      if (index > 0) setExchangeContract(tokens[index].address);
+                      console.log(tokens[index].address);
+                      if (index > 0) {
+                        getExchangeContract(tokens[index].address);
+                      }
                       if (selectedToken === 0) {
                         dispatch(changeToken0({ index }));
                         dispatch(changeToken1({ index: 0 }));
