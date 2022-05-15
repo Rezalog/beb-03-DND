@@ -13,7 +13,7 @@ export const Modal = styled.div`
 `;
 
 export const Container = styled.div`
-  position: absolute;
+  position: relative;
   padding: 60px 40px 30px 40px;
   width: 100%;
   height: 700px;
@@ -23,7 +23,6 @@ export const Container = styled.div`
 `;
 
 export const Header = styled.div`
-  position: relative;
   margin-top: 30px;
 
   & > h1 {
@@ -32,8 +31,8 @@ export const Header = styled.div`
 
   & > button {
     position: absolute;
-    top: -20px;
-    right: -85px;
+    top: 70px;
+    right: 70px;
     background-color: transparent;
     border: none;
     background-image: url("assets/close.png");
