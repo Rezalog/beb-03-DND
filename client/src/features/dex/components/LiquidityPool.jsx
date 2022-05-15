@@ -97,7 +97,7 @@ const LiquidityPool = ({
           .mul(caver.utils.toBN(caver.utils.toPeb(klay)))
           .div(caver.utils.toBN(caver.utils.toPeb(token)))
       );
-      input1.current.value = Number(result).toFixed(6);
+      input1.current.value = parseFloat(Number(result).toFixed(6));
       setKlayAmount(result);
       setTokenAmount(input2Value);
       getPrice();
@@ -123,7 +123,7 @@ const LiquidityPool = ({
           .mul(caver.utils.toBN(caver.utils.toPeb(token)))
           .div(caver.utils.toBN(caver.utils.toPeb(klay)))
       );
-      input2.current.value = Number(result).toFixed(6);
+      input2.current.value = parseFloat(Number(result).toFixed(6));
       setTokenAmount(result);
       setKlayAmount(input1Value);
       getPrice();
@@ -180,8 +180,8 @@ const LiquidityPool = ({
       setPrice("");
       setReversePrice("");
     } else {
-      setPrice((Number(t1) / Number(t0)).toFixed(6));
-      setReversePrice((Number(t0) / Number(t1)).toFixed(6));
+      setPrice(parseFloat((Number(t1) / Number(t0)).toFixed(6)));
+      setReversePrice(parseFloat((Number(t0) / Number(t1)).toFixed(6)));
     }
   };
 
@@ -199,17 +199,14 @@ const LiquidityPool = ({
           .div(caver.utils.toBN(caver.utils.toPeb(reservedKlay)))
       )
     ).toFixed(6);
-    console.log("lp", expectedLP);
-    console.log(
-      "lp",
-      Number(caver.utils.fromPeb(totalSupply)) + Number(expectedLP)
-    );
     setShare(
-      Number(
-        (expectedLP /
-          (Number(caver.utils.fromPeb(totalSupply)) + Number(expectedLP))) *
-          100
-      ).toFixed(2)
+      parseFloat(
+        Number(
+          (expectedLP /
+            (Number(caver.utils.fromPeb(totalSupply)) + Number(expectedLP))) *
+            100
+        ).toFixed(2)
+      )
     );
   };
 
@@ -240,7 +237,7 @@ const LiquidityPool = ({
           </span>
         </BalanceContainer>
       </InputContainer>
-      <p>+</p>
+      <span style={{ fontSize: "2rem", marginBottom: "-20px" }}>+</span>
       <InputContainer type='number'>
         <button
           onClick={() => {

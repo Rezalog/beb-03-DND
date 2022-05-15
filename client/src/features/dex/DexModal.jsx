@@ -52,7 +52,7 @@ const DexModal = () => {
   return (
     <ModalCenter>
       {!isSubModalOpen && (
-        <Modal>
+        <Modal style={{ height: "750px" }}>
           <Container>
             <Header>
               <h1>광산 (유동성)</h1>

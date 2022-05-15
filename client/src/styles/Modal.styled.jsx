@@ -55,7 +55,6 @@ export const Button = styled.button`
   background-size: 100% 100%;
   background-position: center;
   color: white;
-  bottom: 5px;
+  bottom: 10px;
   font-size: 2rem;
-  bottom: 60px;
 `;

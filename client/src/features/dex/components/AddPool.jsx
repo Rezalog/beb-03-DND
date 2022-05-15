@@ -5,34 +5,30 @@ import { useDispatch, useSelector } from "react-redux";
 import { addExchange } from "../dexSlice";
 import { addNewToken } from "../../tokenSwap/tokenSwapSlice";
 
+import {
+  InputContainer,
+  BalanceContainer,
+} from "../../../styles/InputContainer.styled";
+import {
+  SwapInfoContainer,
+  InfoContainer,
+} from "../../../styles/TokenSwap.styled";
+import { Button } from "../../../styles/Modal.styled";
+
 const AddPool = ({ account }) => {
   const [klayBalance, setKlayBalance] = useState(0);
   const [tokenBalance, setTokenBalance] = useState(0);
+  const [isValidAddress, setIsValidAddress] = useState(false);
   const [selectedToken, setSelectedToken] = useState("");
   const [currentTokenSymbol, setCurrentTokenSymbol] = useState("URU");
+  const [currentTokenName, setCurrentTokenName] = useState("");
   const klayAmount = useRef(null);
   const tokenAmount = useRef(null);
   const newTokenAddress = useRef(null);
+  const [price, setPrice] = useState("");
 
   const { tokens } = useSelector((state) => state.tokenSwap);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const getInitialBalance = async () => {
-      const caver = new Caver(window.klaytn);
-
-      const kbalance = await caver.klay.getBalance(account);
-      setKlayBalance(caver.utils.fromPeb(kbalance));
-
-      const address = tokens[1].address;
-      const kip7 = new caver.klay.KIP7(address);
-      const symbol = await kip7.symbol();
-      const tbalance = await kip7.balanceOf(account);
-      setTokenBalance(caver.utils.fromPeb(tbalance));
-      setSelectedToken(address);
-    };
-    getInitialBalance();
-  }, [account]);
 
   const addPool = async () => {
     const caver = new Caver(window.klaytn);
@@ -109,39 +105,89 @@ const AddPool = ({ account }) => {
   };
 
   const addToken = async () => {
-    const caver = new Caver(window.klaytn);
+    if (account) {
+      const caver = new Caver(window.klaytn);
+      try {
+        const kip7 = new caver.klay.KIP7(newTokenAddress.current.value);
+        const name = await kip7.name();
+        const symbol = await kip7.symbol();
+        const balance = await kip7.balanceOf(account);
 
-    const kip7 = new caver.klay.KIP7(newTokenAddress.current.value);
-    const name = await kip7.name();
-    const symbol = await kip7.symbol();
-    const balance = await kip7.balanceOf(account);
+        const kbalance = await caver.klay.getBalance(account);
+        setKlayBalance(caver.utils.fromPeb(kbalance));
+        setCurrentTokenSymbol(symbol);
+        setCurrentTokenName(name);
+        setTokenBalance(caver.utils.fromPeb(balance));
+        setSelectedToken(newTokenAddress.current.value);
+        setIsValidAddress(true);
 
-    dispatch(
-      addNewToken({ symbol, name, address: newTokenAddress.current.value })
-    );
-    setCurrentTokenSymbol(symbol);
-    setTokenBalance(caver.utils.fromPeb(balance));
-    setSelectedToken(newTokenAddress.current.value);
+        dispatch(
+          addNewToken({ symbol, name, address: newTokenAddress.current.value })
+        );
+      } catch (err) {
+        setIsValidAddress(false);
+      }
+    }
+  };
+
+  const getPrice = () => {
+    const ka = klayAmount.current.value;
+    const ta = tokenAmount.current.value;
+    if (ka && ta) {
+      const result = klayAmount.current.value / tokenAmount.current.value;
+      setPrice(parseFloat(result.toFixed(6)));
+    } else {
+      setPrice("");
+    }
   };
 
   return (
-    <div>
-      <input placeholder='0.0' ref={klayAmount} />
-      <button>KLAY</button>
-      <p>
-        잔액: {Number(klayBalance).toFixed(6)} KLAY
-        <button>Max</button>
-      </p>
-      <input placeholder='0.0' ref={tokenAmount} />
-      <button>{currentTokenSymbol}</button>
-      <p>
-        잔액:{Number(tokenBalance).toFixed(6)} {currentTokenSymbol}
-      </p>
-      <input placeholder='주소' ref={newTokenAddress} />
-      <button onClick={addToken}>추가</button>
-      <br></br>
-      <button onClick={addPool}>풀 추가</button>
-    </div>
+    <>
+      <InputContainer>
+        <input
+          placeholder='토큰 주소'
+          ref={newTokenAddress}
+          onChange={addToken}
+        />
+      </InputContainer>
+      {!isValidAddress ? (
+        <p>추가 하고 싶은 토큰 주소를 입력하세요!</p>
+      ) : (
+        <>
+          <InputContainer>
+            <button style={{ opacity: "0.8" }}>KLAY</button>
+            <input placeholder='0.0' ref={klayAmount} onChange={getPrice} />
+            <BalanceContainer>
+              <span>잔액: {Number(klayBalance).toFixed(2)} KLAY</span>
+            </BalanceContainer>
+          </InputContainer>
+          <InputContainer>
+            <button style={{ opacity: "0.8" }}>
+              {currentTokenSymbol}
+              <span style={{ marginLeft: "20px", fontSize: "1rem" }}>
+                {currentTokenName}
+              </span>
+            </button>
+
+            <input placeholder='0.0' ref={tokenAmount} onChange={getPrice} />
+            <BalanceContainer>
+              <span>
+                잔액: {Number(tokenBalance).toFixed(2)} {currentTokenSymbol}
+              </span>
+            </BalanceContainer>
+          </InputContainer>
+          {price && (
+            <SwapInfoContainer>
+              <InfoContainer>
+                <span>{price}</span>
+                <span>KLAY per {currentTokenSymbol}</span>
+              </InfoContainer>
+            </SwapInfoContainer>
+          )}
+          <Button onClick={addPool}>풀 추가</Button>
+        </>
+      )}
+    </>
   );
 };
 

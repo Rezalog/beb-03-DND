@@ -227,7 +227,7 @@ const TokenSwapModal = () => {
     if (t0 === "" || t1 === "") {
       setPrice("");
     } else {
-      setPrice((Number(t1) / Number(t0)).toFixed(6));
+      setPrice(parseFloat((Number(t1) / Number(t0)).toFixed(6)));
     }
   };
 
@@ -282,7 +282,8 @@ const TokenSwapModal = () => {
               <BalanceContainer>
                 <div onClick={inputMaxToken}>Max</div>
                 <span>
-                  잔액: {Number(balance).toFixed(2)} {tokens[token0].symbol}
+                  잔액: {parseFloat(Number(balance).toFixed(2))}{" "}
+                  {tokens[token0].symbol}
                 </span>
               </BalanceContainer>
             </InputContainer>
@@ -304,7 +305,9 @@ const TokenSwapModal = () => {
                   잔액:{" "}
                   {token1 < 0
                     ? "0.0"
-                    : `${Number(balance1).toFixed(2)} ${tokens[token1].symbol}`}
+                    : `${parseFloat(Number(balance1).toFixed(2))} ${
+                        tokens[token1].symbol
+                      }`}
                 </span>
               </BalanceContainer>
             </InputContainer>
@@ -323,7 +326,7 @@ const TokenSwapModal = () => {
               </InfoContainer>
               <InfoContainer>
                 <span>최소 수령</span>
-                <span>{minOutput.toFixed(6)}</span>
+                <span>{parseFloat(minOutput.toFixed(6))}</span>
               </InfoContainer>
             </SwapInfoContainer>
             <Button onClick={swapToken}>교환</Button>
