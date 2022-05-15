@@ -68,13 +68,21 @@ const AddPool = ({ account }) => {
 
       const lpKip7 = new caver.klay.KIP7(exchangeAddress);
       const lpSymbol = await lpKip7.symbol();
-      const lpName = await lpKip7.name();
+      //const lpName = await lpKip7.name();
 
       dispatch(
         addExchange({
           address: exchangeAddress,
-          name: lpName,
+          name: `${currentTokenSymbol}/KLAY`,
           tokenAddress: selectedToken,
+        })
+      );
+
+      dispatch(
+        addNewToken({
+          symbol: currentTokenSymbol,
+          name: currentTokenName,
+          address: newTokenAddress.current.value,
         })
       );
       window.klaytn.sendAsync(
@@ -120,10 +128,6 @@ const AddPool = ({ account }) => {
         setTokenBalance(caver.utils.fromPeb(balance));
         setSelectedToken(newTokenAddress.current.value);
         setIsValidAddress(true);
-
-        dispatch(
-          addNewToken({ symbol, name, address: newTokenAddress.current.value })
-        );
       } catch (err) {
         setIsValidAddress(false);
       }
