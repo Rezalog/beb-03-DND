@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const SwapInfoContainer = styled.div`
-  width: 60%;
+  width: 70%;
   font-size: 1rem;
   display: flex;
   flex-direction: column;

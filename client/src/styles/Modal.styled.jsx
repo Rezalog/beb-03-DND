@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Modal = styled.div`
   position: relative;
   width: 530px;
-  height: 700px;
+  height: ${(props) => props.height || "700px"};
   background-image: url("assets/modal.png");
   background-size: 100% 100%;
   background-repeat: no-repeat;
@@ -16,7 +16,7 @@ export const Container = styled.div`
   position: relative;
   padding: 60px 40px 30px 40px;
   width: 100%;
-  height: 700px;
+  height: ${(props) => props.height || "700px"};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -55,6 +55,6 @@ export const Button = styled.button`
   background-size: 100% 100%;
   background-position: center;
   color: white;
-  bottom: 10px;
+  bottom: 70px;
   font-size: 2rem;
 `;
