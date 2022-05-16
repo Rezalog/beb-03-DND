@@ -10,19 +10,19 @@ const userInfoSlice = createSlice({
   name: "userInfo",
   initialState,
   reducers: {
-    setNickname: (state, action) => {
+    addNickname: (state, action) => {
       state.nickname = action.payload.nickname;
     },
-    setCharacterIndex: (state, action) => {
+    addCharacterIndex: (state, action) => {
       state.characterIndex = action.payload.characterIndex;
     },
-    setAddress: (state, action) => {
+    addAddress: (state, action) => {
       state.address = action.payload.address; // or state.address = action.payload
     },
   },
 });
 
-export const { setNickname, setCharacterIndex, setAddress } =
+export const { addNickname, addCharacterIndex, addAddress } =
   userInfoSlice.actions;
 
 export default userInfoSlice.reducer;

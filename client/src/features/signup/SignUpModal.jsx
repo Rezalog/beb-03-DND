@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { closeSignUpModal } from "../modal/signUpModalSlice";
 import styled from "styled-components";
 import axios from "axios";
-import { setCharacterIndex, setNickname } from "../userinfo/userInfoSlice";
-import game from "../../PhaserGame"; // 맞는지 확인 필요
+import { addCharacterIndex, addNickname } from "../userinfo/userInfoSlice";
+import game from "../../PhaserGame";
 
 const SignUpModal = () => {
   const dispatch = useDispatch();
@@ -28,12 +28,17 @@ const SignUpModal = () => {
 
     try {
       await axios
-        .post(`http://localhost:8080/users/signup/${account}`, {
-          // 수정필요
-          user_address: account,
-          user_nickname: nickname,
-          character_index: characterIndex,
-        })
+        .post(
+          `http://localhost:8080/users/signup/${account}`,
+          {
+            user_address: account,
+            user_nickname: nickname,
+            character_index: characterIndex,
+          },
+          {
+            withCredentials: true,
+          }
+        )
         .then((res) => {
           console.log(res);
           dispatch(closeSignUpModal());
@@ -71,7 +76,7 @@ const SignUpModal = () => {
           <input
             value={nickname}
             onChange={(event) =>
-              dispatch(setNickname({ nickname: event.target.value }))
+              dispatch(addNickname({ nickname: event.target.value }))
             }
             required
           />
@@ -90,7 +95,7 @@ const SignUpModal = () => {
                 alt="elf_f"
                 width="40"
                 onClick={() =>
-                  dispatch(setCharacterIndex({ characterIndex: "1" }))
+                  dispatch(addCharacterIndex({ characterIndex: "1" }))
                 }
               />
             </label>
@@ -107,7 +112,7 @@ const SignUpModal = () => {
                 alt="elf_m"
                 width="40"
                 onClick={() =>
-                  dispatch(setCharacterIndex({ characterIndex: "2" }))
+                  dispatch(addCharacterIndex({ characterIndex: "2" }))
                 }
               />
             </label>
@@ -125,7 +130,7 @@ const SignUpModal = () => {
                 alt="knight"
                 width="40"
                 onClick={() =>
-                  dispatch(setCharacterIndex({ characterIndex: "3" }))
+                  dispatch(addCharacterIndex({ characterIndex: "3" }))
                 }
               />
             </label>
@@ -142,7 +147,7 @@ const SignUpModal = () => {
                 alt="dragon"
                 width="40"
                 onClick={() =>
-                  dispatch(setCharacterIndex({ characterIndex: "4" }))
+                  dispatch(addCharacterIndex({ characterIndex: "4" }))
                 }
               />
             </label>
@@ -159,7 +164,7 @@ const SignUpModal = () => {
                 alt="dark_mage"
                 width="40"
                 onClick={() =>
-                  dispatch(setCharacterIndex({ characterIndex: "5" }))
+                  dispatch(addCharacterIndex({ characterIndex: "5" }))
                 }
               />
             </label>
@@ -176,7 +181,7 @@ const SignUpModal = () => {
                 alt="wizard"
                 width="40"
                 onClick={() =>
-                  dispatch(setCharacterIndex({ characterIndex: "6" }))
+                  dispatch(addCharacterIndex({ characterIndex: "6" }))
                 }
               />
             </label>
@@ -193,7 +198,7 @@ const SignUpModal = () => {
                 alt="archer"
                 width="40"
                 onClick={() =>
-                  dispatch(setCharacterIndex({ characterIndex: "7" }))
+                  dispatch(addCharacterIndex({ characterIndex: "7" }))
                 }
               />
             </label>
@@ -210,7 +215,7 @@ const SignUpModal = () => {
                 alt="theif"
                 width="40"
                 onClick={() =>
-                  dispatch(setCharacterIndex({ characterIndex: "8" }))
+                  dispatch(addCharacterIndex({ characterIndex: "8" }))
                 }
               />
             </label>
@@ -227,7 +232,7 @@ const SignUpModal = () => {
                 alt="mage"
                 width="40"
                 onClick={() =>
-                  dispatch(setCharacterIndex({ characterIndex: "9" }))
+                  dispatch(addCharacterIndex({ characterIndex: "9" }))
                 }
               />
             </label>
@@ -244,7 +249,7 @@ const SignUpModal = () => {
                 alt="blacksmith"
                 width="40"
                 onClick={() =>
-                  dispatch(setCharacterIndex({ characterIndex: "10" }))
+                  dispatch(addCharacterIndex({ characterIndex: "10" }))
                 }
               />
             </label>

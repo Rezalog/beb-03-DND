@@ -14,8 +14,8 @@ import LPFarmModal from "./features/lpFarming/LPFarmModal";
 import axios from "axios";
 import Loading from "./features/loading/Loading";
 import {
-  setCharacterIndex,
-  setNickname,
+  addCharacterIndex,
+  addNickname,
 } from "./features/userinfo/userInfoSlice";
 
 function App() {
@@ -31,6 +31,7 @@ function App() {
 
   const nickname = useSelector((state) => state.userInfo.nickname);
   const characterIndex = useSelector((state) => state.userInfo.characterIndex);
+  // const [isRegisterd, setIsRegistered] = useState(false);
 
   const connectToWallet = async () => {
     if (typeof window.klaytn !== "undefined") {
@@ -42,7 +43,6 @@ function App() {
         const caver = new Caver(window.klaytn);
         const balance = await caver.klay.getBalance(account);
         console.log(balance);
-        // dispatch(openSignUpModal());
 
         // 서버에 get요청을 보내 해당 어카운트가 있으면 접속(isSignIn = true)
         // get 요청을 통해 받아온 유저 닉네임과 이미지 받아와 적용하기
@@ -50,24 +50,41 @@ function App() {
         // signUp 이 완료되면 isSignIn = true 상태로 바꾸어 접속
         await axios
           .get(`http://localhost:8080/users/signin/${account}`, {
-            // params: {
-            //   user_address: account,
-            // }, //params 를 보낼 때
+            withCredentials: true,
           })
           .then((res) => {
             if (res.status === 200) {
-              // 수정필요
-              dispatch(setNickname({ nickname: res.nickname })); // 디스패치 활용 SetNickname 예시
-              dispatch(
-                setCharacterIndex({ characterIndex: res.characterIndex })
-              );
-              setIsSignIn(true);
-              // emit 이벤트
-              // 두번째 인자값에 캐릭터 이미지 파일 이름이 들어가면된다.
-              game.events.emit("start", "dragon");
+              axios
+                .get("http://localhost:8080/users/profile", {
+                  withCredentials: true, // 없으면 요청(req)헤더에 쿠키 없음
+                })
+                .then((res) => {
+                  setIsSignIn(true);
+                  dispatch(
+                    addNickname({ nickname: res.data.profile.user_nickname })
+                  );
+                  dispatch(
+                    addCharacterIndex({
+                      characterIndex: res.data.profile.character_index,
+                    })
+                  );
+                  console.log(
+                    "Your nickname is",
+                    res.data.profile.user_nickname
+                  );
+                  console.log(
+                    "Your character index is",
+                    res.data.profile.character_index
+                  );
+
+                  // emit 이벤트
+                  // 두번째 인자값에 캐릭터 이미지 파일 이름이 들어가면된다.
+                  game.events.emit("start", res.data.profile.character_index);
+                });
             }
           });
       } catch (err) {
+        console.log(err);
         // 저장된 지갑주소가 없어서 HTTP 상태코드 400을 받으면 사인업 모달창을 연다.
         if (err.response.status === 400) {
           console.log("You have to sign up! ");
@@ -96,12 +113,18 @@ function App() {
           dispatch(openLpFarmModal());
           break;
         }
+
         default: {
           break;
         }
       }
     });
   }, []);
+
+  useEffect(() => {
+    console.log(characterIndex);
+    console.log(nickname);
+  }, [characterIndex, nickname]);
 
   return (
     <div className="App">
@@ -116,7 +139,6 @@ function App() {
       {isTokenSwapOpen && <TokenSwapModal />}
       {isLpFarmOpen && <LPFarmModal />}
       {isSignUpOpen && <SignUpModal />}
-      {/* <SignUpModal /> */}
       {isLoading && <Loading />}
     </div>
   );
