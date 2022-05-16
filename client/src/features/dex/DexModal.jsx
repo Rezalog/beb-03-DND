@@ -39,7 +39,7 @@ const DexModal = () => {
     }
   };
 
-  const setExchangeContract = (address) => {
+  const getExchangeContract = (address) => {
     const caver = new Caver(window.klaytn);
     for (let i = 0; i < exchanges.length; i++) {
       if (exchanges[i].tokenAddress.toLowerCase() === address.toLowerCase()) {
@@ -76,7 +76,7 @@ const DexModal = () => {
               <LiquidityPool
                 account={account}
                 setSelectedToken={setSelectedToken}
-                setExchangeContract={setExchangeContract}
+                getExchangeContract={getExchangeContract}
                 exchange={exchange}
                 currentExchangeAddress={currentExchangeAddress}
               />
@@ -89,7 +89,7 @@ const DexModal = () => {
       {isSubModalOpen && (
         <TokenSelectModal
           selectedToken={selectedToken}
-          setExchangeContract={setExchangeContract}
+          getExchangeContract={getExchangeContract}
         />
       )}
     </ModalCenter>

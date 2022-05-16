@@ -20,7 +20,7 @@ import {
 const LiquidityPool = ({
   account,
   setSelectedToken,
-  setExchangeContract,
+  getExchangeContract,
   exchange,
   currentExchangeAddress,
 }) => {
@@ -61,7 +61,7 @@ const LiquidityPool = ({
       const kip7 = new caver.klay.KIP7(address);
       const _balance = await kip7.balanceOf(account);
       setBalance(caver.utils.fromPeb(_balance));
-      setExchangeContract(address);
+      getExchangeContract(address);
       setCurrentTokenAddress(address);
     } else {
       const _balance = await caver.klay.getBalance(account);
@@ -76,7 +76,7 @@ const LiquidityPool = ({
       const kip7 = new caver.klay.KIP7(address);
       const _balance = await kip7.balanceOf(account);
       setBalance1(caver.utils.fromPeb(_balance));
-      setExchangeContract(address);
+      getExchangeContract(address);
       setCurrentTokenAddress(address);
     } else {
       const _balance = await caver.klay.getBalance(account);
