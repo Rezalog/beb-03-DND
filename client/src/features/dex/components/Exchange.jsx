@@ -12,7 +12,14 @@ import {
 } from "../../../styles/TokenSwap.styled";
 import { Button } from "../../../styles/Modal.styled";
 
-const Exchange = ({ address, name, tokenAddress, account }) => {
+const Exchange = ({
+  address,
+  name,
+  tokenAddress,
+  account,
+  setIsWithdrawal,
+  setSelectedExchange,
+}) => {
   const [reservedKlay, setReservedKlay] = useState(0);
   const [reservedToken, setReservedToken] = useState(0);
   const [tokenName, setTokenName] = useState("");
@@ -51,39 +58,6 @@ const Exchange = ({ address, name, tokenAddress, account }) => {
 
     getReserved();
   }, []);
-
-  const removeLiquidity = async () => {
-    const caver = new Caver(window.klaytn);
-    const exchange = new caver.klay.Contract(exchangeABI, address);
-
-    const kip7 = new caver.klay.KIP7(address);
-    const allowed = await kip7.allowance(account, address);
-    if (allowed.toString() === "0") {
-      try {
-        await kip7.approve(address, caver.utils.toPeb("100000000"), {
-          from: account,
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
-    await exchange.methods
-      .removeLiquidity(caver.utils.toPeb(removeLp.current.value))
-      .send({
-        from: account,
-        gas: 2000000,
-      });
-
-    const klayInExchange = await exchange.methods.getKlay().call();
-    const tokenInExchange = await exchange.methods.getReserve().call();
-    const balance = await kip7.balanceOf(account);
-
-    setReservedKlay(caver.utils.fromPeb(klayInExchange));
-    setReservedToken(caver.utils.fromPeb(tokenInExchange));
-
-    setLp(caver.utils.fromPeb(balance));
-  };
 
   const getShareOfLP = async (balance) => {
     const caver = new Caver(window.klaytn);
@@ -128,7 +102,15 @@ const Exchange = ({ address, name, tokenAddress, account }) => {
             <span>{share < 0.01 ? `<0.01` : share}%</span>
           </InfoContainer>
         </SwapInfoContainer>
-        <Button style={{ bottom: "-100px" }}>출금</Button>
+        <Button
+          style={{ bottom: "-100px" }}
+          onClick={() => {
+            setIsWithdrawal(true);
+            setSelectedExchange(address);
+          }}
+        >
+          출금
+        </Button>
       </Content>
     </LPContainer>
   );

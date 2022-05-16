@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Caver from "caver-js";
 import { useDispatch, useSelector } from "react-redux";
 import { closeDexModal } from "../modal/dexModalSlice";
-import LiquidityPool from "./components/LiquidityPool";
+import AddLiquidity from "./components/AddLiquidity";
 import AddPool from "./components/AddPool";
 import MyLiquidity from "./components/MyLiquidity";
 import TokenSelectModal from "../tokenSwap/TokenSelectModal";
@@ -39,7 +39,7 @@ const DexModal = () => {
     }
   };
 
-  const setExchangeContract = (address) => {
+  const getExchangeContract = (address) => {
     const caver = new Caver(window.klaytn);
     for (let i = 0; i < exchanges.length; i++) {
       if (exchanges[i].tokenAddress.toLowerCase() === address.toLowerCase()) {
@@ -73,10 +73,10 @@ const DexModal = () => {
             {currentNav == 0 && account ? (
               <MyLiquidity account={account} />
             ) : currentNav == 1 && account ? (
-              <LiquidityPool
+              <AddLiquidity
                 account={account}
                 setSelectedToken={setSelectedToken}
-                setExchangeContract={setExchangeContract}
+                getExchangeContract={getExchangeContract}
                 exchange={exchange}
                 currentExchangeAddress={currentExchangeAddress}
               />
@@ -89,7 +89,7 @@ const DexModal = () => {
       {isSubModalOpen && (
         <TokenSelectModal
           selectedToken={selectedToken}
-          setExchangeContract={setExchangeContract}
+          getExchangeContract={getExchangeContract}
         />
       )}
     </ModalCenter>

@@ -10,7 +10,13 @@ import {
   changeToken1,
 } from "./tokenSwapSlice";
 import { startLoading, stopLoading } from "../loading/loadingSlice";
-import { Modal, Container, Header, Button } from "../../styles/Modal.styled";
+import {
+  Modal,
+  Container,
+  Header,
+  Button,
+  UpDownButton,
+} from "../../styles/Modal.styled";
 import { ModalCenter } from "../../styles/ModalCenter.styled";
 import {
   InputContainer,
@@ -287,7 +293,7 @@ const TokenSwapModal = () => {
                 </span>
               </BalanceContainer>
             </InputContainer>
-            <button onClick={swapToken0AndToken1}>스왑</button>
+            <UpDownButton onClick={swapToken0AndToken1}></UpDownButton>
             <InputContainer type='number'>
               <button
                 onClick={() => {

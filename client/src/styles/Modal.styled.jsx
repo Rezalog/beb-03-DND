@@ -58,3 +58,28 @@ export const Button = styled.button`
   bottom: 70px;
   font-size: 2rem;
 `;
+
+export const BackButton = styled.button`
+  position: absolute;
+  background-color: transparent;
+  border: none;
+  background-image: url("assets/back.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+  width: 48px;
+  height: 48px;
+  top: 190px;
+  left: 70px;
+`;
+
+export const UpDownButton = styled.button`
+  background-color: transparent;
+  border: none;
+  background-image: url("assets/UpDown.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+  width: 32px;
+  height: 32px;
+`;
