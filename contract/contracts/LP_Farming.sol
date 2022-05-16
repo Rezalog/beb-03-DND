@@ -81,9 +81,9 @@ contract LP_Farming {
 
         // stake가 일어날 때와의 마찬가지의 논리
         for (uint256 i = 0; i < userList.length; i++) {
-        startTime[userList[i]] = block.timestamp;
         uint256 nowURUBalance = calculateYieldTotal(userList[i]);
         URUBalance[userList[i]] += nowURUBalance;
+        startTime[userList[i]] = block.timestamp;
         }
     }
 
