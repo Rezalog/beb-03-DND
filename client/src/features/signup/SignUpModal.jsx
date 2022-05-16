@@ -88,6 +88,9 @@ const SignUpModal = () => {
               id="choose-1"
               value="1"
               required
+              onClick={() =>
+                dispatch(addCharacterIndex({ characterIndex: "1" }))
+              }
             />
             <label htmlFor="choose-1">
               <img
@@ -105,6 +108,9 @@ const SignUpModal = () => {
               id="choose-2"
               value="2"
               required
+              onClick={() =>
+                dispatch(addCharacterIndex({ characterIndex: "2" }))
+              }
             />
             <label htmlFor="choose-2">
               <img
@@ -123,6 +129,9 @@ const SignUpModal = () => {
               id="choose-3"
               value="3"
               required
+              onClick={() =>
+                dispatch(addCharacterIndex({ characterIndex: "3" }))
+              }
             />
             <label htmlFor="choose-3">
               <img
@@ -140,6 +149,9 @@ const SignUpModal = () => {
               id="choose-4"
               value="4"
               required
+              onClick={() =>
+                dispatch(addCharacterIndex({ characterIndex: "4" }))
+              }
             />
             <label htmlFor="choose-4">
               <img
@@ -157,6 +169,9 @@ const SignUpModal = () => {
               id="choose-5"
               value="5"
               required
+              onClick={() =>
+                dispatch(addCharacterIndex({ characterIndex: "5" }))
+              }
             />
             <label htmlFor="choose-5">
               <img
@@ -174,6 +189,9 @@ const SignUpModal = () => {
               id="choose-6"
               value="6"
               required
+              onClick={() =>
+                dispatch(addCharacterIndex({ characterIndex: "6" }))
+              }
             />
             <label htmlFor="choose-6">
               <img
@@ -188,9 +206,12 @@ const SignUpModal = () => {
             <input
               type="radio"
               name="choice"
-              id="choose-2"
+              id="choose-7"
               value="7"
               required
+              onClick={() =>
+                dispatch(addCharacterIndex({ characterIndex: "7" }))
+              }
             />
             <label htmlFor="choose-7">
               <img
@@ -208,6 +229,9 @@ const SignUpModal = () => {
               id="choose-8"
               value="8"
               required
+              onClick={() =>
+                dispatch(addCharacterIndex({ characterIndex: "8" }))
+              }
             />
             <label htmlFor="choose-8">
               <img
@@ -225,6 +249,9 @@ const SignUpModal = () => {
               id="choose-9"
               value="9"
               required
+              onClick={() =>
+                dispatch(addCharacterIndex({ characterIndex: "9" }))
+              }
             />
             <label htmlFor="choose-9">
               <img
@@ -242,6 +269,9 @@ const SignUpModal = () => {
               id="choose-10"
               value="10"
               required
+              onClick={() =>
+                dispatch(addCharacterIndex({ characterIndex: "10" }))
+              }
             />
             <label htmlFor="choose-10">
               <img
