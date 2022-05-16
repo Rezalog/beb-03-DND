@@ -215,4 +215,6 @@ contract Exchange is KIP7, KIP7Metadata {
         // return (inputAmount * outputReserve) / (inputReserve + inputAmount); 수수료 없을 때의 경우
     }
 
+    // LP-Farming feature
+    
 }
