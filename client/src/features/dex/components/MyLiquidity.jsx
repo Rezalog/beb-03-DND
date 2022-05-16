@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Caver from "caver-js";
 import { useSelector } from "react-redux";
 import Exchange from "./Exchange";
+import RemoveLiquidity from "./RemoveLiquidity";
 
 import { ListContainer } from "../../../styles/LPContainer.styled";
 
@@ -10,6 +11,8 @@ import { Container } from "../../../styles/Modal.styled";
 const MyLiquidity = ({ account }) => {
   const { exchanges } = useSelector((state) => state.dex);
   const [ownedLP, setOwnedLP] = useState([]);
+  const [isWithdrawal, setIsWithdrawal] = useState(false);
+  const [selectedExchange, setSelectedExchange] = useState("");
 
   const getOwnedLPAsync = async () => {
     const caver = new Caver(window.klaytn);
@@ -27,13 +30,31 @@ const MyLiquidity = ({ account }) => {
   useEffect(() => {
     getOwnedLPAsync();
   }, []);
-  return (
-    <ListContainer>
-      {ownedLP.map((exchange, idx) => {
-        return <Exchange key={idx} {...exchange} account={account} />;
-      })}
-    </ListContainer>
-  );
+  if (isWithdrawal) {
+    return (
+      <RemoveLiquidity
+        account={account}
+        selectedExchange={selectedExchange}
+        setIsWithdrawal={setIsWithdrawal}
+      />
+    );
+  } else {
+    return (
+      <ListContainer>
+        {ownedLP.map((exchange, idx) => {
+          return (
+            <Exchange
+              key={idx}
+              {...exchange}
+              account={account}
+              setIsWithdrawal={setIsWithdrawal}
+              setSelectedExchange={setSelectedExchange}
+            />
+          );
+        })}
+      </ListContainer>
+    );
+  }
 };
 
 export default MyLiquidity;
