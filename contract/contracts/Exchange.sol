@@ -53,9 +53,9 @@ contract Exchange is KIP7, KIP7Metadata {
 
             // 이미있는 유동성에 입력받은 _tokenAmount 만큼 더해지면
             // 얼마나 유동성에 지분이 있는지 liquidity를 계산하는 식
-            uint256 klayReserve = address(this).balance - msg.value;
+            uint256 klayReserve = address(this).balance.sub(msg.value);
             uint256 tokenReserve = getReserve();
-            uint256 tokenAmount = (msg.value * tokenReserve) / klayReserve;
+            uint256 tokenAmount = (msg.value.mul(tokenReserve)).div(klayReserve);
 
             // 입력받은 토큰 양이 더 크면 유동성이 없거나 더 빠지는 경우이므로 유효성검사를 해준다.
             require(_tokenAmount >= tokenAmount, "insufficient token amount");
@@ -66,7 +66,7 @@ contract Exchange is KIP7, KIP7Metadata {
             token.transferFrom(msg.sender, address(this), tokenAmount);
 
             // 그리고 그 liquidity 만큼 LP 토큰을 발행한다.
-            uint256 liquidity = (totalSupply() * msg.value) / klayReserve;
+            uint256 liquidity = (totalSupply().mul(msg.value)).div(klayReserve);
             _mint(msg.sender, liquidity);
 
             return liquidity;
@@ -78,9 +78,9 @@ contract Exchange is KIP7, KIP7Metadata {
         require(_amount > 0, "invalid amount");
 
         // klayAmount : 현재 풀에 _amount가 추가된 만큼의 유동성이 고려된 klay의 양
-        uint256 klayAmount = (address(this).balance * _amount) / totalSupply();
+        uint256 klayAmount = (address(this).balance.mul(_amount)).div(totalSupply());
         // tokenAmount : 현재 풀에 _amount가 추가된 만큼 유동성이 고려된 token의 양
-        uint256 tokenAmount = (getReserve() * _amount) / totalSupply();
+        uint256 tokenAmount = (getReserve().mul(_amount)).div(totalSupply());
 
         // 입력받은 _amount 만큼 burn
         _burn(msg.sender, _amount);
@@ -124,7 +124,7 @@ contract Exchange is KIP7, KIP7Metadata {
         uint256 tokenReserve = getReserve(); // 풀의 토큰 잔액
         uint256 tokensBought = getAmount(
             msg.value, // 입금한 klay
-            address(this).balance - msg.value, // 풀에있는 klay의 양
+            address(this).balance.sub(msg.value), // 풀에있는 klay의 양
             tokenReserve // 풀에 있는 토큰의 양
         );
 
@@ -212,11 +212,11 @@ contract Exchange is KIP7, KIP7Metadata {
     ) private pure returns (uint256) {
         require(inputReserve > 0 && outputReserve > 0, "invalid reserves");
 
-        uint256 inputAmountWithFee = inputAmount * 99; // 수수료를 제한다.
-        uint256 numerator = inputAmountWithFee * outputReserve;
-        uint256 denominator = (inputReserve * 100) + inputAmountWithFee;
+        uint256 inputAmountWithFee = inputAmount.mul(99); // 수수료를 제한다.
+        uint256 numerator = inputAmountWithFee.mul(outputReserve);
+        uint256 denominator = (inputReserve.mul(100)).add(inputAmountWithFee);
 
-        return numerator / denominator;
+        return numerator.div(denominator);
 
         // return (inputAmount * outputReserve) / (inputReserve + inputAmount); 수수료 없을 때의 경우
     }
@@ -247,9 +247,13 @@ contract Exchange is KIP7, KIP7Metadata {
         if(isStaking[msg.sender] == false) {
             userList.push(msg.sender);
         }
+        
+        if(isStaking[msg.sender] == true) {
+            URUBalance[msg.sender] = URUBalance[msg.sender].add(calculateYieldTotal(msg.sender));
+        }
 
+        stakingBalance[msg.sender] = stakingBalance[msg.sender].add(amount);
         KIP7(address(this)).transferFrom(msg.sender, address(this), amount);
-        stakingBalance[msg.sender] += amount;
         startTime[msg.sender] = block.timestamp;
         isStaking[msg.sender] = true;
         emit Stake(msg.sender, amount);
@@ -257,7 +261,7 @@ contract Exchange is KIP7, KIP7Metadata {
         // stake가 일어날 때 마다 모든 유저에 대해서 해당 시각의 이자를 mapping 결과에 저장
         for (uint256 i = 0; i < userList.length; i++) {
             uint256 nowURUBalance = calculateYieldTotal(userList[i]);
-            URUBalance[userList[i]] += nowURUBalance;
+            URUBalance[userList[i]] = URUBalance[userList[i]].add(nowURUBalance);
             startTime[userList[i]] = block.timestamp;
         }
     }
@@ -273,9 +277,9 @@ contract Exchange is KIP7, KIP7Metadata {
         startTime[msg.sender] = block.timestamp;
         uint256 balTransfer = amount;
         amount = 0;
-        stakingBalance[msg.sender] -= balTransfer;
+        stakingBalance[msg.sender] = stakingBalance[msg.sender].sub(balTransfer);
         KIP7(address(this)).transfer(msg.sender, balTransfer);
-        URUBalance[msg.sender] += yieldTransfer;
+        URUBalance[msg.sender] = URUBalance[msg.sender].add(yieldTransfer);
         if(stakingBalance[msg.sender] == 0){
             isStaking[msg.sender] = false;
             // 예치량이 0이되면 userList에서 해당 함수의 주소를 삭제
@@ -285,7 +289,7 @@ contract Exchange is KIP7, KIP7Metadata {
         // stake가 일어날 때와의 마찬가지의 논리
         for (uint256 i = 0; i < userList.length; i++) {
         uint256 nowURUBalance = calculateYieldTotal(userList[i]);
-        URUBalance[userList[i]] += nowURUBalance;
+        URUBalance[userList[i]] = URUBalance[userList[i]].add(nowURUBalance);
         startTime[userList[i]] = block.timestamp;
         }
     }
@@ -298,14 +302,14 @@ contract Exchange is KIP7, KIP7Metadata {
     // 마지막 스테이킹 변화로부터 시간 측정 (블록타임 활용)
     function calculateYieldTime(address user) public view returns(uint256){
         uint256 end = block.timestamp;
-        uint256 totalTime = end - startTime[user];
+        uint256 totalTime = end.sub(startTime[user]);
         return totalTime;
     }
 
     // 전체 비율 중 해당 유저의 유동성 기여도 측정
     // 소수점 둘째 자리까지 가능 (백분율)
     function calculateContribute(address user) public view returns(uint256){
-        uint contribution = (stakingBalance[user] * 100) / KIP7(address(this)).balanceOf(address(this));
+        uint contribution = (stakingBalance[user].mul(100)).div(KIP7(address(this)).balanceOf(address(this)));
         return contribution;
     }
 
@@ -315,7 +319,7 @@ contract Exchange is KIP7, KIP7Metadata {
     function calculateYieldTotal(address user) public view returns(uint256) {
         uint256 time = calculateYieldTime(user);
         uint256 contribution = calculateContribute(user);
-        uint256 rawYield = (time * contribution * 25);
+        uint256 rawYield = (time.mul(contribution).mul(25));
         return rawYield;
     } 
 
@@ -332,7 +336,7 @@ contract Exchange is KIP7, KIP7Metadata {
         if(URUBalance[msg.sender] != 0){
             uint256 oldBalance = URUBalance[msg.sender];
             URUBalance[msg.sender] = 0;
-            toTransfer += oldBalance;
+            toTransfer = toTransfer.add(oldBalance);
         }
 
         startTime[msg.sender] = block.timestamp;
