@@ -6,6 +6,19 @@
   font-style: normal;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
 body {
   margin: 0;
   font-family: "DungGeunMo", -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -20,4 +33,15 @@ textarea,
 button {
   font-family: "DungGeunMo", source-code-pro, Menlo, Monaco, Consolas,
     "Courier New", monospace;
+}
+
+div:hover {
+  cursor: default;
+}
+*:focus {
+  outline: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
 }

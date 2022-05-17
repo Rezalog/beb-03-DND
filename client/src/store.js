@@ -6,6 +6,9 @@ import tokenSwapSlice from "./features/tokenSwap/tokenSwapSlice";
 import signUpModalReducer from "./features/modal/signUpModalSlice";
 import signUpSlice from "./features/signup/signUpSlice";
 import loadingSlice from "./features/loading/loadingSlice";
+import userInfoSlice from "./features/userinfo/userInfoSlice";
+import lpFarmSlice from "./features/lpFarming/lpFarmSlice";
+import lpFarmingModalSlice from "./features/modal/lpFarmingModalSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,5 +19,8 @@ export const store = configureStore({
     tokenSwap: tokenSwapSlice,
     signUp: signUpSlice,
     loading: loadingSlice,
+    userInfo: userInfoSlice,
+    lpFarm: lpFarmSlice,
+    lpFarmModal: lpFarmingModalSlice,
   },
 });
