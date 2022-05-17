@@ -33,8 +33,6 @@ contract Exchange is KIP7, KIP7Metadata {
     uint256 nextEpoch;
     uint256 epochDuration;
 
-    mapping (address => uint256) lockedToken;
-
     constructor(address _token, Token _uru, uint256 _epochDuration) public KIP7Metadata("klay-uru-LP-token", "LP", 18)  {
         require(_token != address(0), "invalid token address");
         tokenAddress = _token;
@@ -346,18 +344,14 @@ contract Exchange is KIP7, KIP7Metadata {
         return lockedPercentage;
     }
 
-    function _calculateLockedPercentage() public {
+    function _calculateLockedPercentage() internal {
     // 현재 블록 시간이 nextEpoch보다 큰 경우 = lockedPercentage가 감소해야한다.
-        if(block.timestamp >= nextEpoch){
+        while (block.timestamp >= nextEpoch) {
             lockedPercentage = lockedPercentage < 20 ? 0 : uint8(uint256(lockedPercentage).sub(20));
             nextEpoch = nextEpoch.add(epochDuration);
         }
     }
 
-    function getLockedAmount() public view returns (uint256 lockedAmount){
-        lockedAmount = lockedToken[msg.sender];
-    }
-    
     // URUBalance에 저장된 값과 현재 기간 쌓인 이자의 합으로 mint해줌
     function withdrawYield() public {
         uint256 toTransfer = calculateYieldTotal(msg.sender);
@@ -375,18 +369,12 @@ contract Exchange is KIP7, KIP7Metadata {
             toTransfer = toTransfer.add(oldBalance);
         }
 
-        if(lockedToken[msg.sender] != 0){
-            uint256 lockedBalance = lockedToken[msg.sender];
-            lockedToken[msg.sender] = 0;
-            toTransfer = toTransfer.add(lockedBalance);
-        }
-
         startTime[msg.sender] = block.timestamp;
         if (lockedPercentage != 0) {
             _calculateLockedPercentage();
             uint256 lockedTokenAmount = toTransfer.mul(uint256(lockedPercentage)).div(100);
             uru.mint(msg.sender, toTransfer.sub(lockedTokenAmount));
-            lockedToken[msg.sender] = lockedToken[msg.sender].add(lockedTokenAmount);
+            uru.lock(msg.sender, lockedTokenAmount);
         }
         else {
             uru.mint(msg.sender, toTransfer);
