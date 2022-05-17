@@ -81,42 +81,42 @@ const SignUpModal = () => {
             required
           />
           <div>Choose your Character</div>
-          <div className="characterGroup">
+          <div className='characterGroup'>
             <input
-              type="radio"
-              name="choice"
-              id="choose-1"
-              value="1"
+              type='radio'
+              name='choice'
+              id='choose-1'
+              value='1'
               required
               onClick={() =>
                 dispatch(addCharacterIndex({ characterIndex: "1" }))
               }
             />
-            <label htmlFor="choose-1">
+            <label htmlFor='choose-1'>
               <img
-                src="assets/1.gif"
-                alt="elf_f"
-                width="40"
+                src='assets/1.gif'
+                alt='elf_f'
+                width='40'
                 onClick={() =>
                   dispatch(addCharacterIndex({ characterIndex: "1" }))
                 }
               />
             </label>
             <input
-              type="radio"
-              name="choice"
-              id="choose-2"
-              value="2"
+              type='radio'
+              name='choice'
+              id='choose-2'
+              value='2'
               required
               onClick={() =>
                 dispatch(addCharacterIndex({ characterIndex: "2" }))
               }
             />
-            <label htmlFor="choose-2">
+            <label htmlFor='choose-2'>
               <img
-                src="assets/2.gif"
-                alt="elf_m"
-                width="40"
+                src='assets/2.gif'
+                alt='elf_m'
+                width='40'
                 onClick={() =>
                   dispatch(addCharacterIndex({ characterIndex: "2" }))
                 }
@@ -124,167 +124,167 @@ const SignUpModal = () => {
             </label>
 
             <input
-              type="radio"
-              name="choice"
-              id="choose-3"
-              value="3"
+              type='radio'
+              name='choice'
+              id='choose-3'
+              value='3'
               required
               onClick={() =>
                 dispatch(addCharacterIndex({ characterIndex: "3" }))
               }
             />
-            <label htmlFor="choose-3">
+            <label htmlFor='choose-3'>
               <img
-                src="assets/3.gif"
-                alt="knight"
-                width="40"
+                src='assets/3.gif'
+                alt='knight'
+                width='40'
                 onClick={() =>
                   dispatch(addCharacterIndex({ characterIndex: "3" }))
                 }
               />
             </label>
             <input
-              type="radio"
-              name="choice"
-              id="choose-4"
-              value="4"
+              type='radio'
+              name='choice'
+              id='choose-4'
+              value='4'
               required
               onClick={() =>
                 dispatch(addCharacterIndex({ characterIndex: "4" }))
               }
             />
-            <label htmlFor="choose-4">
+            <label htmlFor='choose-4'>
               <img
-                src="assets/4.gif"
-                alt="dragon"
-                width="40"
+                src='assets/4.gif'
+                alt='dragon'
+                width='40'
                 onClick={() =>
                   dispatch(addCharacterIndex({ characterIndex: "4" }))
                 }
               />
             </label>
             <input
-              type="radio"
-              name="choice"
-              id="choose-5"
-              value="5"
+              type='radio'
+              name='choice'
+              id='choose-5'
+              value='5'
               required
               onClick={() =>
                 dispatch(addCharacterIndex({ characterIndex: "5" }))
               }
             />
-            <label htmlFor="choose-5">
+            <label htmlFor='choose-5'>
               <img
-                src="assets/5.gif"
-                alt="dark_mage"
-                width="40"
+                src='assets/5.gif'
+                alt='dark_mage'
+                width='40'
                 onClick={() =>
                   dispatch(addCharacterIndex({ characterIndex: "5" }))
                 }
               />
             </label>
             <input
-              type="radio"
-              name="choice"
-              id="choose-6"
-              value="6"
+              type='radio'
+              name='choice'
+              id='choose-6'
+              value='6'
               required
               onClick={() =>
                 dispatch(addCharacterIndex({ characterIndex: "6" }))
               }
             />
-            <label htmlFor="choose-6">
+            <label htmlFor='choose-6'>
               <img
-                src="assets/6.gif"
-                alt="wizard"
-                width="40"
+                src='assets/6.gif'
+                alt='wizard'
+                width='40'
                 onClick={() =>
                   dispatch(addCharacterIndex({ characterIndex: "6" }))
                 }
               />
             </label>
             <input
-              type="radio"
-              name="choice"
-              id="choose-7"
-              value="7"
+              type='radio'
+              name='choice'
+              id='choose-7'
+              value='7'
               required
               onClick={() =>
                 dispatch(addCharacterIndex({ characterIndex: "7" }))
               }
             />
-            <label htmlFor="choose-7">
+            <label htmlFor='choose-7'>
               <img
-                src="assets/7.gif"
-                alt="archer"
-                width="40"
+                src='assets/7.gif'
+                alt='archer'
+                width='40'
                 onClick={() =>
                   dispatch(addCharacterIndex({ characterIndex: "7" }))
                 }
               />
             </label>
             <input
-              type="radio"
-              name="choice"
-              id="choose-8"
-              value="8"
+              type='radio'
+              name='choice'
+              id='choose-8'
+              value='8'
               required
               onClick={() =>
                 dispatch(addCharacterIndex({ characterIndex: "8" }))
               }
             />
-            <label htmlFor="choose-8">
+            <label htmlFor='choose-8'>
               <img
-                src="assets/8.gif"
-                alt="theif"
-                width="40"
+                src='assets/8.gif'
+                alt='theif'
+                width='40'
                 onClick={() =>
                   dispatch(addCharacterIndex({ characterIndex: "8" }))
                 }
               />
             </label>
             <input
-              type="radio"
-              name="choice"
-              id="choose-9"
-              value="9"
+              type='radio'
+              name='choice'
+              id='choose-9'
+              value='9'
               required
               onClick={() =>
                 dispatch(addCharacterIndex({ characterIndex: "9" }))
               }
             />
-            <label htmlFor="choose-9">
+            <label htmlFor='choose-9'>
               <img
-                src="assets/9.gif"
-                alt="mage"
-                width="40"
+                src='assets/9.gif'
+                alt='mage'
+                width='40'
                 onClick={() =>
                   dispatch(addCharacterIndex({ characterIndex: "9" }))
                 }
               />
             </label>
             <input
-              type="radio"
-              name="choice"
-              id="choose-10"
-              value="10"
+              type='radio'
+              name='choice'
+              id='choose-10'
+              value='10'
               required
               onClick={() =>
                 dispatch(addCharacterIndex({ characterIndex: "10" }))
               }
             />
-            <label htmlFor="choose-10">
+            <label htmlFor='choose-10'>
               <img
-                src="assets/10.gif"
-                alt="blacksmith"
-                width="40"
+                src='assets/10.gif'
+                alt='blacksmith'
+                width='40'
                 onClick={() =>
                   dispatch(addCharacterIndex({ characterIndex: "10" }))
                 }
               />
             </label>
           </div>
-          <button type="submit" onClick={() => signUp}>
+          <button type='submit' onClick={() => signUp}>
             Sign Up
           </button>
         </form>
