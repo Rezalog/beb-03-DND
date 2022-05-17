@@ -14,6 +14,7 @@ import LPFarmModal from "./features/lpFarming/LPFarmModal";
 import axios from "axios";
 import Loading from "./features/loading/Loading";
 import {
+  addAddress,
   addCharacterIndex,
   addNickname,
 } from "./features/userinfo/userInfoSlice";
@@ -43,6 +44,11 @@ function App() {
         const caver = new Caver(window.klaytn);
         const balance = await caver.klay.getBalance(account);
         console.log(balance);
+        dispatch(
+          addAddress({
+            address: account,
+          })
+        );
 
         // 서버에 get요청을 보내 해당 어카운트가 있으면 접속(isSignIn = true)
         // get 요청을 통해 받아온 유저 닉네임과 이미지 받아와 적용하기
@@ -127,7 +133,7 @@ function App() {
   }, [characterIndex, nickname]);
 
   return (
-    <div className="App">
+    <div className='App'>
       {isSignIn ? null : (
         <div>
           <h1>Dungeon & Defi</h1>

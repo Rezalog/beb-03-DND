@@ -17,27 +17,11 @@ const DexModal = () => {
   const dispatch = useDispatch();
   const { isSubModalOpen } = useSelector((state) => state.tokenSwap);
   const { exchanges } = useSelector((state) => state.dex);
-  const [account, setAccount] = useState(null);
+  const { address: account } = useSelector((state) => state.userInfo);
   const [currentNav, setCurrentNav] = useState(0);
   const [exchange, setExchange] = useState({});
   const [selectedToken, setSelectedToken] = useState(0);
   const [currentExchangeAddress, setCurrentExchangeAddress] = useState("");
-
-  const connectToWallet = async () => {
-    if (typeof window.klaytn !== "undefined") {
-      const provider = window["klaytn"];
-      try {
-        const accounts = await window.klaytn.enable();
-        const _account = window.klaytn.selectedAddress;
-        setAccount(_account);
-
-        // const caver = new Caver(window.klaytn);
-        // setExchange(new caver.klay.Contract(abi, address));
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
 
   const getExchangeContract = (address) => {
     const caver = new Caver(window.klaytn);
@@ -63,7 +47,6 @@ const DexModal = () => {
                 }}
               ></button>
             </Header>
-            <button onClick={connectToWallet}>연결</button>
             <DexNavbar left={currentNav * 120}>
               <li onClick={() => setCurrentNav(0)}>나의 유동성</li>
               <li onClick={() => setCurrentNav(1)}>유동성 풀</li>
