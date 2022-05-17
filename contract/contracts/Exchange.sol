@@ -19,11 +19,6 @@ interface IFactory {
     function getExchange(address _tokenAddress) external view returns (address);
 }
 
-interface IToken {
-    function mint(address to, uint256 amount) external;
-    function lock(address owner, uint256 _amount) external;
-}
-
 contract Exchange is KIP7, KIP7Metadata {
 
     using SafeMath for uint256;
