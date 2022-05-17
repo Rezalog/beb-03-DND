@@ -22,10 +22,12 @@ const Farm = ({ address, name, tokenAddress }) => {
   const [locked, setLocked] = useState(0);
 
   useEffect(() => {
-    setInterval(() => {
+    const intervalID = setInterval(() => {
       setTokenAmount((prev) => prev + 1);
     }, 1000);
-  }, []);
+
+    return () => clearInterval(intervalID);
+  });
 
   useEffect(() => {
     setUnlocked(parseFloat(Number(tokenAmount * 0.05).toFixed(6)));
