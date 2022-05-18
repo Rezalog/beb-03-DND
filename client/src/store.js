@@ -9,7 +9,6 @@ import loadingSlice from "./features/loading/loadingSlice";
 import userInfoSlice from "./features/userinfo/userInfoSlice";
 import lpFarmSlice from "./features/lpFarming/lpFarmSlice";
 import lpFarmingModalSlice from "./features/modal/lpFarmingModalSlice";
-
 export const store = configureStore({
   reducer: {
     dexModal: dexModalReducer,
