@@ -57,13 +57,13 @@ contract NFT_Farming {
     }   
 
     function withdrawYield () public {
-        require(getStakingTime() > 30, "withdrawl can be 30s after your last claim"); 
+        require(getStakingTime() > 20, "withdrawl can be 20s after your last claim"); 
         require(stakeInfo[msg.sender].isStaking == true, "there is no staking nft");
 
         token.mint(msg.sender, level.mul(100));
         stakeInfo[msg.sender].yieldLockTime = block.timestamp;
 
-        emit YieldWithdraw(msg.sender, level * 100);
+        emit YieldWithdraw(msg.sender, level.mul(100));
     }
 
     // assist functions
