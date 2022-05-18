@@ -9,6 +9,7 @@ import loadingSlice from "./features/loading/loadingSlice";
 import userInfoSlice from "./features/userinfo/userInfoSlice";
 import lpFarmSlice from "./features/lpFarming/lpFarmSlice";
 import lpFarmingModalSlice from "./features/modal/lpFarmingModalSlice";
+import TooltipSlice from "./features/tooltip/TooltipSlice";
 export const store = configureStore({
   reducer: {
     dexModal: dexModalReducer,
@@ -21,5 +22,6 @@ export const store = configureStore({
     userInfo: userInfoSlice,
     lpFarm: lpFarmSlice,
     lpFarmModal: lpFarmingModalSlice,
+    tooltip: TooltipSlice,
   },
 });
