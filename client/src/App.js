@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "./App.css";
 import game from "./PhaserGame";
 import Caver from "caver-js";
@@ -18,6 +18,7 @@ import {
   addCharacterIndex,
   addNickname,
 } from "./features/userinfo/userInfoSlice";
+import Inventory from "./features/inventory/Inventory";
 
 function App() {
   const { isOpen: isDexOpen } = useSelector((state) => state.dexModal);
@@ -26,6 +27,10 @@ function App() {
   );
   const { isOpen: isSignUpOpen } = useSelector((state) => state.signUpModal);
   const { isOpen: isLpFarmOpen } = useSelector((state) => state.lpFarmModal);
+  // const { isOpen: isInventoryOpen } = useSelector(
+  //   (state) => state.inventoryModal
+  // );
+  const [isInventoryOpen, setIsInventoryOpen] = useState(false);
   const { isLoading } = useSelector((state) => state.loading);
   const dispatch = useDispatch();
   const [isSignIn, setIsSignIn] = useState(false);
@@ -127,6 +132,18 @@ function App() {
     });
   }, []);
 
+  const handleUserKeyPress = (event) => {
+    if (event.key.toLowerCase() === "i") {
+      setIsInventoryOpen((prev) => !prev);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleUserKeyPress);
+
+    return () => window.removeEventListener("keydown", handleUserKeyPress);
+  }, []);
+
   useEffect(() => {
     console.log(characterIndex);
     console.log(nickname);
@@ -146,6 +163,7 @@ function App() {
       {isLpFarmOpen && <LPFarmModal />}
       {isSignUpOpen && <SignUpModal />}
       {isLoading && <Loading />}
+      {isInventoryOpen && <Inventory />}
     </div>
   );
 }
