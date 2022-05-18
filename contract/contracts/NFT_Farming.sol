@@ -1,67 +1,74 @@
 // // SPDX-License-Identifier: MIT
 pragma solidity ^0.5.6;
 
+import "@klaytn/contracts/token/KIP17/KIP17.sol";
 import "@klaytn/contracts/math/SafeMath.sol";
+import "./Token.sol";
 
-contract NFT-Farming {
+contract NFT_Farming {
 
     using SafeMath for uint256;
 
+    struct Stake {
+        uint256 tokenID;
+        uint256 yieldLockTime;
+        bool isStaking;
+    }
+
     address nft;
-    address token;
-    uint8 level;
+    Token token;
+    uint256 level;
 
     event NFTStaked(address owner, uint256 tokenId);
     event NFTUnstaked(address owner, uint256 tokenId);
-    event YieldWithdraw(address indexed to, uint256 amount);
+    event YieldWithdraw(address to, uint256 amount);
 
-    mapping(uint256 => bool) public isStaking;
-    mapping(address => uint256) public yieldLockTime;
+    mapping(address => Stake) public stakeInfo;
 
-    constructor (address _NFTaddress, address _tokenaddress, uint8 _level) public {
+    constructor (address _NFTaddress, Token _tokenAddress, uint256 _level) public {
         nft = _NFTaddress; // nft 배포 컨트랙트 주소를 받아옴
-        token = _tokenaddress; // 보상 (uru 토큰)
+        token = _tokenAddress; // 보상 (uru 토큰)
         level = _level; // 보상수준을 결정하는 레벨
     }
 
     function stake (uint256 _tokenID) public {
         // 중복 방지
-        require(isStaking[_tokenID] != true, "already staking");
+        // 메타데이터 가져와서 비교 require()
+        require(stakeInfo[msg.sender].isStaking != true, "you already hunting monster");
 
         // 먼저 approve 필요
-        nft.transferFrom(msg.sender, address(this), _tokenID)
-        emit NFTStaked(msg.sender, _tokenId);
+        KIP17(nft).transferFrom(msg.sender, address(this), _tokenID);
+        emit NFTStaked(msg.sender, _tokenID);
 
-        isStaking[_tokenID] = true;
+        stakeInfo[msg.sender] = Stake({
+            tokenID: _tokenID,
+            yieldLockTime: block.timestamp,
+            isStaking: true
+        });
     }
 
-    function unskate (uint256 _tokenID) public {
-        require("nft 주인" == msg.sender, "소유한 nft가 아닙니다")
+    function unstake (uint256 _tokenID) public {
+        require(stakeInfo[msg.sender].tokenID == _tokenID, "not your own NFT");
 
-        nft.transferFrom(address(this), msg.sender, _tokenID)
-        emit NFTUnstaked(msg.sender, _tokenId);
+        KIP17(nft).transferFrom(address(this), msg.sender, _tokenID);
+        emit NFTUnstaked(msg.sender, _tokenID);
+
+        delete stakeInfo[msg.sender];
     }   
 
-    function calculateYield(address user) public view returns(uint256) {
-        uint256 stakingTime = lock.timestamp.sub(startTime[user]);
-        return stakingTime / 86400;
-    } 
-
     function withdrawYield () public {
+        require(getStakingTime() > 30, "withdrawl can be 30s after your last claim"); 
+        require(stakeInfo[msg.sender].isStaking == true, "there is no staking nft");
 
-        uint256 toTransfer = calculateYield(msg.sender);
-        require(toTransfer > 0, "Nothing to withdraw");
-        require(block.timestamp.sub(yieldLockTime[msg.sender] > 60, "이자는 매 ## 마다 출금 가능합니다"))
+        token.mint(msg.sender, level.mul(100));
+        stakeInfo[msg.sender].yieldLockTime = block.timestamp;
 
-        token.mint(msg.sender, toTransfer)
-        yieldLockTime[msg.sender] = block.timestamp
-
-        emit YieldWithdraw(msg.sender, toTransfer)
+        emit YieldWithdraw(msg.sender, level * 100);
     }
 
     // assist functions
 
-    function assist () public view returns() {
-
+    function getStakingTime() public view returns(uint256) {
+        return block.timestamp - stakeInfo[msg.sender].yieldLockTime;
     } 
 }
