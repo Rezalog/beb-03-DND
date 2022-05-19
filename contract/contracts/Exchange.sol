@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.5.6;
 
-import "@klaytn/contracts/token/KIP7/KIP7.sol";
-import "@klaytn/contracts/token/KIP7/IKIP7.sol";
-import "@klaytn/contracts/token/KIP7/KIP7Metadata.sol";
+import "../node_modules/@klaytn/contracts/token/KIP7/KIP7.sol";
+import "../node_modules/@klaytn/contracts/token/KIP7/IKIP7.sol";
+import "../node_modules/@klaytn/contracts/token/KIP7/KIP7Metadata.sol";
 
 interface IExchange {
     function klayToTokenSwap(uint256 _minTokens) external payable;

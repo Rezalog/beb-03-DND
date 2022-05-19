@@ -3,7 +3,7 @@ pragma solidity ^0.5.6;
 
 import "./Exchange.sol";
 
-contract Factory is IFactory {
+contract Factory {
 
     // data structure : store exchange
     mapping(address => address) public tokenToExchange;
