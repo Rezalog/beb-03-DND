@@ -16,14 +16,15 @@ export const TooltipContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  background-color: #8f5765;
-  border: 5px solid black;
+  background-image: ${(props) => `url("assets/Frames/${props.frame}.png");`};
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
 
   & > img {
-    width: 90%;
+    width: 60%;
     position: absolute;
-    top: 10px;
+    top: 35px;
   }
 `;
 
@@ -35,12 +36,11 @@ export const TooltipInfoContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #cf968c;
-  bottom: 0;
+  bottom: 15px;
 
   & > p {
     position: absolute;
-    left: 2px;
+    left: 15px;
     top: 0px;
   }
 `;
@@ -51,5 +51,4 @@ export const TooltipTextContainer = styled.div`
   padding: 3px 40px;
   justify-content: space-between;
   align-items: center;
-  background-color: #cf968c;
 `;

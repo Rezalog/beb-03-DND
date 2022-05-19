@@ -1,7 +1,6 @@
 import React from "react";
 
 import { useSelector } from "react-redux";
-import { weapons } from "../../weapons";
 
 import {
   TooltipCard,
@@ -15,8 +14,8 @@ const Tooltip = ({ x, y }) => {
   const { currentWeapon } = useSelector((state) => state.tooltip);
   return (
     <TooltipCard x={x} y={y}>
-      <TooltipContainer>
-        <img src={weapons[currentWeapon.lvl][currentWeapon.img]}></img>
+      <TooltipContainer frame={currentWeapon.lvl}>
+        <img src={currentWeapon.img}></img>
         <TooltipInfoContainer>
           <p>{currentWeapon.dna}</p>
           <TooltipTextContainer>

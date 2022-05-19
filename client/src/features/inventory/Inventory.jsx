@@ -1,7 +1,5 @@
 import React from "react";
 
-import { useDispatch, useSelector } from "react-redux";
-
 import WeaponRenderer from "../weapon/WeaponRenderer";
 
 import { InventoryContainer } from "../../styles/Inventory.styled";
@@ -21,7 +19,6 @@ const weapons = [
 ];
 
 const Inventory = () => {
-  const dispatch = useDispatch();
   return (
     <ModalCenter>
       <Modal width={"700px"}>
