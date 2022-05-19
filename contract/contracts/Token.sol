@@ -34,11 +34,15 @@ contract Token is KIP7, KIP7Metadata, MinterRole {
         lockedToken[owner] = lockedToken[owner].add(_amount);
     }
 
+    function burn(address owner, uint256 _amount) external onlyMinter{
+        _burn(owner, _amount);
+    }
+
     function releaseLockedToken(address to) public {
         require(block.timestamp > lockEndTime);
         uint256 amount = lockedToken[to];
         lockedToken[to] = 0;
-        _mint(to, _amount);
+        _mint(to, amount);
     }   
 
     function getLockedTokenAmount(address owner) public view returns (uint256) {
