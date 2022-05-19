@@ -19,6 +19,8 @@ import {
   addNickname,
 } from "./features/userinfo/userInfoSlice";
 import Inventory from "./features/inventory/Inventory";
+import { openMarketplaceModal } from "./features/modal/marketplaceModalSlice";
+import Marketplace from "./features/marketplace/Marketplace";
 
 function App() {
   const { isOpen: isDexOpen } = useSelector((state) => state.dexModal);
@@ -27,6 +29,9 @@ function App() {
   );
   const { isOpen: isSignUpOpen } = useSelector((state) => state.signUpModal);
   const { isOpen: isLpFarmOpen } = useSelector((state) => state.lpFarmModal);
+  const { isOpen: isMarketplaceOpen } = useSelector(
+    (state) => state.marketplaceModal
+  );
   // const { isOpen: isInventoryOpen } = useSelector(
   //   (state) => state.inventoryModal
   // );
@@ -124,6 +129,10 @@ function App() {
           dispatch(openLpFarmModal());
           break;
         }
+        case "4": {
+          dispatch(openMarketplaceModal());
+          break;
+        }
 
         default: {
           break;
@@ -162,6 +171,7 @@ function App() {
       {isTokenSwapOpen && <TokenSwapModal />}
       {isLpFarmOpen && <LPFarmModal />}
       {isSignUpOpen && <SignUpModal />}
+      {isMarketplaceOpen && <Marketplace />}
       {isLoading && <Loading />}
       {isInventoryOpen && <Inventory />}
     </div>

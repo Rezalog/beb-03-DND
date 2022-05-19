@@ -6,6 +6,7 @@ export const DexNavbar = styled.ul`
   align-items: center;
   position: relative;
   width: 80%;
+  margin-top: 10px;
 
   & > li {
     flex: 1;

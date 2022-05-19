@@ -7,6 +7,7 @@ export default class Main extends Phaser.Scene {
     this.kingOverlapped = false;
     this.princessOverlapped = false;
     this.merchantOverlapped = false;
+    this.shoekeeperOverlapped = false;
   }
 
   init(data) {
@@ -51,6 +52,12 @@ export default class Main extends Phaser.Scene {
     this.anims.create({
       key: "merchant_idle",
       frames: this.anims.generateFrameNumbers("merchant"),
+      frameRate: 5,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: "shoekeeper_idle",
+      frames: this.anims.generateFrameNumbers("shoekeeper"),
       frameRate: 5,
       repeat: -1,
     });
@@ -121,7 +128,7 @@ export default class Main extends Phaser.Scene {
     this.merchant = this.physics.add.sprite(
       400,
       game.config.height / 6,
-      "princess"
+      "merchant"
     );
     this.merchant.setScale(2);
 
@@ -137,6 +144,26 @@ export default class Main extends Phaser.Scene {
     this.merchantText.x = this.nameTag.x - this.merchantText.width / 2;
     this.merchantText.y = this.nameTag.y - this.merchantText.height / 2;
 
+    // 슈키퍼 NPC 생성
+    this.shoekeeper = this.physics.add.sprite(
+      500,
+      game.config.height / 6,
+      "shoekeeper"
+    );
+    this.shoekeeper.setScale(2);
+
+    this.nameTag = this.add.sprite(
+      this.shoekeeper.x,
+      this.shoekeeper.y - 16,
+      "nametag"
+    );
+    this.shoekeeperText = this.add.text(0, 0, "거래소", {
+      color: "black",
+      fontSize: "10px",
+    });
+    this.shoekeeperText.x = this.nameTag.x - this.shoekeeperText.width / 2;
+    this.shoekeeperText.y = this.nameTag.y - this.shoekeeperText.height / 2;
+
     // 캐릭터와 NPC overlap 이벤트
     this.physics.add.overlap(this.player, this.king, () => {
       this.kingOverlapped = true;
@@ -146,6 +173,9 @@ export default class Main extends Phaser.Scene {
     });
     this.physics.add.overlap(this.player, this.merchant, () => {
       this.merchantOverlapped = true;
+    });
+    this.physics.add.overlap(this.player, this.shoekeeper, () => {
+      this.shoekeeperOverlapped = true;
     });
 
     // 캐릭터와 벽 Collider
@@ -163,6 +193,7 @@ export default class Main extends Phaser.Scene {
     this.king.play("king_idle");
     this.princess.play("princess_idle");
     this.merchant.play("merchant_idle");
+    this.shoekeeper.play("shoekeeper_idle");
 
     this.spacebar = this.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.SPACE
@@ -189,6 +220,7 @@ export default class Main extends Phaser.Scene {
       if (this.kingOverlapped) game.events.emit("enter", "1");
       if (this.princessOverlapped) game.events.emit("enter", "2");
       if (this.merchantOverlapped) game.events.emit("enter", "3");
+      if (this.shoekeeperOverlapped) game.events.emit("enter", "4");
     }
 
     if (
@@ -212,5 +244,6 @@ export default class Main extends Phaser.Scene {
     this.kingOverlapped = false;
     this.princessOverlapped = false;
     this.merchantOverlapped = false;
+    this.shoekeeperOverlapped = false;
   }
 }
