@@ -12,7 +12,7 @@ contract Factory is IFactory {
     Token public uru;
 
     // 거래소 생성
-    function createExchange(address _tokenAddress, Token _uru) public returns (address) {
+    function createExchange(address _tokenAddress, Token _uru, uint256 _epochDuration) public returns (address) {
         
         uru = _uru;
         // 0 주소(zero address)인지 검사
@@ -26,7 +26,7 @@ contract Factory is IFactory {
 
         // 생성자로 새로운 거래소 생성, 토큰 주소 store
         //--참고 : Solidity의 new 생성자는 다른 객체지향언어와 달리 해당 contract를 deploy 한다.
-        Exchange exchange = new Exchange(_tokenAddress, uru);
+        Exchange exchange = new Exchange(_tokenAddress, uru, _epochDuration);
         tokenToExchange[_tokenAddress] = address(exchange);
 
         // 여기서는 Exchange만 address 타입으로 casting 되었지만

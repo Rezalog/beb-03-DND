@@ -27,11 +27,22 @@ contract Exchange is KIP7, KIP7Metadata {
     address public factoryAddress;   // 모든 거래소 contract는 factory 주소를 알 수 있어야 함
     Token public uru;
 
-    constructor(address _token, Token _uru) public KIP7Metadata("klay-uru-LP-token", "LP", 18)  {
+    // lock 관련 선언
+    uint8 lockedPercentage = 95;
+    uint256 lockStartTime;
+    uint256 nextEpoch;
+    uint256 epochDuration;
+
+    constructor(address _token, Token _uru, uint256 _epochDuration) public KIP7Metadata("klay-uru-LP-token", "LP", 18)  {
         require(_token != address(0), "invalid token address");
         tokenAddress = _token;
         uru = _uru;
         factoryAddress = msg.sender;  // factory address link
+
+        // lock 관련
+        lockStartTime = block.timestamp;
+        nextEpoch = block.timestamp.add(_epochDuration);
+        epochDuration = _epochDuration;
     }
 
     function addLiquidity(uint256 _tokenAmount) public payable returns (uint256) {
@@ -221,7 +232,9 @@ contract Exchange is KIP7, KIP7Metadata {
         // return (inputAmount * outputReserve) / (inputReserve + inputAmount); 수수료 없을 때의 경우
     }
 
+    // ------------------
     // LP-Farming feature
+    // ------------------
     
     // iterations을 위한 배열 선언
     address[] public userList;
@@ -323,6 +336,22 @@ contract Exchange is KIP7, KIP7Metadata {
         return rawYield;
     } 
 
+    function countDown() public view returns (uint256 count){
+        count = nextEpoch.sub(block.timestamp);
+    }
+
+    function currentLockedPercentage() public view returns (uint8) {
+        return lockedPercentage;
+    }
+
+    function _calculateLockedPercentage() internal {
+    // 현재 블록 시간이 nextEpoch보다 큰 경우 = lockedPercentage가 감소해야한다.
+        while (block.timestamp >= nextEpoch) {
+            lockedPercentage = lockedPercentage < 20 ? 0 : uint8(uint256(lockedPercentage).sub(20));
+            nextEpoch = nextEpoch.add(epochDuration);
+        }
+    }
+
     // URUBalance에 저장된 값과 현재 기간 쌓인 이자의 합으로 mint해줌
     function withdrawYield() public {
         uint256 toTransfer = calculateYieldTotal(msg.sender);
@@ -332,7 +361,8 @@ contract Exchange is KIP7, KIP7Metadata {
             URUBalance[msg.sender] > 0,
             "Nothing to withdraw"
             );
-                    
+        
+        // 잔액 전부 가져왔음
         if(URUBalance[msg.sender] != 0){
             uint256 oldBalance = URUBalance[msg.sender];
             URUBalance[msg.sender] = 0;
@@ -340,7 +370,15 @@ contract Exchange is KIP7, KIP7Metadata {
         }
 
         startTime[msg.sender] = block.timestamp;
-        uru.mint(msg.sender, toTransfer);
+        if (lockedPercentage != 0) {
+            _calculateLockedPercentage();
+            uint256 lockedTokenAmount = toTransfer.mul(uint256(lockedPercentage)).div(100);
+            uru.mint(msg.sender, toTransfer.sub(lockedTokenAmount));
+            uru.lock(msg.sender, lockedTokenAmount);
+        }
+        else {
+            uru.mint(msg.sender, toTransfer);
+        }
         emit YieldWithdraw(msg.sender, toTransfer);
     } 
 }

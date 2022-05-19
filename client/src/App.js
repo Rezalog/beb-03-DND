@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "./App.css";
 import game from "./PhaserGame";
 import Caver from "caver-js";
@@ -14,9 +14,11 @@ import LPFarmModal from "./features/lpFarming/LPFarmModal";
 import axios from "axios";
 import Loading from "./features/loading/Loading";
 import {
+  addAddress,
   addCharacterIndex,
   addNickname,
 } from "./features/userinfo/userInfoSlice";
+import Inventory from "./features/inventory/Inventory";
 
 function App() {
   const { isOpen: isDexOpen } = useSelector((state) => state.dexModal);
@@ -25,6 +27,10 @@ function App() {
   );
   const { isOpen: isSignUpOpen } = useSelector((state) => state.signUpModal);
   const { isOpen: isLpFarmOpen } = useSelector((state) => state.lpFarmModal);
+  // const { isOpen: isInventoryOpen } = useSelector(
+  //   (state) => state.inventoryModal
+  // );
+  const [isInventoryOpen, setIsInventoryOpen] = useState(false);
   const { isLoading } = useSelector((state) => state.loading);
   const dispatch = useDispatch();
   const [isSignIn, setIsSignIn] = useState(false);
@@ -43,6 +49,11 @@ function App() {
         const caver = new Caver(window.klaytn);
         const balance = await caver.klay.getBalance(account);
         console.log(balance);
+        dispatch(
+          addAddress({
+            address: account,
+          })
+        );
 
         // 서버에 get요청을 보내 해당 어카운트가 있으면 접속(isSignIn = true)
         // get 요청을 통해 받아온 유저 닉네임과 이미지 받아와 적용하기
@@ -121,13 +132,25 @@ function App() {
     });
   }, []);
 
+  const handleUserKeyPress = (event) => {
+    if (event.key.toLowerCase() === "i") {
+      setIsInventoryOpen((prev) => !prev);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleUserKeyPress);
+
+    return () => window.removeEventListener("keydown", handleUserKeyPress);
+  }, []);
+
   useEffect(() => {
     console.log(characterIndex);
     console.log(nickname);
   }, [characterIndex, nickname]);
 
   return (
-    <div className="App">
+    <div className='App'>
       {isSignIn ? null : (
         <div>
           <h1>Dungeon & Defi</h1>
@@ -140,6 +163,7 @@ function App() {
       {isLpFarmOpen && <LPFarmModal />}
       {isSignUpOpen && <SignUpModal />}
       {isLoading && <Loading />}
+      {isInventoryOpen && <Inventory />}
     </div>
   );
 }
