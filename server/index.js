@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser"); // cookieParser 추가
 const app = express();
 const mongoose = require("mongoose");
 const usersRouter = require("./routes/users");
+const tokensRouter = require("./routes/tokens");
 const { PORT, USER_NAME, USER_PASSWORD, CLOUD_NAME, DATABASE_NAME } =
   process.env;
 
@@ -26,6 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser()); // cookieParser 추가
 app.use("/users", usersRouter);
+app.use("/tokens", tokensRouter);
 
 app.get("/", (req, res) => {});
 app.listen(PORT, () => {
