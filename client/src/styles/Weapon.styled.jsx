@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 export const WeaponContainer = styled.div`
   position: relative;
-  width: 250px;
-  height: 450px;
+  width: 96px;
+  height: 96px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -13,8 +13,6 @@ export const WeaponContainer = styled.div`
   border: 5px solid black;
   & > img {
     width: 90%;
-    position: absolute;
-    top: 10px;
   }
 `;
 

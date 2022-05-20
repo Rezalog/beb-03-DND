@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.22 <0.9.0;
 
-import "../node_modules/@klaytn/contracts/token/KIP17/KIP17Full.sol";
-import "../node_modules/@klaytn/contracts/drafts/Counters.sol";
+import "@klaytn/contracts/token/KIP17/KIP17Full.sol";
+import "@klaytn/contracts/drafts/Counters.sol";
 import "./Token.sol";
 
 contract NFT is KIP17Full{

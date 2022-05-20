@@ -4,19 +4,23 @@ pragma solidity ^0.5.6;
 import "@klaytn/contracts/token/KIP17/KIP17.sol";
 import "@klaytn/contracts/math/SafeMath.sol";
 import "./Token.sol";
+import "./NFT.sol";
 
 contract NFT_Farming {
 
     using SafeMath for uint256;
 
+    // 각 주소의 스테이킹 정보를 저장
     struct Stake {
         uint256 tokenID;
         uint256 yieldLockTime;
         bool isStaking;
     }
 
-    address nft;
+    mapping(address => Stake) public stakeInfo;
+
     Token token;
+    NFT nft;
     uint256 level;
     uint256 coolDownTime;
 
@@ -24,21 +28,20 @@ contract NFT_Farming {
     event NFTUnstaked(address owner, uint256 tokenId);
     event YieldWithdraw(address to, uint256 amount);
 
-    mapping(address => Stake) public stakeInfo;
-
-    constructor (address _NFTaddress, Token _tokenAddress, uint256 _level, uint256 _coolDownTime) public {
-        nft = _NFTaddress; // nft 배포 컨트랙트 주소를 받아옴
-        token = _tokenAddress; // 보상 (uru 토큰)
+    constructor (NFT _NFTaddress, Token _tokenAddress, uint256 _level, uint256 _coolDownTime) public {
+        nft = _NFTaddress; // NFT 컨트랙트 주소
+        token = _tokenAddress; // URU 토큰 컨트랙트 주소
         level = _level; // 보상수준을 결정하는 레벨
-        coolDownTime = _coolDownTime; // 다음 클레임까지 쿨다운 타임
+        coolDownTime = _coolDownTime; // 한 번 클레임 한 후 다음 클레임까지 쿨다운 타임
     }
 
     function stake (uint256 _tokenID) public {
-        // 중복 방지
-        // 메타데이터 가져와서 비교 require()
+        // 레벨에 맞는 던전 입장
+        require(nft.getWeaponLevel(_tokenID) == level, "weapon and dungeon level do not match");
+        // 중복 사냥 금지
         require(stakeInfo[msg.sender].isStaking != true, "you already hunting monster");
 
-        // 먼저 approve 필요
+        // stake 함수 호출 전 approve 필요!\
         KIP17(nft).transferFrom(msg.sender, address(this), _tokenID);
         emit NFTStaked(msg.sender, _tokenID);
 
@@ -50,6 +53,7 @@ contract NFT_Farming {
     }
 
     function unstake (uint256 _tokenID) public {
+        // 본인 소유의 NFT만 인출 가능
         require(stakeInfo[msg.sender].tokenID == _tokenID, "not your own NFT");
 
         KIP17(nft).transferFrom(address(this), msg.sender, _tokenID);
@@ -62,9 +66,9 @@ contract NFT_Farming {
         require(getStakingTime() > coolDownTime, "withdrawl can be after cooldowntime"); 
         require(stakeInfo[msg.sender].isStaking == true, "there is no staking nft");
 
-        token.mint(msg.sender, level.mul(100));
+        token.mint(msg.sender, level.mul(10**20));
         stakeInfo[msg.sender].yieldLockTime = block.timestamp;
-        emit YieldWithdraw(msg.sender, level.mul(100));
+        emit YieldWithdraw(msg.sender, level.mul(10**20));
     }
 
     // assist functions
