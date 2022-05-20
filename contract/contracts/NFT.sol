@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.22 <0.9.0;
 
-import "../node_modules/@klaytn/contracts/token/KIP17/KIP17Full.sol";
-import "../node_modules/@klaytn/contracts/drafts/Counters.sol";
+import "@klaytn/contracts/token/KIP17/KIP17Full.sol";
+import "@klaytn/contracts/drafts/Counters.sol";
 import "./Token.sol";
 
 contract NFT is KIP17Full{
@@ -164,36 +164,36 @@ contract NFT is KIP17Full{
         weapons[_weaponId - 1].durability = weapons[_weaponId - 1].durability - 1;
     }
 
-    // staking 내구도 수리
-    function fixWeaponDurability (uint256 _weaponId) public {
-        // 수리하는 무기의 소유 확인
-        require(msg.sender == ownerOf(_weaponId));
+    // // staking 내구도 수리
+    // function fixWeaponDurability (uint256 _weaponId) public {
+    //     // 수리하는 무기의 소유 확인
+    //     require(msg.sender == ownerOf(_weaponId));
 
-        // 충분한 수리비용을 가졌는 지 확인
-        uint256 spendToken = tokenToFixDurability[myWeapon1.weaponLevel - 1];
-        require(spendToken <= token.balanceOf(msg.sender), "You must have URU token to fix durability");
+    //     // 충분한 수리비용을 가졌는 지 확인
+    //     uint256 spendToken = tokenToFixDurability[myWeapon1.weaponLevel - 1];
+    //     require(spendToken <= token.balanceOf(msg.sender), "You must have URU token to fix durability");
         
         
-        weapons[_weaponId - 1].durability = 3;
+    //     weapons[_weaponId - 1].durability = 3;
 
-        token.burn(msg.sender, spendToken);
-    }
+    //     token.burn(msg.sender, spendToken);
+    // }
 
 
-    // enchant 내구도 수리
-    function fixWeaponEnchant (uint256 _weaponId) public {
-        // 수리하는 무기의 소유 확인
-        require(msg.sender == ownerOf(_weaponId));
+    // // enchant 내구도 수리
+    // function fixWeaponEnchant (uint256 _weaponId) public {
+    //     // 수리하는 무기의 소유 확인
+    //     require(msg.sender == ownerOf(_weaponId));
         
-        // 충분한 수리비용을 가졌는 지 확인
-        uint256 spendToken = tokenToFixEnchant[myWeapon1.weaponLevel - 1];
-        require(spendToken <= token.balanceOf(msg.sender), "You must have URU token to fix enchant");
+    //     // 충분한 수리비용을 가졌는 지 확인
+    //     uint256 spendToken = tokenToFixEnchant[myWeapon1.weaponLevel - 1];
+    //     require(spendToken <= token.balanceOf(msg.sender), "You must have URU token to fix enchant");
         
         
-        weapons[_weaponId - 1].enchant = 3;
+    //     weapons[_weaponId - 1].enchant = 3;
 
-        token.burn(msg.sender, spendToken);
-    }
+    //     token.burn(msg.sender, spendToken);
+    // }
 
     // 현재 msg.sender가 보유중인 무기를 배열로 리턴해주는 함수 (getter)
 
