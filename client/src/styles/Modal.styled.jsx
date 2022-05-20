@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Modal = styled.div`
   position: relative;
-  width: 530px;
+  width: ${(props) => props.width || "530px"};
   height: ${(props) => props.height || "700px"};
   background-image: url("assets/modal.png");
   background-size: 100% 100%;
