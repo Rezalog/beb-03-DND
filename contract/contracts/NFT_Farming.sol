@@ -52,10 +52,6 @@ contract NFT_Farming {
         });
     }
 
-    function getLevel (uint256 _tokenID) public view returns (uint256) {
-        return nft.getWeaponLevel(_tokenID);
-    }
-
     function unstake (uint256 _tokenID) public {
         // 본인 소유의 NFT만 인출 가능
         require(stakeInfo[msg.sender].tokenID == _tokenID, "not your own NFT");
@@ -70,9 +66,9 @@ contract NFT_Farming {
         require(getStakingTime() > coolDownTime, "withdrawl can be after cooldowntime"); 
         require(stakeInfo[msg.sender].isStaking == true, "there is no staking nft");
 
-        token.mint(msg.sender, level.mul(100));
+        token.mint(msg.sender, level.mul(10**20));
         stakeInfo[msg.sender].yieldLockTime = block.timestamp;
-        emit YieldWithdraw(msg.sender, level.mul(100));
+        emit YieldWithdraw(msg.sender, level.mul(10**20));
     }
 
     // assist functions
