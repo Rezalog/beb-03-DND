@@ -21,13 +21,15 @@ module.exports = {
   },
 
   get: async (req, res) => {
-    await pairs
-      .find({}, { _id: false, pair_address: true })
-      .then((data) => {
-        let arr = [];
-
-        res.status(200).json(data);
-      })
-      .catch((err) => res.status(400).send(err));
+    let arr = [];
+    try {
+      let result = await pairs.find({}, { _id: false, pair_address: true });
+      for (let i = 0; i < result.length; i++) {
+        arr.push(result[i].pair_address);
+      }
+      res.status(200).send(arr);
+    } catch (err) {
+      res.status(400).send(err);
+    }
   },
 };
