@@ -9,11 +9,13 @@ import loadingSlice from "./features/loading/loadingSlice";
 import userInfoSlice from "./features/userinfo/userInfoSlice";
 import lpFarmSlice from "./features/lpFarming/lpFarmSlice";
 import lpFarmingModalSlice from "./features/modal/lpFarmingModalSlice";
+import weaponCompoundModalSlice from "./features/modal/weaponCompoundModalSlice";
 export const store = configureStore({
   reducer: {
     dexModal: dexModalReducer,
     tokenSwapModal: TokenSwapModalReducer,
     signUpModal: signUpModalReducer,
+    weaponCompoundModal: weaponCompoundModalSlice,
     dex: dexSlice,
     tokenSwap: tokenSwapSlice,
     signUp: signUpSlice,

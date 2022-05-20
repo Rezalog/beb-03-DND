@@ -14,8 +14,8 @@ contract NFT is KIP17Full{
     
     uint256 [9] public percentage; // 합성 성공확률
     uint256 [9] public tokenToCompound; // 합성시 토큰 소모량
-    uint256 [9] public tokenToFixDurability; // 내구도 수리시 토큰 소모량
-    uint256 [9] public tokenToFixEnchant; // 강화 내구도 수리시 토큰 소모량
+    uint256 [9] public tokenToFix; // 내구도 수리시 토큰 소모량
+    // uint256 [9] public tokenToFixEnchant; // 합성 내구도 수리시 토큰 소모량
     
 
     Token token;
@@ -24,7 +24,7 @@ contract NFT is KIP17Full{
         uint256 weaponType; // dna 
         uint256 weaponLevel; // 
         uint256 durability; // 내구도 - staking
-        uint256 enchant; // 강화횟수 - compound
+        uint256 enchant; //합성횟수 - compound
     }
 
     Weapon[] public weapons;
@@ -53,8 +53,16 @@ contract NFT is KIP17Full{
         tokenToCompound[7] = 3000;
         tokenToCompound[8] = 5000;
 
-        // 내구도, 강화내구도 수리시 토큰 소모량 의논 후 수정
-        // tokenToFixDurability[0~8] = ??;
+        // 내구도, 합성내구도 수리시 토큰 소모량 의논 후 수정
+        tokenToFix[0] = 50;
+        tokenToFix[1] = 100;
+        tokenToFix[2] = 150;
+        tokenToFix[3] = 200;
+        tokenToFix[4] = 250;
+        tokenToFix[5] = 300;
+        tokenToFix[6] = 350;
+        tokenToFix[7] = 400;
+        tokenToFix[8] = 450;
         // tokenToFixEnchant[0~8] = ??;
 
         token = Token(_token);
@@ -70,9 +78,18 @@ contract NFT is KIP17Full{
     createRandomWeapon(_weaponLevel);
 
     return newItemId;
-  }
+     }
+    
+    // 기본 무기 구매
+    function buyBasicWeapon () public {
+        // 구매자가 50 토큰 이상 보유중인지 확인
+        require(50 <= token.balanceOf(msg.sender), "Not enough token to buy basic weapon");
+        
+        token.burn(msg.sender, 50);
+        mint(msg.sender, 1);
+    }
 
-    // 장비 합성 추가 중
+    // 무기 합성 
     function _createWeapon(uint256 _weaponType, uint256 _weaponLevel) internal {
          _Ids.increment();
 
@@ -121,7 +138,7 @@ contract NFT is KIP17Full{
     Weapon storage myWeapon2 = weapons[_weapon2Id - 1];
     require(myWeapon1.weaponLevel == myWeapon2.weaponLevel, "Compound Same weapon level");
 
-    // 합성 진행시 enchant(강화 내구도) 필요
+    // 합성 진행시 enchant(합성 내구도) 필요
     require(myWeapon1.enchant != 0 && myWeapon2.enchant != 0, "Weapon compound needs enchant");
     
     // 유저가 합성시 필요한 토큰을 충분히 가졌는지 확인
@@ -134,7 +151,7 @@ contract NFT is KIP17Full{
 
     uint256 newType = (myWeapon1.weaponType + myWeapon2.weaponType + _generateRandomType()) / 2 % weaponModulus;
 
-    // 합성시 enchant(강화 내구도) 1씩 소모
+    // 합성시 enchant(합성 내구도) 1씩 소모
     myWeapon1.enchant = myWeapon1.enchant - 1;
     myWeapon2.enchant = myWeapon2.enchant - 1;
 
@@ -168,10 +185,13 @@ contract NFT is KIP17Full{
     function fixWeaponDurability (uint256 _weaponId) public {
         // 수리하는 무기의 소유 확인
         require(msg.sender == ownerOf(_weaponId));
+        
+        // 내구도가 3미만일 경우에만 수리
+        require(weapons[_weaponId -1].durability < 3, "Your weapon doesn't need to fix");
 
         // 충분한 수리비용을 가졌는 지 확인
-        uint256 spendToken = tokenToFixDurability[myWeapon1.weaponLevel - 1];
-        require(spendToken <= token.balanceOf(msg.sender), "You must have URU token to fix durability");
+        uint256 spendToken = tokenToFix[weapons[_weaponId - 1].weaponLevel - 1];
+        require(spendToken <= token.balanceOf(msg.sender), "You must have enough URU token to fix durability");
         
         
         weapons[_weaponId - 1].durability = 3;
@@ -184,10 +204,13 @@ contract NFT is KIP17Full{
     function fixWeaponEnchant (uint256 _weaponId) public {
         // 수리하는 무기의 소유 확인
         require(msg.sender == ownerOf(_weaponId));
+
+        // 내구도가 3미만일 경우에만 수리
+        require(weapons[_weaponId -1].enchant < 3, "Your weapon doesn't need to fix");
         
         // 충분한 수리비용을 가졌는 지 확인
-        uint256 spendToken = tokenToFixEnchant[myWeapon1.weaponLevel - 1];
-        require(spendToken <= token.balanceOf(msg.sender), "You must have URU token to fix enchant");
+        uint256 spendToken = tokenToFix[weapons[_weaponId - 1].weaponLevel - 1];
+        require(spendToken <= token.balanceOf(msg.sender), "You must have enough URU token to fix enchant");
         
         
         weapons[_weaponId - 1].enchant = 3;
