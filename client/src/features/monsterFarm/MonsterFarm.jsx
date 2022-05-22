@@ -29,49 +29,42 @@ const MonsterFarm = () => {
   const [stakedWeapons, setStakedWeapons] = useState([]);
   const [currentTime, setCurrentTime] = useState("");
 
+  const updateWeapons = async () => {
+    const temp = [];
+    const list = await getOwnedWeapons(address);
+
+    setWeapons(list);
+    const caver = new Caver(window.klaytn);
+    for (let i = 0; i < monsters.length; i++) {
+      const monsterContract = new caver.klay.Contract(
+        farmingABI,
+        monsters[i].address
+      );
+
+      const stakeInfo = await monsterContract.methods.stakeInfo(address).call();
+
+      let tempObj = {};
+      if (stakeInfo.isStaking) {
+        const nft = new caver.klay.Contract(nftABI, nftAddress);
+        const weapon = await nft.methods.weapons(stakeInfo.tokenID - 1).call();
+        tempObj = {
+          dna: weapon.weaponType,
+          lvl: weapon.weaponLevel,
+          id: stakeInfo.tokenID,
+        };
+      }
+      temp.push(tempObj);
+    }
+    dispatch(updateStakedWeapon({ staked: temp }));
+    //setStakedWeapons([...temp]);
+    console.log(temp);
+  };
   // useEffect dependency list 잘 활용하기
   useEffect(() => {
-    const temp = [];
-    const getWeapons = async () => {
-      const list = await getOwnedWeapons(address);
+    updateWeapons();
+  }, []);
 
-      setWeapons(list);
-    };
-
-    const getStakeInfo = async () => {
-      const caver = new Caver(window.klaytn);
-      for (let i = 0; i < monsters.length; i++) {
-        const monsterContract = new caver.klay.Contract(
-          farmingABI,
-          monsters[i].address
-        );
-
-        const stakeInfo = await monsterContract.methods
-          .stakeInfo(address)
-          .call();
-
-        let tempObj = {};
-        if (stakeInfo.isStaking) {
-          const nft = new caver.klay.Contract(nftABI, nftAddress);
-          const weapon = await nft.methods
-            .weapons(stakeInfo.tokenID - 1)
-            .call();
-          tempObj = {
-            dna: weapon.weaponType,
-            lvl: weapon.weaponLevel,
-            id: stakeInfo.tokenID,
-          };
-        }
-        temp.push(tempObj);
-      }
-      dispatch(updateStakedWeapon({ staked: temp }));
-      //setStakedWeapons([...temp]);
-      console.log(temp);
-    };
-
-    getWeapons();
-    getStakeInfo();
-
+  useEffect(() => {
     const intervalID = setInterval(() => {
       const currentTime = Math.round(new Date().getTime() / 1000);
       setCurrentTime(currentTime);
@@ -102,6 +95,7 @@ const MonsterFarm = () => {
                     setAvailableWeapons={setAvailableWeapons}
                     setSelectedMonsterAddress={setSelectedMonsterAddress}
                     currentTime={currentTime}
+                    updateWeapons={updateWeapons}
                   ></Monster>
                 );
               })}
@@ -118,6 +112,7 @@ const MonsterFarm = () => {
             <WeaponList
               availableWeapons={availableWeapons}
               selectedMonsterAddress={selectedMonsterAddress}
+              updateWeapons={updateWeapons}
             />
           </Container>
         </Modal>

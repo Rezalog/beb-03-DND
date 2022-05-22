@@ -10,7 +10,11 @@ import { BuySellButton } from "../../../styles/Inventory.styled";
 
 import { farmingABI } from "../nftStakingContractInfo";
 import { nftAddress } from "../../marketplace/nftContractInfo";
-const WeaponList = ({ availableWeapons, selectedMonsterAddress }) => {
+const WeaponList = ({
+  availableWeapons,
+  selectedMonsterAddress,
+  updateWeapons,
+}) => {
   const dispatch = useDispatch();
   const { address } = useSelector((state) => state.userInfo);
 
@@ -40,6 +44,7 @@ const WeaponList = ({ availableWeapons, selectedMonsterAddress }) => {
     });
 
     dispatch(closeSubModal());
+    updateWeapons();
   };
   return (
     <InventoryContainer>

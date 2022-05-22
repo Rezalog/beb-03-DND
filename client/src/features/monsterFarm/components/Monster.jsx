@@ -31,6 +31,7 @@ const Monster = ({
   setAvailableWeapons,
   setSelectedMonsterAddress,
   currentTime,
+  updateWeapons,
 }) => {
   const dispatch = useDispatch();
   const { address } = useSelector((state) => state.userInfo);
@@ -47,6 +48,7 @@ const Monster = ({
     });
     getRemainingTime();
   };
+
   const getRemainingTime = async () => {
     const caver = new Caver(window.klaytn);
     const monsterContract = new caver.klay.Contract(farmingABI, monsterAddress);
@@ -54,10 +56,15 @@ const Monster = ({
     const { yieldLockTime } = await monsterContract.methods
       .stakeInfo(address)
       .call();
-    const end = Number(yieldLockTime.toString()) + Number(cooltime);
-    setEndTime(end);
-    const currentTime = Math.round(new Date().getTime() / 1000);
-    setRemainingTime(end - currentTime >= 0 ? end - currentTime : 0);
+    console.log("lock time", typeof yieldLockTime);
+    if (yieldLockTime !== "0") {
+      const end = Number(yieldLockTime.toString()) + Number(cooltime);
+      setEndTime(end);
+      const currentTime = Math.round(new Date().getTime() / 1000);
+      setRemainingTime(end - currentTime >= 0 ? end - currentTime : 0);
+    } else {
+      setEndTime(0);
+    }
   };
 
   const unStakeWeapon = async () => {
@@ -70,21 +77,22 @@ const Monster = ({
     });
 
     dispatch(removeStakedWeapon({ index: staked.id - 1 }));
+    updateWeapons();
   };
 
   useEffect(() => {
     getRemainingTime();
-  }, []);
+  }, [staked]);
 
   useEffect(() => {
-    console.log(staked);
+    console.log("staekd", staked);
   }, [staked]);
 
   // 이런식으로 하면 몇초뒤부터 카운트 시작함
   // getRemainingTime하고 같이 묶으면 endTime이 0임
   // 왜냐하면 state는 rendering이 끝날때 적용되기 때문에
   useEffect(() => {
-    if (currentTime === "") {
+    if (currentTime === "" || endTime === 0) {
       setRemainingTime("");
     } else {
       setRemainingTime(endTime - currentTime >= 0 ? endTime - currentTime : 0);
@@ -98,14 +106,14 @@ const Monster = ({
           lvl {lvl} {name}
         </h2>
         <p>
-          {reward} URU / {remainingTime}초
+          {reward} URU / {endTime === 0 ? cooltime : remainingTime}초
         </p>
         {remainingTime === 0 && <button onClick={getReward}>보상획득</button>}
       </MonsterHeader>
       <MonsterContainer>
         <div>
           <WeaponRenderer dna={staked?.dna} lvl={staked?.lvl} />
-          {Object.keys(staked).length ? (
+          {staked && Object.keys(staked).length ? (
             <BuySellButton
               onClick={() => {
                 unStakeWeapon();
