@@ -46,7 +46,8 @@ library DNDLibrary {
 
     // calculates the CREATE2 address for a pair without making any external calls
     //-- Then, this sequence of bytes gets hashed (keccak256) and converted to address (bytes->uint256->uint160->address).
-    // ref) https://jeiwan.net/posts/programming-defi-uniswapv2-3/
+    // ref1) https://jeiwan.net/posts/programming-defi-uniswapv2-3/
+    // ref2) https://emn178.github.io/online-tools/keccak_256.html
 
     /*
         0xff : this first byte helps to avoid collisions with CREATE opcode. (More details are in EIP-1014.)
@@ -67,7 +68,7 @@ library DNDLibrary {
                             hex"ff",
                             factoryAddress,
                             keccak256(abi.encodePacked(token0, token1)),
-                            hex"5c6161774801e93a0f8f0d07a85c441c3660cb025ca0ae9193931073a4d62e7a"
+                            hex"1664ae3c9ccd204ab2a16c6cda9c850db451167e132a5bf42af591dab9c47df4"
                         )
                     )
                 )
