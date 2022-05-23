@@ -12,7 +12,7 @@ import { openSignUpModal } from "./features/modal/signUpModalSlice";
 import { openLpFarmModal } from "./features/modal/lpFarmingModalSlice";
 import LPFarmModal from "./features/lpFarming/LPFarmModal";
 import axios from "axios";
-import Loading from "./features/loading/Loading";
+import Notification from "./features/notification/Notification";
 import { startLoading } from "./features/loading/loadingSlice";
 import {
   addAddress,
@@ -184,6 +184,7 @@ function App() {
       {isMarketplaceOpen && <Marketplace />}
       {isMonsterFarmOpen && <MonsterFarm />}
       {isInventoryOpen && <Inventory />}
+      <Notification />
     </div>
   );
 }

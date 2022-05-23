@@ -28,7 +28,7 @@ export const LoadingBar = styled.div`
     text-indent: -9999em;
     margin: 88px auto;
     position: relative;
-    font-size: 11px;
+    font-size: ${(props) => props.size || "11px"};
     transform: translateZ(0);
     animation-delay: -0.16s;
   }

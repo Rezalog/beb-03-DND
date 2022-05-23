@@ -14,6 +14,7 @@ import marketplaceModalSlice from "./features/modal/marketplaceModalSlice";
 import marketplaceSlice from "./features/marketplace/marketplaceSlice";
 import monsterFarmModalSlice from "./features/modal/monsterFarmModalSlice";
 import monsterFarmSlice from "./features/monsterFarm/monsterFarmSlice";
+import notifiactionSlice from "./features/notification/notifiactionSlice";
 export const store = configureStore({
   reducer: {
     dexModal: dexModalReducer,
@@ -31,5 +32,6 @@ export const store = configureStore({
     marketplace: marketplaceSlice,
     monsterFarmModal: monsterFarmModalSlice,
     monsterFarm: monsterFarmSlice,
+    notification: notifiactionSlice,
   },
 });
