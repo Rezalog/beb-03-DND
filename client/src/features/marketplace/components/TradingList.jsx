@@ -61,8 +61,20 @@ const TradingList = ({ getMarketplaceList }) => {
   });
 
   return (
-    <InventoryContainer>
-      <button onClick={buyNewNFT}>구매</button>
+    <InventoryContainer style={{ height: "70%" }}>
+      <div>
+        <img
+          src='assets/chest.png'
+          style={{
+            width: "96px",
+            height: "96px",
+            backgroundColor: "#8f5765",
+            border: "5px solid black",
+            marginBottom: "-3px",
+          }}
+        ></img>
+        <BuySellButton onClick={() => buyNewNFT()}>50 URU</BuySellButton>
+      </div>
       {list.map((item, idx) => {
         return (
           <div key={idx}>

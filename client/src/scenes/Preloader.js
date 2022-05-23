@@ -31,6 +31,10 @@ export default class Preloader extends Phaser.Scene {
       frameWidth: 64,
       frameHeight: 16,
     });
+    this.load.spritesheet("dungeon", "assets/dungeon.png", {
+      frameWidth: 16,
+      frameHeight: 20,
+    });
   }
 
   create() {
