@@ -13,6 +13,8 @@ import weaponCompoundModalSlice from "./features/modal/weaponCompoundModalSlice"
 import TooltipSlice from "./features/tooltip/TooltipSlice";
 import marketplaceModalSlice from "./features/modal/marketplaceModalSlice";
 import marketplaceSlice from "./features/marketplace/marketplaceSlice";
+import monsterFarmModalSlice from "./features/modal/monsterFarmModalSlice";
+import monsterFarmSlice from "./features/monsterFarm/monsterFarmSlice";
 export const store = configureStore({
   reducer: {
     dexModal: dexModalReducer,
@@ -29,5 +31,7 @@ export const store = configureStore({
     tooltip: TooltipSlice,
     marketplaceModal: marketplaceModalSlice,
     marketplace: marketplaceSlice,
+    monsterFarmModal: monsterFarmModalSlice,
+    monsterFarm: monsterFarmSlice,
   },
 });

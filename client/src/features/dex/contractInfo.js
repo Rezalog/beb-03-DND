@@ -1,25 +1,6 @@
 module.exports = {
-  factoryAddress: "0x08D52D9e38e664366291B4093B27d8A89A21fADc",
+  factoryAddress: "0x801Bc872bD1b533807EeCaa66329363AD17ABe06",
   factoryABI: [
-    {
-      constant: false,
-      inputs: [
-        {
-          name: "_tokenAddress",
-          type: "address",
-        },
-      ],
-      name: "createExchange",
-      outputs: [
-        {
-          name: "",
-          type: "address",
-        },
-      ],
-      payable: false,
-      stateMutability: "nonpayable",
-      type: "function",
-    },
     {
       constant: true,
       inputs: [
@@ -37,6 +18,47 @@ module.exports = {
       ],
       payable: false,
       stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [],
+      name: "uru",
+      outputs: [
+        {
+          name: "",
+          type: "address",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "_tokenAddress",
+          type: "address",
+        },
+        {
+          name: "_uru",
+          type: "address",
+        },
+        {
+          name: "_epochDuration",
+          type: "uint256",
+        },
+      ],
+      name: "createExchange",
+      outputs: [
+        {
+          name: "",
+          type: "address",
+        },
+      ],
+      payable: false,
+      stateMutability: "nonpayable",
       type: "function",
     },
     {
@@ -64,6 +86,25 @@ module.exports = {
       constant: true,
       inputs: [
         {
+          name: "user",
+          type: "address",
+        },
+      ],
+      name: "calculateContribute",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [
+        {
           name: "interfaceId",
           type: "bytes4",
         },
@@ -73,6 +114,25 @@ module.exports = {
         {
           name: "",
           type: "bool",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [
+        {
+          name: "user",
+          type: "address",
+        },
+      ],
+      name: "calculateYieldTotal",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
         },
       ],
       payable: false,
@@ -114,6 +174,34 @@ module.exports = {
       ],
       payable: false,
       stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [],
+      name: "currentLockedPercentage",
+      outputs: [
+        {
+          name: "",
+          type: "uint8",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [],
+      name: "uru",
+      outputs: [
+        {
+          name: "",
+          type: "address",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
       type: "function",
     },
     {
@@ -173,6 +261,39 @@ module.exports = {
       ],
       payable: false,
       stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "amount",
+          type: "uint256",
+        },
+      ],
+      name: "unstake",
+      outputs: [],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [
+        {
+          name: "",
+          type: "address",
+        },
+      ],
+      name: "URUBalance",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
       type: "function",
     },
     {
@@ -248,6 +369,25 @@ module.exports = {
       type: "function",
     },
     {
+      constant: true,
+      inputs: [
+        {
+          name: "",
+          type: "address",
+        },
+      ],
+      name: "stakingBalance",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
       constant: false,
       inputs: [
         {
@@ -282,6 +422,58 @@ module.exports = {
     },
     {
       constant: true,
+      inputs: [],
+      name: "countDown",
+      outputs: [
+        {
+          name: "count",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [
+        {
+          name: "",
+          type: "address",
+        },
+      ],
+      name: "startTime",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [
+        {
+          name: "",
+          type: "address",
+        },
+      ],
+      name: "isStaking",
+      outputs: [
+        {
+          name: "",
+          type: "bool",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
       inputs: [
         {
           name: "account",
@@ -293,6 +485,20 @@ module.exports = {
         {
           name: "",
           type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [],
+      name: "getuserList",
+      outputs: [
+        {
+          name: "",
+          type: "address[]",
         },
       ],
       payable: false,
@@ -321,6 +527,25 @@ module.exports = {
         {
           name: "",
           type: "address",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [
+        {
+          name: "user",
+          type: "address",
+        },
+      ],
+      name: "calculateYieldTime",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
         },
       ],
       payable: false,
@@ -362,6 +587,39 @@ module.exports = {
       ],
       payable: false,
       stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      name: "userList",
+      outputs: [
+        {
+          name: "",
+          type: "address",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "amount",
+          type: "uint256",
+        },
+      ],
+      name: "stake",
+      outputs: [],
+      payable: false,
+      stateMutability: "nonpayable",
       type: "function",
     },
     {
@@ -522,6 +780,15 @@ module.exports = {
     },
     {
       constant: false,
+      inputs: [],
+      name: "withdrawYield",
+      outputs: [],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: false,
       inputs: [
         {
           name: "recipient",
@@ -570,10 +837,69 @@ module.exports = {
           name: "_token",
           type: "address",
         },
+        {
+          name: "_uru",
+          type: "address",
+        },
+        {
+          name: "_epochDuration",
+          type: "uint256",
+        },
       ],
       payable: false,
       stateMutability: "nonpayable",
       type: "constructor",
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          name: "from",
+          type: "address",
+        },
+        {
+          indexed: false,
+          name: "amount",
+          type: "uint256",
+        },
+      ],
+      name: "Stake",
+      type: "event",
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          name: "from",
+          type: "address",
+        },
+        {
+          indexed: false,
+          name: "amount",
+          type: "uint256",
+        },
+      ],
+      name: "Unstake",
+      type: "event",
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          name: "to",
+          type: "address",
+        },
+        {
+          indexed: false,
+          name: "amount",
+          type: "uint256",
+        },
+      ],
+      name: "YieldWithdraw",
+      type: "event",
     },
     {
       anonymous: false,
