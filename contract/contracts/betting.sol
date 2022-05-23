@@ -12,7 +12,7 @@ contract Betting {
 
     struct betInfo {
         uint256 amount;
-        string side;
+        bool side;
     }
 
     // iteration을 위한 배열 선언
@@ -32,8 +32,8 @@ contract Betting {
         startTime = block.timestamp;
     }
 
-    function bet(uint256 _amount, string _side ) public {
-        (require(startTime.add(120) > block.timestamp, "time over to betting!");)
+    function bet(uint256 _amount, bool _side ) public {
+        require(startTime.add(1200) > block.timestamp, "time over to betting!");
         
         // approve 필요!
         KIP7(token).transferFrom(msg.sender, address(this), _amount);
@@ -41,85 +41,83 @@ contract Betting {
         playerInfo[msg.sender].amount = _amount;
         playerInfo[msg.sender].side = _side;
 
-        player.push(msg.sender);
-
-        if (_side == "succees") {
+        if (_side == true) {
             betAmountSuccees = betAmountSuccees.add(_amount);
             playerOnSuccees.push(msg.sender);
-        } else if (_side == "failure") {
+        } else if (_side == false) {
             betAmountFailure = betAmountFailure.add(_amount);
             playerOnFailure.push(msg.sender);
         }
     }
 
-    function distribution(uint256 _amount, uint256 _token1Id, uint256 _token2Id) public {
-        (require(startTime.add(120) < block.timestamp, "betting is in progress!");)
+    function distribution(uint256 _token1Id, uint256 _token2Id) public {
+        require(startTime.add(120) < block.timestamp, "betting is in progress!");
 
-        let betResult = nft.getCompoundResult(_token1Id, _token2Id)
+        bool betResult = nft.getCompoundResult(_token1Id, _token2Id);
 
         if (betResult == true) {
-            for (let i = 0; i < playerOnSuccees.length; i++) {
-                let reward = calculateRewardSuccees(playerOnSuccees[i])
-                KIp7(token).transferFrom(address(this), playerOnSuccees[i], reward)
+            for (uint256 i = 0; i <= playerOnSuccees.length; i++) {
+                uint256 reward = calculateRewardSuccees(playerOnSuccees[i]);
+                KIP7(token).transferFrom(address(this), playerOnSuccees[i], reward);
             }
-        } else if (betResult == false) {
-            for (let i = 0; i < playerOnFailure.length; i++) {
-                let reward = calculateRewardFailure(playerOnFailure[i])
-                KIp7(token).transferFrom(address(this), playerOnFailure[i], reward)
+        } else {
+            for (uint256 i = 0; i <= playerOnFailure.length; i++) {
+                uint256 reward = calculateRewardFailure(playerOnFailure[i]);
+                KIP7(token).transferFrom(address(this), playerOnFailure[i], reward);
         }
 
         // 관련 항목 초기화;
-        playerOnSuccees = [];
-        playerOnFailure = [];
+        // address[] playerOnSuccees;
+        // address[] playerOnFailure;
         betAmountSuccees = 0;
         betAmountFailure = 0;
     }
 
-
+    }
     // assist function
 
     // '성공'에 베팅시 보상 계산
-    function calculateRewardSuccees (address _player) public view returns (uint256) {
-        let amount = playerInfo[_player].amount;
-        let portion = 100.mul(amount).div(betAmountSuccees);
-        let reward = amount.add((betAmountFailure.mul(portion)));
+    function calculateRewardSuccees(address _player) public view returns (uint256) {
+        uint256 amount = playerInfo[_player].amount;
+        uint256 portion = amount.mul(100).div(betAmountSuccees);
+        uint256 reward = amount.add(betAmountFailure.mul(portion).div(100));
         return reward;
     }
 
     
-    function calculateRewardFailure () public view returns (uint256) {
-        let amount = playerInfo[msg.sender].amount;
-        let portion = 100.mul(amount).div(betAmountFailure);
-        let reward = amount.add((betAmountSuccees.mul(portion)));
+    function calculateRewardFailure(address _player) public view returns (uint256) {
+        uint256 amount = playerInfo[_player].amount;
+        uint256 portion = amount.mul(100).div(betAmountFailure);
+        uint256 reward = amount.add(betAmountSuccees.mul(portion).div(100));
         return reward;
     }
 
 
     // 참여자 목록 
-    function getPlayerSuccees () public view returns (address[]) {
-        return playerOnSuccess;
+    function getPlayerSuccees() public view returns (address[] memory) {
+        return playerOnSuccees;
     }
 
-    function getPlayerFailure () public view returns (address[]) {
+    function getPlayerFailure() public view returns (address[] memory) {
         return playerOnFailure;
     }
 
     // 각 결과에 걸린 베팅 총액
-    function amountForSuccees () public view returns (uint256 amount) {
+    function amountForSuccees() public view returns (uint256 amount) {
         return betAmountSuccees;
     }
     
-    function amountForFailure () public view returns (uint256 amount) {
+    function amountForFailure() public view returns (uint256 amount) {
         return betAmountFailure;
     }
 
     // 배당률 계산
-    function oddsForSuccees () public view returns (uint256 odds) {
+    // function oddsForSuccees() public view returns (uint256 odds) {
 
-    }
+    // }
 
-    function oddsForFailure () public view returns (uint256 odds) {
+    // function oddsForFailure() public view returns (uint256 odds) {
 
-    }
+    // }
 
 }
