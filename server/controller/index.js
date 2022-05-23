@@ -1,3 +1,4 @@
 module.exports = {
-  usersController: require('./users'),
+  usersController: require("./users"),
+  contractsController: require("./contracts"),
 };
