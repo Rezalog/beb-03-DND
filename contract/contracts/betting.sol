@@ -71,6 +71,7 @@ contract Betting {
         delete playerOnSuccees;
         delete playerOnFailure;
     }
+
     // assist function
 
     // '성공'에 베팅시 보상 계산
@@ -88,7 +89,6 @@ contract Betting {
         uint256 reward = amount.add(betAmountSuccees.mul(portion).div(100));
         return reward;
     }
-
 
     // 참여자 목록 
     function getPlayerSuccees() public view returns (address[] memory) {
