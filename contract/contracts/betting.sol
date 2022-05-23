@@ -51,24 +51,23 @@ contract Betting {
     }
 
     function distribution(uint256 _token1Id, uint256 _token2Id) public {
-        require(startTime.add(120) < block.timestamp, "betting is in progress!");
+        require(startTime.add(30) < block.timestamp, "betting is in progress!");
 
         bool betResult = nft.getCompoundResult(_token1Id, _token2Id);
 
         if (betResult == true) {
-            for (uint256 i = 0; i <= playerOnSuccees.length; i++) {
+            for (uint256 i = 0; i < playerOnSuccees.length; i++) {
                 uint256 reward = calculateRewardSuccees(playerOnSuccees[i]);
-                KIP7(token).transferFrom(address(this), playerOnSuccees[i], reward);
+                KIP7(token).transfer(playerOnSuccees[i], reward);
             }
-        } else {
-            for (uint256 i = 0; i <= playerOnFailure.length; i++) {
+        } else if (betResult == false) {
+            for (uint256 i = 0; i < playerOnFailure.length; i++) {
                 uint256 reward = calculateRewardFailure(playerOnFailure[i]);
-                KIP7(token).transferFrom(address(this), playerOnFailure[i], reward);
+                KIP7(token).transfer(playerOnFailure[i], reward);
         }
-
         // 관련 항목 초기화;
-        // address[] playerOnSuccees;
-        // address[] playerOnFailure;
+        delete playerOnSuccees;
+        delete playerOnFailure;
         betAmountSuccees = 0;
         betAmountFailure = 0;
     }
