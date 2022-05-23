@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.5.6;
 
-import "../node_modules/@klaytn/contracts/token/KIP7/KIP7.sol";
-import "../node_modules/@klaytn/contracts/token/KIP7/IKIP7.sol";
-import "../node_modules/@klaytn/contracts/token/KIP7/KIP7Metadata.sol";
+import "@klaytn/contracts/token/KIP7/KIP7.sol";
+import "@klaytn/contracts/token/KIP7/IKIP7.sol";
+import "@klaytn/contracts/token/KIP7/KIP7Metadata.sol";
+import "@klaytn/contracts/math/SafeMath.sol";
+import "./Token.sol";
 
 interface IExchange {
     function klayToTokenSwap(uint256 _minTokens) external payable;
@@ -19,13 +21,28 @@ interface IFactory {
 
 contract Exchange is KIP7, KIP7Metadata {
 
+    using SafeMath for uint256;
+
     address public tokenAddress;
     address public factoryAddress;   // 모든 거래소 contract는 factory 주소를 알 수 있어야 함
+    Token public uru;
 
-    constructor(address _token) public KIP7Metadata("klay-uru-LP-token", "LP", 18)  {
+    // lock 관련 선언
+    uint8 lockedPercentage = 95;
+    uint256 lockStartTime;
+    uint256 nextEpoch;
+    uint256 epochDuration;
+
+    constructor(address _token, Token _uru, uint256 _epochDuration) public KIP7Metadata("klay-uru-LP-token", "LP", 18)  {
         require(_token != address(0), "invalid token address");
         tokenAddress = _token;
+        uru = _uru;
         factoryAddress = msg.sender;  // factory address link
+
+        // lock 관련
+        lockStartTime = block.timestamp;
+        nextEpoch = block.timestamp.add(_epochDuration);
+        epochDuration = _epochDuration;
     }
 
     function addLiquidity(uint256 _tokenAmount) public payable returns (uint256) {
@@ -47,9 +64,9 @@ contract Exchange is KIP7, KIP7Metadata {
 
             // 이미있는 유동성에 입력받은 _tokenAmount 만큼 더해지면
             // 얼마나 유동성에 지분이 있는지 liquidity를 계산하는 식
-            uint256 klayReserve = address(this).balance - msg.value;
+            uint256 klayReserve = address(this).balance.sub(msg.value);
             uint256 tokenReserve = getReserve();
-            uint256 tokenAmount = (msg.value * tokenReserve) / klayReserve;
+            uint256 tokenAmount = (msg.value.mul(tokenReserve)).div(klayReserve);
 
             // 입력받은 토큰 양이 더 크면 유동성이 없거나 더 빠지는 경우이므로 유효성검사를 해준다.
             require(_tokenAmount >= tokenAmount, "insufficient token amount");
@@ -60,7 +77,7 @@ contract Exchange is KIP7, KIP7Metadata {
             token.transferFrom(msg.sender, address(this), tokenAmount);
 
             // 그리고 그 liquidity 만큼 LP 토큰을 발행한다.
-            uint256 liquidity = (totalSupply() * msg.value) / klayReserve;
+            uint256 liquidity = (totalSupply().mul(msg.value)).div(klayReserve);
             _mint(msg.sender, liquidity);
 
             return liquidity;
@@ -72,9 +89,9 @@ contract Exchange is KIP7, KIP7Metadata {
         require(_amount > 0, "invalid amount");
 
         // klayAmount : 현재 풀에 _amount가 추가된 만큼의 유동성이 고려된 klay의 양
-        uint256 klayAmount = (address(this).balance * _amount) / totalSupply();
+        uint256 klayAmount = (address(this).balance.mul(_amount)).div(totalSupply());
         // tokenAmount : 현재 풀에 _amount가 추가된 만큼 유동성이 고려된 token의 양
-        uint256 tokenAmount = (getReserve() * _amount) / totalSupply();
+        uint256 tokenAmount = (getReserve().mul(_amount)).div(totalSupply());
 
         // 입력받은 _amount 만큼 burn
         _burn(msg.sender, _amount);
@@ -118,7 +135,7 @@ contract Exchange is KIP7, KIP7Metadata {
         uint256 tokenReserve = getReserve(); // 풀의 토큰 잔액
         uint256 tokensBought = getAmount(
             msg.value, // 입금한 klay
-            address(this).balance - msg.value, // 풀에있는 klay의 양
+            address(this).balance.sub(msg.value), // 풀에있는 klay의 양
             tokenReserve // 풀에 있는 토큰의 양
         );
 
@@ -206,13 +223,162 @@ contract Exchange is KIP7, KIP7Metadata {
     ) private pure returns (uint256) {
         require(inputReserve > 0 && outputReserve > 0, "invalid reserves");
 
-        uint256 inputAmountWithFee = inputAmount * 99; // 수수료를 제한다.
-        uint256 numerator = inputAmountWithFee * outputReserve;
-        uint256 denominator = (inputReserve * 100) + inputAmountWithFee;
+        uint256 inputAmountWithFee = inputAmount.mul(99); // 수수료를 제한다.
+        uint256 numerator = inputAmountWithFee.mul(outputReserve);
+        uint256 denominator = (inputReserve.mul(100)).add(inputAmountWithFee);
 
-        return numerator / denominator;
+        return numerator.div(denominator);
 
         // return (inputAmount * outputReserve) / (inputReserve + inputAmount); 수수료 없을 때의 경우
     }
 
+    // ------------------
+    // LP-Farming feature
+    // ------------------
+    
+    // iterations을 위한 배열 선언
+    address[] public userList;
+
+    // 관련 정보를 기록할 mapping 선언
+    mapping(address => uint256) public stakingBalance;
+    mapping(address => bool) public isStaking;
+    mapping(address => uint256) public startTime;
+    mapping(address => uint256) public URUBalance;
+
+    event Stake(address indexed from, uint256 amount);
+    event Unstake(address indexed from, uint256 amount);
+    event YieldWithdraw(address indexed to, uint256 amount);
+
+    //  예치 기능
+    function stake(uint256 amount) public {
+        require(
+            amount > 0 &&
+            KIP7(address(this)).balanceOf(msg.sender) >= amount, 
+            "토큰이 부족합니다");
+
+        // userList에 "없는 주소일 경우" msg.sender을 주소를 userList에 삽입
+        if(isStaking[msg.sender] == false) {
+            userList.push(msg.sender);
+        }
+        
+        if(isStaking[msg.sender] == true) {
+            URUBalance[msg.sender] = URUBalance[msg.sender].add(calculateYieldTotal(msg.sender));
+        }
+
+        stakingBalance[msg.sender] = stakingBalance[msg.sender].add(amount);
+        KIP7(address(this)).transferFrom(msg.sender, address(this), amount);
+        startTime[msg.sender] = block.timestamp;
+        isStaking[msg.sender] = true;
+        emit Stake(msg.sender, amount);
+
+        // stake가 일어날 때 마다 모든 유저에 대해서 해당 시각의 이자를 mapping 결과에 저장
+        for (uint256 i = 0; i < userList.length; i++) {
+            uint256 nowURUBalance = calculateYieldTotal(userList[i]);
+            URUBalance[userList[i]] = URUBalance[userList[i]].add(nowURUBalance);
+            startTime[userList[i]] = block.timestamp;
+        }
+    }
+
+    // 예치량 빼기
+    function unstake(uint256 amount) public {
+        require(
+            isStaking[msg.sender] = true &&
+            stakingBalance[msg.sender] >= amount, 
+            "예치량보다 많습니다"
+        );
+        uint256 yieldTransfer = calculateYieldTotal(msg.sender);
+        startTime[msg.sender] = block.timestamp;
+        uint256 balTransfer = amount;
+        amount = 0;
+        stakingBalance[msg.sender] = stakingBalance[msg.sender].sub(balTransfer);
+        KIP7(address(this)).transfer(msg.sender, balTransfer);
+        URUBalance[msg.sender] = URUBalance[msg.sender].add(yieldTransfer);
+        if(stakingBalance[msg.sender] == 0){
+            isStaking[msg.sender] = false;
+            // 예치량이 0이되면 userList에서 해당 함수의 주소를 삭제
+        }
+        emit Unstake(msg.sender, balTransfer);
+
+        // stake가 일어날 때와의 마찬가지의 논리
+        for (uint256 i = 0; i < userList.length; i++) {
+        uint256 nowURUBalance = calculateYieldTotal(userList[i]);
+        URUBalance[userList[i]] = URUBalance[userList[i]].add(nowURUBalance);
+        startTime[userList[i]] = block.timestamp;
+        }
+    }
+
+    // 현재 스테이킹 중인 address를 배열로 반환
+    function getuserList() public view returns(address[] memory) {
+        return userList;
+    }
+
+    // 마지막 스테이킹 변화로부터 시간 측정 (블록타임 활용)
+    function calculateYieldTime(address user) public view returns(uint256){
+        uint256 end = block.timestamp;
+        uint256 totalTime = end.sub(startTime[user]);
+        return totalTime;
+    }
+
+    // 전체 비율 중 해당 유저의 유동성 기여도 측정
+    // 소수점 둘째 자리까지 가능 (백분율)
+    function calculateContribute(address user) public view returns(uint256){
+        uint contribution = (stakingBalance[user].mul(100)).div(KIP7(address(this)).balanceOf(address(this)));
+        return contribution;
+    }
+
+    // 새로운 기간 동안 (새로운 stake나 unstake가 일어나지 않는 동안) 각 유저에게 지급할 이자를 계산
+    // 시간과 기여도의 곱으로 계산
+    // 총 분당 1500개, 초당 25개씩 발행될 것이고 이를 기여도에 따라서 나누는 시스템
+    function calculateYieldTotal(address user) public view returns(uint256) {
+        uint256 time = calculateYieldTime(user);
+        uint256 contribution = calculateContribute(user);
+        uint256 rawYield = (time.mul(contribution).mul(25));
+        return rawYield;
+    } 
+
+    function countDown() public view returns (uint256 count){
+        count = nextEpoch.sub(block.timestamp);
+    }
+
+    function currentLockedPercentage() public view returns (uint8) {
+        return lockedPercentage;
+    }
+
+    function _calculateLockedPercentage() internal {
+    // 현재 블록 시간이 nextEpoch보다 큰 경우 = lockedPercentage가 감소해야한다.
+        while (block.timestamp >= nextEpoch) {
+            lockedPercentage = lockedPercentage < 20 ? 0 : uint8(uint256(lockedPercentage).sub(20));
+            nextEpoch = nextEpoch.add(epochDuration);
+        }
+    }
+
+    // URUBalance에 저장된 값과 현재 기간 쌓인 이자의 합으로 mint해줌
+    function withdrawYield() public {
+        uint256 toTransfer = calculateYieldTotal(msg.sender);
+
+        require(
+            toTransfer > 0 ||
+            URUBalance[msg.sender] > 0,
+            "Nothing to withdraw"
+            );
+        
+        // 잔액 전부 가져왔음
+        if(URUBalance[msg.sender] != 0){
+            uint256 oldBalance = URUBalance[msg.sender];
+            URUBalance[msg.sender] = 0;
+            toTransfer = toTransfer.add(oldBalance);
+        }
+
+        startTime[msg.sender] = block.timestamp;
+        if (lockedPercentage != 0) {
+            _calculateLockedPercentage();
+            uint256 lockedTokenAmount = toTransfer.mul(uint256(lockedPercentage)).div(100);
+            uru.mint(msg.sender, toTransfer.sub(lockedTokenAmount));
+            uru.lock(msg.sender, lockedTokenAmount);
+        }
+        else {
+            uru.mint(msg.sender, toTransfer);
+        }
+        emit YieldWithdraw(msg.sender, toTransfer);
+    } 
 }

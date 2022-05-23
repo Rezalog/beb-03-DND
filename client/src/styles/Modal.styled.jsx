@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Modal = styled.div`
   position: relative;
-  width: 530px;
+  width: ${(props) => props.width || "530px"};
   height: ${(props) => props.height || "700px"};
   background-image: url("assets/modal.png");
   background-size: 100% 100%;
@@ -57,4 +57,29 @@ export const Button = styled.button`
   color: white;
   bottom: 70px;
   font-size: 2rem;
+`;
+
+export const BackButton = styled.button`
+  position: absolute;
+  background-color: transparent;
+  border: none;
+  background-image: url("assets/back.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+  width: 48px;
+  height: 48px;
+  top: 190px;
+  left: 70px;
+`;
+
+export const UpDownButton = styled.button`
+  background-color: transparent;
+  border: none;
+  background-image: url("assets/UpDown.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+  width: 32px;
+  height: 32px;
 `;

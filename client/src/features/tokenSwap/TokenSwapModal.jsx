@@ -10,7 +10,13 @@ import {
   changeToken1,
 } from "./tokenSwapSlice";
 import { startLoading, stopLoading } from "../loading/loadingSlice";
-import { Modal, Container, Header, Button } from "../../styles/Modal.styled";
+import {
+  Modal,
+  Container,
+  Header,
+  Button,
+  UpDownButton,
+} from "../../styles/Modal.styled";
 import { ModalCenter } from "../../styles/ModalCenter.styled";
 import {
   InputContainer,
@@ -27,10 +33,10 @@ const TokenSwapModal = () => {
   const { isSubModalOpen, tokens, token0, token1 } = useSelector(
     (state) => state.tokenSwap
   );
+  const { address: account } = useSelector((state) => state.userInfo);
   const { exchanges } = useSelector((state) => state.dex);
   const [balance, setBalance] = useState(0);
   const [balance1, setBalance1] = useState(0);
-  const [account, setAccount] = useState(null);
   const [selectedToken, setSelectedToken] = useState(0);
   const token0InputRef = useRef(null);
   const token1InputRef = useRef(null);
@@ -38,28 +44,12 @@ const TokenSwapModal = () => {
   const [minOutput, setMinOutput] = useState(0);
   const [price, setPrice] = useState("");
 
-  const connectToWallet = async () => {
-    if (typeof window.klaytn !== "undefined") {
-      const provider = window["klaytn"];
-      try {
-        const accounts = await window.klaytn.enable();
-        const _account = window.klaytn.selectedAddress;
-        setAccount(_account);
-
-        const caver = new Caver(window.klaytn);
-        const _balance = await caver.klay.getBalance(_account);
-        setBalance(caver.utils.fromPeb(_balance));
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
-
   /*
    * 현재 보유중인 전체 수량을 input으로 넣어준다.
    */
   const inputMaxToken = () => {
     token0InputRef.current.value = balance;
+    getOutputAmount();
   };
 
   /*
@@ -263,7 +253,6 @@ const TokenSwapModal = () => {
                 }}
               ></button>
             </Header>
-            <button onClick={connectToWallet}>잔액조회</button>
             <InputContainer type='number'>
               <button
                 onClick={() => {
@@ -287,7 +276,7 @@ const TokenSwapModal = () => {
                 </span>
               </BalanceContainer>
             </InputContainer>
-            <button onClick={swapToken0AndToken1}>스왑</button>
+            <UpDownButton onClick={swapToken0AndToken1}></UpDownButton>
             <InputContainer type='number'>
               <button
                 onClick={() => {
