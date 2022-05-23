@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import WeaponRenderer from "../weapon/WeaponRenderer";
+import Loading from "../loading/Loading";
 
 import { InventoryContainer } from "../../styles/Inventory.styled";
 import { ModalCenter } from "../../styles/ModalCenter.styled";
 import { Modal, Container, Header } from "../../styles/Modal.styled";
 
 import { getOwnedWeapons } from "../../helper/getOwnedWeapons";
+import { startLoading, stopLoading } from "../loading/loadingSlice";
 // const weapons = [
 //   { dna: "5948301827384950", lvl: "1" },
 //   { dna: "9829384617283748", lvl: "2" },
@@ -22,14 +24,18 @@ import { getOwnedWeapons } from "../../helper/getOwnedWeapons";
 // ];
 
 const Inventory = () => {
+  const dispatch = useDispatch();
   const [weapons, setWeapons] = useState([]);
   const { address } = useSelector((state) => state.userInfo);
+  const { isLoading } = useSelector((state) => state.loading);
 
   useEffect(() => {
     const getWeapons = async () => {
+      console.log(isLoading);
       const list = await getOwnedWeapons(address);
 
       setWeapons(list);
+      dispatch(stopLoading());
     };
     getWeapons();
   }, []);
@@ -40,11 +46,15 @@ const Inventory = () => {
           <Header>
             <h1>인벤토리</h1>
           </Header>
-          <InventoryContainer>
-            {weapons.map((weapon, idx) => {
-              return <WeaponRenderer key={idx} {...weapon} />;
-            })}
-          </InventoryContainer>
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <InventoryContainer>
+              {weapons.map((weapon, idx) => {
+                return <WeaponRenderer key={idx} {...weapon} />;
+              })}
+            </InventoryContainer>
+          )}
         </Container>
       </Modal>
     </ModalCenter>

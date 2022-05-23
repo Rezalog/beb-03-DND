@@ -8,6 +8,7 @@ import { closeSubModal, updateStakedWeapon } from "./monsterFarmSlice";
 
 import Monster from "./components/Monster";
 import WeaponList from "./components/WeaponList";
+import Loading from "../loading/Loading";
 
 import { ModalCenter } from "../../styles/ModalCenter.styled";
 import { Modal, Container, Header } from "../../styles/Modal.styled";
@@ -16,6 +17,7 @@ import { ListContainer } from "../../styles/LPContainer.styled";
 import { nftABI, nftAddress } from "../marketplace/nftContractInfo";
 import { farmingABI } from "./nftStakingContractInfo";
 import { getOwnedWeapons } from "../../helper/getOwnedWeapons";
+import { startLoading, stopLoading } from "../loading/loadingSlice";
 
 const MonsterFarm = () => {
   const dispatch = useDispatch();
@@ -25,11 +27,13 @@ const MonsterFarm = () => {
   const { monsters, isSubModalOpen, staked } = useSelector(
     (state) => state.monsterFarm
   );
+  const { isLoading } = useSelector((state) => state.loading);
   const [selectedMonsterAddress, setSelectedMonsterAddress] = useState("");
   const [stakedWeapons, setStakedWeapons] = useState([]);
   const [currentTime, setCurrentTime] = useState("");
 
   const updateWeapons = async () => {
+    dispatch(startLoading());
     const temp = [];
     const list = await getOwnedWeapons(address);
 
@@ -58,6 +62,7 @@ const MonsterFarm = () => {
     dispatch(updateStakedWeapon({ staked: temp }));
     //setStakedWeapons([...temp]);
     console.log(temp);
+    dispatch(stopLoading());
   };
   // useEffect dependency list 잘 활용하기
   useEffect(() => {
@@ -85,20 +90,24 @@ const MonsterFarm = () => {
               ></button>
             </Header>
             <ListContainer>
-              {monsters.map((monster, idx) => {
-                return (
-                  <Monster
-                    key={idx}
-                    staked={staked[idx]}
-                    {...monster}
-                    weapons={weapons}
-                    setAvailableWeapons={setAvailableWeapons}
-                    setSelectedMonsterAddress={setSelectedMonsterAddress}
-                    currentTime={currentTime}
-                    updateWeapons={updateWeapons}
-                  ></Monster>
-                );
-              })}
+              {isLoading ? (
+                <Loading />
+              ) : (
+                monsters.map((monster, idx) => {
+                  return (
+                    <Monster
+                      key={idx}
+                      staked={staked[idx]}
+                      {...monster}
+                      weapons={weapons}
+                      setAvailableWeapons={setAvailableWeapons}
+                      setSelectedMonsterAddress={setSelectedMonsterAddress}
+                      currentTime={currentTime}
+                      updateWeapons={updateWeapons}
+                    ></Monster>
+                  );
+                })
+              )}
             </ListContainer>
           </Container>
         </Modal>

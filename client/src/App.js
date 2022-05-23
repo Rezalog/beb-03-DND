@@ -13,6 +13,7 @@ import { openLpFarmModal } from "./features/modal/lpFarmingModalSlice";
 import LPFarmModal from "./features/lpFarming/LPFarmModal";
 import axios from "axios";
 import Loading from "./features/loading/Loading";
+import { startLoading } from "./features/loading/loadingSlice";
 import {
   addAddress,
   addCharacterIndex,
@@ -41,7 +42,6 @@ function App() {
   //   (state) => state.inventoryModal
   // );
   const [isInventoryOpen, setIsInventoryOpen] = useState(false);
-  const { isLoading } = useSelector((state) => state.loading);
   const dispatch = useDispatch();
   const [isSignIn, setIsSignIn] = useState(false);
 
@@ -120,7 +120,7 @@ function App() {
 
   useEffect(() => {
     game.events.on("enter", (event) => {
-      console.log(event);
+      dispatch(startLoading());
       switch (event) {
         case "1": {
           dispatch(openDexModal());
@@ -152,6 +152,7 @@ function App() {
 
   const handleUserKeyPress = (event) => {
     if (event.key.toLowerCase() === "i") {
+      dispatch(startLoading());
       setIsInventoryOpen((prev) => !prev);
     }
   };
@@ -182,7 +183,6 @@ function App() {
       {isSignUpOpen && <SignUpModal />}
       {isMarketplaceOpen && <Marketplace />}
       {isMonsterFarmOpen && <MonsterFarm />}
-      {isLoading && <Loading />}
       {isInventoryOpen && <Inventory />}
     </div>
   );
