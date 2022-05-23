@@ -18,7 +18,13 @@ import { farmingABI } from "../nftStakingContractInfo";
 import { nftABI, nftAddress } from "../../marketplace/nftContractInfo";
 
 import { getOwnedWeapons } from "../../../helper/getOwnedWeapons";
-import { current } from "@reduxjs/toolkit";
+import {
+  pendingNoti,
+  stopPendingNoti,
+  successNoti,
+  failNoti,
+  clearState,
+} from "../../notification/notifiactionSlice";
 
 const Monster = ({
   name,
@@ -35,18 +41,32 @@ const Monster = ({
 }) => {
   const dispatch = useDispatch();
   const { address } = useSelector((state) => state.userInfo);
+  const { isPending } = useSelector((state) => state.notification);
   const [endTime, setEndTime] = useState(0);
   const [remainingTime, setRemainingTime] = useState("");
 
   const getReward = async () => {
     const caver = new Caver(window.klaytn);
-    const monsterContract = new caver.klay.Contract(farmingABI, monsterAddress);
+    dispatch(pendingNoti());
+    try {
+      const monsterContract = new caver.klay.Contract(
+        farmingABI,
+        monsterAddress
+      );
 
-    await monsterContract.methods.withdrawYield().send({
-      from: address,
-      gas: 200000,
-    });
-    getRemainingTime();
+      await monsterContract.methods.withdrawYield().send({
+        from: address,
+        gas: 200000,
+      });
+      getRemainingTime();
+      updateWeapons();
+      dispatch(successNoti({ msg: `${reward} URU 획득 완료!` }));
+    } catch (error) {
+      dispatch(failNoti());
+    }
+    setTimeout(() => {
+      dispatch(clearState());
+    }, 5000);
   };
 
   const getRemainingTime = async () => {
@@ -56,7 +76,6 @@ const Monster = ({
     const { yieldLockTime } = await monsterContract.methods
       .stakeInfo(address)
       .call();
-    console.log("lock time", typeof yieldLockTime);
     if (yieldLockTime !== "0") {
       const end = Number(yieldLockTime.toString()) + Number(cooltime);
       setEndTime(end);
@@ -68,24 +87,32 @@ const Monster = ({
   };
 
   const unStakeWeapon = async () => {
+    dispatch(pendingNoti());
     const caver = new Caver(window.klaytn);
-    const monsterContract = new caver.klay.Contract(farmingABI, monsterAddress);
+    try {
+      const monsterContract = new caver.klay.Contract(
+        farmingABI,
+        monsterAddress
+      );
 
-    await monsterContract.methods.unstake(staked.id).send({
-      from: address,
-      gas: 300000,
-    });
+      await monsterContract.methods.unstake(staked.id).send({
+        from: address,
+        gas: 300000,
+      });
 
-    dispatch(removeStakedWeapon({ index: staked.id - 1 }));
-    updateWeapons();
+      dispatch(removeStakedWeapon({ index: staked.id - 1 }));
+      updateWeapons();
+      dispatch(successNoti({ msg: "NFT 언스테이킹 완료!" }));
+    } catch (err) {
+      dispatch(failNoti());
+    }
+    setTimeout(() => {
+      dispatch(clearState());
+    }, 5000);
   };
 
   useEffect(() => {
     getRemainingTime();
-  }, [staked]);
-
-  useEffect(() => {
-    console.log("staekd", staked);
   }, [staked]);
 
   // 이런식으로 하면 몇초뒤부터 카운트 시작함
@@ -112,7 +139,7 @@ const Monster = ({
       </MonsterHeader>
       <MonsterContainer>
         <div>
-          <WeaponRenderer dna={staked?.dna} lvl={staked?.lvl} />
+          <WeaponRenderer {...staked} />
           {staked && Object.keys(staked).length ? (
             <BuySellButton
               onClick={() => {

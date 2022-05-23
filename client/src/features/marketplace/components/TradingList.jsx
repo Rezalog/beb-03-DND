@@ -9,6 +9,13 @@ import { updateList, updateOnSaleList } from "../marketplaceSlice";
 import { BuySellButton } from "../../../styles/Inventory.styled";
 
 import {
+  pendingNoti,
+  successNoti,
+  failNoti,
+  clearState,
+} from "../../notification/notifiactionSlice";
+
+import {
   tokenAddress,
   marketAddress,
   nftAddress,
@@ -18,10 +25,12 @@ import {
 const caver = new Caver(window.klaytn);
 
 const TradingList = ({ getMarketplaceList }) => {
+  const dispatch = useDispatch();
   const { address } = useSelector((state) => state.userInfo);
   const { list } = useSelector((state) => state.marketplace);
 
   const buyNewNFT = async () => {
+    dispatch(pendingNoti());
     const nft = new caver.klay.Contract(nftABI, nftAddress);
 
     try {
@@ -30,12 +39,17 @@ const TradingList = ({ getMarketplaceList }) => {
         gas: 2000000,
       });
       getMarketplaceList();
+      dispatch(successNoti({ msg: `NFT 구매 성공!` }));
     } catch (err) {
-      console.log(err);
+      dispatch(failNoti());
     }
+    setTimeout(() => {
+      dispatch(clearState());
+    }, 5000);
   };
 
   const buyWeapon = async (id) => {
+    dispatch(pendingNoti());
     const market = new caver.klay.Contract(marketABI, marketAddress);
 
     const kip7 = new caver.klay.KIP7(tokenAddress);
@@ -47,18 +61,20 @@ const TradingList = ({ getMarketplaceList }) => {
           from: address,
         });
       } catch (err) {
-        console.log(err);
+        dispatch(failNoti());
       }
     }
-
-    await market.methods.buyNft(id).send({ from: address, gas: 5000000 });
-
-    getMarketplaceList();
+    try {
+      await market.methods.buyNft(id).send({ from: address, gas: 5000000 });
+      getMarketplaceList();
+      dispatch(successNoti({ msg: `NFT 구매 성공!` }));
+    } catch (error) {
+      dispatch(failNoti());
+    }
+    setTimeout(() => {
+      dispatch(clearState());
+    }, 5000);
   };
-
-  useEffect(() => {
-    console.log(list);
-  });
 
   return (
     <InventoryContainer style={{ height: "70%" }}>

@@ -1,7 +1,7 @@
 module.exports = {
   tokenAddress: "0x481253AC3b7F9738461c70f8282435287915895d",
-  marketAddress: "0xf9dd9405146CE72887b0016704963ef5eCc76445",
-  nftAddress: "0x47E32f87E561d2E6Bf6da06a0Eec76759d5291cE",
+  marketAddress: "0x82312aD04a587eAFb39a3860d399069a484e111f",
+  nftAddress: "0x222519Bc9A2e7B6a93E3651e9f009DD870bB988C",
   marketABI: [
     {
       constant: false,
@@ -336,25 +336,6 @@ module.exports = {
       type: "function",
     },
     {
-      constant: true,
-      inputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      name: "tokenToFixDurability",
-      outputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
       constant: false,
       inputs: [
         {
@@ -371,6 +352,20 @@ module.exports = {
         },
       ],
       name: "transferFrom",
+      outputs: [],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "_weaponId",
+          type: "uint256",
+        },
+      ],
+      name: "fixWeaponEnchant",
       outputs: [],
       payable: false,
       stateMutability: "nonpayable",
@@ -397,6 +392,20 @@ module.exports = {
       ],
       payable: false,
       stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "_weaponId",
+          type: "uint256",
+        },
+      ],
+      name: "fixWeaponDurability",
+      outputs: [],
+      payable: false,
+      stateMutability: "nonpayable",
       type: "function",
     },
     {
@@ -598,6 +607,15 @@ module.exports = {
       type: "function",
     },
     {
+      constant: false,
+      inputs: [],
+      name: "buyBasicWeapon",
+      outputs: [],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
       constant: true,
       inputs: [],
       name: "symbol",
@@ -627,25 +645,6 @@ module.exports = {
       outputs: [],
       payable: false,
       stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      name: "tokenToFixEnchant",
-      outputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
       type: "function",
     },
     {
@@ -701,6 +700,25 @@ module.exports = {
         {
           name: "",
           type: "string",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      name: "tokenToFix",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
         },
       ],
       payable: false,

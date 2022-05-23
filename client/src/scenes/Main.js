@@ -206,7 +206,7 @@ export default class Main extends Phaser.Scene {
     this.physics.add.collider(this.player, this.wallslayer);
 
     // 카메라 세팅
-    this.cameras.main.setBounds(0, 0, window.innerWidth, window.innerHeight);
+    this.cameras.main.setBounds(0, 0, 1350, 1200);
     this.cameras.main.startFollow(this.player, true);
 
     // 캐릭터 애니메이션 생성

@@ -1,17 +1,30 @@
 module.exports = {
   farmingABI: [
     {
-      constant: false,
+      constant: true,
       inputs: [
         {
-          name: "_tokenID",
-          type: "uint256",
+          name: "",
+          type: "address",
         },
       ],
-      name: "stake",
-      outputs: [],
+      name: "stakeInfo",
+      outputs: [
+        {
+          name: "tokenID",
+          type: "uint256",
+        },
+        {
+          name: "yieldLockTime",
+          type: "uint256",
+        },
+        {
+          name: "isStaking",
+          type: "bool",
+        },
+      ],
       payable: false,
-      stateMutability: "nonpayable",
+      stateMutability: "view",
       type: "function",
     },
     {
@@ -30,11 +43,39 @@ module.exports = {
     },
     {
       constant: false,
+      inputs: [
+        {
+          name: "_tokenID",
+          type: "uint256",
+        },
+      ],
+      name: "stake",
+      outputs: [],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: false,
       inputs: [],
       name: "withdrawYield",
       outputs: [],
       payable: false,
       stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [],
+      name: "getStakingTime",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
       type: "function",
     },
     {
@@ -110,47 +151,6 @@ module.exports = {
       ],
       name: "YieldWithdraw",
       type: "event",
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: "getStakingTime",
-      outputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [
-        {
-          name: "",
-          type: "address",
-        },
-      ],
-      name: "stakeInfo",
-      outputs: [
-        {
-          name: "tokenID",
-          type: "uint256",
-        },
-        {
-          name: "yieldLockTime",
-          type: "uint256",
-        },
-        {
-          name: "isStaking",
-          type: "bool",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
     },
   ],
 };
