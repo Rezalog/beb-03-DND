@@ -16,7 +16,7 @@ module.exports = function (deployer) {
   // deployer.deploy(Exchange, process.env.TOKEN_CONTRACT, process.env.TOKEN_CONTRACT, 120);
   // deployer.deploy(LP_Farming, process.env.TOKEN_CONTRACT);
 
-  // deployer.deploy(NFT, process.env.TOKEN_CONTRACT);
+  deployer.deploy(NFT, process.env.TOKEN_CONTRACT);
   // deployer.deploy(NFT_Factory);
   // deployer.deploy(NFT_Farming, process.env.NFT_CONTRACT, process.env.TOKEN_CONTRACT, 5, 15);
 };

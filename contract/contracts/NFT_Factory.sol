@@ -10,6 +10,16 @@ contract NFT_Factory {
     NFT public nft;
     Token public uru;
 
+    struct Monster {
+        address NFTAddress;
+        string name;
+        uint256 level;
+        uint256 coolDownTime;
+        uint256 reward;
+    }
+
+    Monster[] public monsters;
+
     function createNFTFarm(NFT _NFTAddress, Token _tokenAddress, uint256 _level, uint256 _coolDownTime) public returns (address) {
         
         nft = _NFTAddress;
