@@ -64,14 +64,12 @@ contract Betting {
             for (uint256 i = 0; i < playerOnFailure.length; i++) {
                 uint256 reward = calculateRewardFailure(playerOnFailure[i]);
                 KIP7(token).transfer(playerOnFailure[i], reward);
+            }
         }
-        // 관련 항목 초기화;
-        delete playerOnSuccees;
-        delete playerOnFailure;
         betAmountSuccees = 0;
         betAmountFailure = 0;
-    }
-
+        delete playerOnSuccees;
+        delete playerOnFailure;
     }
     // assist function
 
