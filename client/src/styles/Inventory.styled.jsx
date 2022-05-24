@@ -4,8 +4,11 @@ export const InventoryContainer = styled.div`
   margin-top: 50px;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(4, 1fr);
   gap: 5px;
   width: 82%;
+  height: 75%;
+  overflow: scroll;
 `;
 
 export const BuySellButton = styled.button`

@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Caver from "caver-js";
+
+import Loading from "../loading/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import { closeMarketplaceModal } from "../modal/marketplaceModalSlice";
+import { stopLoading } from "../loading/loadingSlice";
 
 import { ModalCenter } from "../../styles/ModalCenter.styled";
 import { Modal, Container, Header } from "../../styles/Modal.styled";
@@ -25,7 +28,9 @@ import {
 const Marketplace = () => {
   const dispatch = useDispatch();
   const { address } = useSelector((state) => state.userInfo);
+  const { isLoading } = useSelector((state) => state.loading);
   const [currentNav, setCurrentNav] = useState(0);
+
   const getMarketplaceList = async () => {
     const caver = new Caver(window.klaytn);
     const market = new caver.klay.Contract(marketABI, marketAddress);
@@ -70,11 +75,10 @@ const Marketplace = () => {
       }
     }
 
-    console.log(ownedList);
-    console.log(remainingList);
     dispatch(updateList({ list: tempList }));
     dispatch(updateOnSaleList({ list: ownedList }));
     dispatch(updateRemainingList({ list: remainingList }));
+    dispatch(stopLoading());
   };
 
   useEffect(() => {
@@ -101,7 +105,9 @@ const Marketplace = () => {
             <li onClick={() => setCurrentNav(1)}>관리</li>
             <div style={{ width: "250px" }}></div>
           </DexNavbar>
-          {currentNav === 0 ? (
+          {isLoading ? (
+            <Loading />
+          ) : currentNav === 0 ? (
             <TradingList getMarketplaceList={getMarketplaceList} />
           ) : currentNav === 1 ? (
             <ManageList getMarketplaceList={getMarketplaceList} />

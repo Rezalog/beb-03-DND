@@ -8,6 +8,7 @@ export default class Main extends Phaser.Scene {
     this.princessOverlapped = false;
     this.merchantOverlapped = false;
     this.shoekeeperOverlapped = false;
+    this.dungeonOverlapped = false;
     this.blacksmithOverlapped = false;
   }
 
@@ -191,6 +192,26 @@ export default class Main extends Phaser.Scene {
     this.blacksmithText.x = this.nameTag.x - this.blacksmithText.width / 2;
     this.blacksmithText.y = this.nameTag.y - this.blacksmithText.height / 2;
 
+    // 던전 입구 생성
+    this.dungeon = this.physics.add.sprite(
+      200,
+      game.config.height / 3,
+      "dungeon"
+    );
+    this.dungeon.setScale(2);
+
+    this.nameTag = this.add.sprite(
+      this.dungeon.x,
+      this.dungeon.y - 16,
+      "nametag"
+    );
+    this.dungeonText = this.add.text(0, 0, "던전", {
+      color: "black",
+      fontSize: "10px",
+    });
+    this.dungeonText.x = this.nameTag.x - this.dungeonText.width / 2;
+    this.dungeonText.y = this.nameTag.y - this.dungeonText.height / 2;
+
     // 캐릭터와 NPC overlap 이벤트
     this.physics.add.overlap(this.player, this.king, () => {
       this.kingOverlapped = true;
@@ -206,6 +227,9 @@ export default class Main extends Phaser.Scene {
     });
     this.physics.add.overlap(this.player, this.blacksmith, () => {
       this.blacksmithOverlapped = true;
+    });
+    this.physics.add.overlap(this.player, this.dungeon, () => {
+      this.dungeonOverlapped = true;
     });
 
     // 캐릭터와 벽 Collider
@@ -252,7 +276,8 @@ export default class Main extends Phaser.Scene {
       if (this.princessOverlapped) game.events.emit("enter", "2");
       if (this.merchantOverlapped) game.events.emit("enter", "3");
       if (this.shoekeeperOverlapped) game.events.emit("enter", "4");
-      if (this.blacksmithOverlapped) game.events.emit("enter", "5");
+      if (this.dungeonOverlapped) game.events.emit("enter", "5");
+      if (this.blacksmithOverlapped) game.events.emit("enter", "6");
     }
 
     if (
@@ -277,6 +302,7 @@ export default class Main extends Phaser.Scene {
     this.princessOverlapped = false;
     this.merchantOverlapped = false;
     this.shoekeeperOverlapped = false;
+    this.dungeonOverlapped = false;
     this.blacksmithOverlapped = false;
   }
 }

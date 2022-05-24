@@ -13,16 +13,19 @@ import { openLpFarmModal } from "./features/modal/lpFarmingModalSlice";
 import LPFarmModal from "./features/lpFarming/LPFarmModal";
 import axios from "axios";
 import Loading from "./features/loading/Loading";
+import { startLoading } from "./features/loading/loadingSlice";
 import {
   addAddress,
   addCharacterIndex,
   addNickname,
 } from "./features/userinfo/userInfoSlice";
+import { openMonsterFarmModal } from "./features/modal/monsterFarmModalSlice";
 import Inventory from "./features/inventory/Inventory";
 import { openMarketplaceModal } from "./features/modal/marketplaceModalSlice";
 import Marketplace from "./features/marketplace/Marketplace";
 import WeaponCompoundModal from "./features/weaponCompound/WeaponCompoundModal";
 import { openWeaponCompoundModal } from "./features/modal/weaponCompoundModalSlice";
+import MonsterFarm from "./features/monsterFarm/MonsterFarm";
 
 function App() {
   const { isOpen: isDexOpen } = useSelector((state) => state.dexModal);
@@ -34,6 +37,9 @@ function App() {
   const { isOpen: isMarketplaceOpen } = useSelector(
     (state) => state.marketplaceModal
   );
+  const { isOpen: isMonsterFarmOpen } = useSelector(
+    (state) => state.monsterFarmModal
+  );
   // const { isOpen: isInventoryOpen } = useSelector(
   //   (state) => state.inventoryModal
   // );
@@ -41,7 +47,6 @@ function App() {
     (state) => state.weaponCompoundModal
   );
   const [isInventoryOpen, setIsInventoryOpen] = useState(false);
-  const { isLoading } = useSelector((state) => state.loading);
   const dispatch = useDispatch();
   const [isSignIn, setIsSignIn] = useState(false);
 
@@ -120,7 +125,7 @@ function App() {
 
   useEffect(() => {
     game.events.on("enter", (event) => {
-      console.log(event);
+      dispatch(startLoading());
       switch (event) {
         case "1": {
           dispatch(openDexModal());
@@ -139,6 +144,10 @@ function App() {
           break;
         }
         case "5": {
+          dispatch(openMonsterFarmModal());
+          break;
+        }
+        case "6": {
           dispatch(openWeaponCompoundModal());
           break;
         }
@@ -152,6 +161,7 @@ function App() {
 
   const handleUserKeyPress = (event) => {
     if (event.key.toLowerCase() === "i") {
+      dispatch(startLoading());
       setIsInventoryOpen((prev) => !prev);
     }
   };
@@ -181,7 +191,7 @@ function App() {
       {isLpFarmOpen && <LPFarmModal />}
       {isSignUpOpen && <SignUpModal />}
       {isMarketplaceOpen && <Marketplace />}
-      {isLoading && <Loading />}
+      {isMonsterFarmOpen && <MonsterFarm />}
       {isInventoryOpen && <Inventory />}
 
       {isWeaponCompoundOpen && <WeaponCompoundModal />}

@@ -15,23 +15,36 @@ const WeaponRenderer = ({ dna, lvl }) => {
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    setWeaponInfo({ ...convertDNA(dna, lvl) });
-  }, []);
+    if (dna && lvl) setWeaponInfo({ ...convertDNA(dna, lvl) });
+  }, [dna]);
 
   return (
     <>
-      <WeaponContainer
-        onMouseOver={() => {
-          dispatch(setCurrentWeapon({ weapon: weaponInfo }));
-          setIsVisible(true);
-        }}
-        onMouseOut={() => setIsVisible(false)}
-        onMouseMove={(e) => {
-          setTooltipPos({ x: e.clientX + 20, y: e.clientY + 10 });
-        }}
-      >
-        <img src={weaponInfo.img}></img>
-      </WeaponContainer>
+      {dna && lvl ? (
+        <WeaponContainer
+          onMouseOver={() => {
+            dispatch(setCurrentWeapon({ weapon: weaponInfo }));
+            setIsVisible(true);
+          }}
+          onMouseOut={() => setIsVisible(false)}
+          onMouseMove={(e) => {
+            setTooltipPos({ x: e.clientX + 20, y: e.clientY + 10 });
+          }}
+        >
+          <img src={weaponInfo.img}></img>
+        </WeaponContainer>
+      ) : (
+        <div
+          style={{
+            width: "96px",
+            height: "96px",
+
+            backgroundColor: "#8f5765",
+            border: "5px solid black",
+          }}
+        ></div>
+      )}
+
       {isVisible && <Tooltip {...tooltipPos}></Tooltip>}
     </>
   );

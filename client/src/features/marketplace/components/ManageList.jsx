@@ -60,13 +60,8 @@ const ManageList = ({ getMarketplaceList }) => {
     setIsSell(!isSell);
   };
 
-  useEffect(() => {
-    console.log(onSaleList);
-    console.log(remainingList);
-  }, []);
-
   return (
-    <InventoryContainer>
+    <InventoryContainer style={{ height: "70%" }}>
       {onSaleList.map((item, idx) => {
         return (
           <div key={idx}>
