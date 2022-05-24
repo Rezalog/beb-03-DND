@@ -13,6 +13,7 @@ contract Betting {
     struct user {
         uint256 amount;
         bool side;
+        bool isBet;
     }
 
     struct amount {
@@ -36,7 +37,7 @@ contract Betting {
 
     address public token; // uru토큰
     uint256 public startTime; // 베팅 시간제한 두기 위해서
-    uint256 public betNumber = 0;
+    uint256 public betNumber = 0; // 베팅 열때마다 대응되는 숫자로 각 베팅을 구분
 
     constructor (NFT _NFTAddress, address _tokenAddress) public {
         nft = _NFTAddress;
@@ -52,12 +53,14 @@ contract Betting {
     }
 
     function bet(uint256 _amount, bool _side, uint256 _betNumber) public {
-        
+        require(userInfo[_betNumber][msg.sender].isBet != true, "you already bet in this game");
+
         // approve 필요!
         KIP7(token).transferFrom(msg.sender, address(this), _amount);
 
         userInfo[_betNumber][msg.sender].amount = _amount;
         userInfo[_betNumber][msg.sender].side = _side;
+        userInfo[_betNumber][msg.sender].isBet = true;
 
         if (_side == true) {
             amountInfo[_betNumber].betAmountSuccees = amountInfo[_betNumber].betAmountSuccees.add(_amount);
@@ -66,6 +69,7 @@ contract Betting {
             amountInfo[_betNumber].betAmountFailure = amountInfo[_betNumber].betAmountFailure.add(_amount);
             failureUserList[_betNumber].push(msg.sender);
         }
+
     }
 
     function distribution(uint256 _betNumber) public {
@@ -80,7 +84,7 @@ contract Betting {
         } else if (betResult == false) {
             for (uint256 i = 0; i < failureUserList[_betNumber].length; i++) {
                 uint256 reward = calculateRewardFailure(_betNumber, failureUserList[_betNumber][i]);
-                KIP7(token).transfer(failureUserList[_betNumber][i], 1);
+                KIP7(token).transfer(failureUserList[_betNumber][i], reward);
             }
         }
     }
@@ -99,7 +103,7 @@ contract Betting {
     function calculateRewardFailure(uint256 _betNumber, address _player) public view returns (uint256) {
         uint256 value = userInfo[_betNumber][_player].amount;
         uint256 portion = value.mul(100).div(amountInfo[_betNumber].betAmountFailure);
-        uint256 reward = value.add(amountInfo[_betNumber].betAmountFailure.mul(portion).div(100));
+        uint256 reward = value.add(amountInfo[_betNumber].betAmountSuccees.mul(portion).div(100));
         return reward;
     }
 
