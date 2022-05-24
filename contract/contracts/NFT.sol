@@ -14,9 +14,14 @@ contract NFT is KIP17Full{
     
     uint256 [9] public percentage; // 합성 성공확률
     uint256 [9] public tokenToCompound; // 합성시 토큰 소모량
+<<<<<<< HEAD
+    uint256 [9] public tokenToFixDurability; // 내구도 수리시 토큰 소모량
+    uint256 [9] public tokenToFixEnchant; // 강화 내구도 수리시 토큰 소모량
+=======
     uint256 [9] public tokenToFix; // 내구도 수리시 토큰 소모량
     // uint256 [9] public tokenToFixEnchant; // 합성 내구도 수리시 토큰 소모량
     
+>>>>>>> bafabcb7c5d77b43a31a8be2630cefd89cd7b5ad
 
     Token token;
 
@@ -28,6 +33,8 @@ contract NFT is KIP17Full{
     }
 
     Weapon[] public weapons;
+
+    mapping(uint256 => mapping(uint256 => bool)) public compoundResult;
 
     event NewWeapon(uint256 weaponId, uint256 weaponType, uint256 weaponLevel);
 
@@ -162,12 +169,16 @@ contract NFT is KIP17Full{
     // 합성확률보다 랜덤숫자가 크면 실패, 작거나 같으면 성공
     if(createRandomNum() <= compoundPercentage) {
         _createWeapon(newType, myWeapon1.weaponLevel + 1);
+        compoundResult[_weapon1Id][_weapon2Id] = true;
     } else {
         _createWeapon(newType, myWeapon1.weaponLevel);
+        compoundResult[_weapon1Id][_weapon2Id] = false;
     }
     
     }
-
+    function getCompoundResult (uint256 _weapon1Id, uint256 _weapon2Id) public view returns (bool) {
+        return compoundResult[_weapon1Id][_weapon2Id];
+    }
     // 무기 레벨을 알려주는 함수 (getter)
     function getWeaponLevel (uint256 _weaponId) public view returns(uint256) {
         return weapons[_weaponId - 1].weaponLevel;
