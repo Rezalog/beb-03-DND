@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Caver from "caver-js";
+import axios from "axios";
 import { closeTokenSwapModal } from "../modal/tokenSwapModalSlice";
 import TokenSelectModal from "./TokenSelectModal";
 import {
@@ -8,6 +9,7 @@ import {
   clearState,
   changeToken0,
   changeToken1,
+  initTokenList,
 } from "./tokenSwapSlice";
 import { startLoading, stopLoading } from "../loading/loadingSlice";
 import {
@@ -27,6 +29,12 @@ import {
   InfoContainer,
 } from "../../styles/TokenSwap.styled";
 import { factoryABI, factoryAddress, exchangeABI } from "../dex/contractInfo";
+import {
+  pendingNoti,
+  successNoti,
+  failNoti,
+  clearState as clear,
+} from "../notification/notifiactionSlice";
 
 const TokenSwapModal = () => {
   const dispatch = useDispatch();
@@ -56,6 +64,8 @@ const TokenSwapModal = () => {
    *
    */
   const getOutputAmount = async () => {
+    console.log(tokens);
+    console.log(exchange);
     const caver = new Caver(window.klaytn);
     const input = token0InputRef.current.value || 0;
     // input field가 비어있는지 확인하고
@@ -89,14 +99,15 @@ const TokenSwapModal = () => {
    * 클레이와 토큰을 교환한다.
    */
   const swapToken = async () => {
+    dispatch(pendingNoti());
     const caver = new Caver(window.klaytn);
-    dispatch(startLoading());
     //만약 지불하는게 토큰이면 tokenToKlay 함수를 호출하고
     // 클레이를 지불한다면 klayToToken 함수를 호출한다.
     if (token0 > 0) {
       const tokenAddress = tokens[token0].address;
       const kip7 = new caver.klay.KIP7(tokenAddress);
       let exchangeAddress;
+      console.log(exchange);
 
       for (let i = 0; i < exchanges.length; i++) {
         if (
@@ -113,29 +124,49 @@ const TokenSwapModal = () => {
             from: account,
           });
         } catch (err) {
-          console.log(err);
+          dispatch(failNoti());
         }
       }
-
-      const input = token0InputRef.current.value;
-      await exchange.methods
-        .tokenToklaySwap(
-          caver.utils.toPeb(input),
-          caver.utils.toPeb(minOutput.toString())
-        )
-        .send({ from: account, gas: 20000000 });
-      dispatch(stopLoading());
+      try {
+        const input = token0InputRef.current.value;
+        await exchange.methods
+          .tokenToKlaySwap(
+            caver.utils.toPeb(input),
+            caver.utils.toPeb(minOutput.toString())
+          )
+          .send({ from: account, gas: 20000000 });
+        dispatch(
+          successNoti({
+            msg: `최소 ${Number(minOutput).toFixed(6)} ${
+              tokens[token1].symbol
+            }을 받았습니다!`,
+          })
+        );
+      } catch (error) {
+        dispatch(failNoti());
+      }
     } else {
-      const input = token0InputRef.current.value;
-      await exchange.methods
-        .klayToTokenSwap(caver.utils.toPeb(minOutput.toString()))
-        .send({
-          from: account,
-          value: caver.utils.toPeb(input),
-          gas: 20000000,
-        });
+      try {
+        const input = token0InputRef.current.value;
+        await exchange.methods
+          .klayToTokenSwap(caver.utils.toPeb(minOutput.toString()))
+          .send({
+            from: account,
+            value: caver.utils.toPeb(input),
+            gas: 20000000,
+          });
 
-      dispatch(stopLoading());
+        dispatch(
+          successNoti({
+            msg: `최소 ${Number(minOutput).toFixed(6)} ${
+              tokens[token1].symbol
+            }을 받았습니다!`,
+          })
+        );
+      } catch (error) {
+        console.log(error);
+        dispatch(failNoti());
+      }
       //만약 URU 토큰으로 교환을 한다면
       //카이카스에 URU 토큰을 등록해준다.
       if (tokens[token1].symbol === "URU") {
@@ -172,6 +203,9 @@ const TokenSwapModal = () => {
     getToken1();
     token0InputRef.current.value = 0;
     token1InputRef.current.value = 0;
+    setTimeout(() => {
+      dispatch(clear());
+    }, 5000);
   };
 
   const getToken0 = async () => {
@@ -232,12 +266,31 @@ const TokenSwapModal = () => {
     dispatch(changeToken1({ index: currentToken0 }));
   };
 
+  const getTokenList = async () => {
+    const response = await axios.get(
+      "http://localhost:8080/contracts/token",
+      {}
+    );
+    const tokenList = response.data.map((token) => {
+      return {
+        symbol: token.token_symbol,
+        name: token.token_name,
+        address: token.token_address,
+      };
+    });
+    dispatch(initTokenList({ list: tokenList }));
+  };
+
   useEffect(() => {
-    if (account) {
+    if (tokens.length) {
       getToken0();
       getToken1();
     }
-  }, [account, token0, token1]);
+  }, [tokens, token0, token1]);
+
+  useEffect(() => {
+    getTokenList();
+  }, []);
 
   return (
     <ModalCenter>
@@ -253,14 +306,14 @@ const TokenSwapModal = () => {
                 }}
               ></button>
             </Header>
-            <InputContainer type='number'>
+            <InputContainer>
               <button
                 onClick={() => {
                   dispatch(openSubModal());
                   setSelectedToken(0);
                 }}
               >
-                {tokens[token0].symbol}
+                {tokens[token0]?.symbol}
                 <img src='assets/arrowDown.png' />
               </button>
               <input
@@ -272,7 +325,7 @@ const TokenSwapModal = () => {
                 <div onClick={inputMaxToken}>Max</div>
                 <span>
                   잔액: {parseFloat(Number(balance).toFixed(2))}{" "}
-                  {tokens[token0].symbol}
+                  {tokens[token0]?.symbol}
                 </span>
               </BalanceContainer>
             </InputContainer>
@@ -284,7 +337,7 @@ const TokenSwapModal = () => {
                   setSelectedToken(1);
                 }}
               >
-                {tokens[token1].symbol}
+                {tokens[token1]?.symbol}
                 <img src='assets/arrowDown.png' />
               </button>
               <input placeholder='0.0' disabled ref={token1InputRef} />
@@ -295,7 +348,7 @@ const TokenSwapModal = () => {
                   {token1 < 0
                     ? "0.0"
                     : `${parseFloat(Number(balance1).toFixed(2))} ${
-                        tokens[token1].symbol
+                        tokens[token1]?.symbol
                       }`}
                 </span>
               </BalanceContainer>
@@ -305,7 +358,8 @@ const TokenSwapModal = () => {
                 <InfoContainer>
                   <span>가격</span>
                   <span>
-                    {price} {tokens[token1].symbol} per {tokens[token0].symbol}{" "}
+                    {price} {tokens[token1]?.symbol} per{" "}
+                    {tokens[token0]?.symbol}{" "}
                   </span>
                 </InfoContainer>
               )}

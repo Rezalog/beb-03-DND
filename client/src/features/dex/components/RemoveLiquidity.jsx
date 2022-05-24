@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Caver from "caver-js";
+import { useDispatch } from "react-redux";
 
 import {
   InputContainer,
@@ -7,8 +8,15 @@ import {
 } from "../../../styles/InputContainer.styled";
 import { Button, BackButton } from "../../../styles/Modal.styled";
 import { exchangeABI } from "../contractInfo";
+import {
+  pendingNoti,
+  successNoti,
+  failNoti,
+  clearState,
+} from "../../notification/notifiactionSlice";
 
 const RemoveLiquidity = ({ account, selectedExchange, setIsWithdrawal }) => {
+  const dispatch = useDispatch();
   const removeLp = useRef(null);
   const [lp, setLp] = useState(0);
 
@@ -25,31 +33,36 @@ const RemoveLiquidity = ({ account, selectedExchange, setIsWithdrawal }) => {
   }, []);
 
   const removeLiquidity = async () => {
+    dispatch(pendingNoti());
     const caver = new Caver(window.klaytn);
-    const exchange = new caver.klay.Contract(exchangeABI, selectedExchange);
+    try {
+      const exchange = new caver.klay.Contract(exchangeABI, selectedExchange);
 
-    const kip7 = new caver.klay.KIP7(selectedExchange);
-    const allowed = await kip7.allowance(account, selectedExchange);
-    if (allowed.toString() === "0") {
-      try {
+      const kip7 = new caver.klay.KIP7(selectedExchange);
+      const allowed = await kip7.allowance(account, selectedExchange);
+      if (allowed.toString() === "0") {
         await kip7.approve(selectedExchange, caver.utils.toPeb("100000000"), {
           from: account,
         });
-      } catch (err) {
-        console.log(err);
       }
+
+      await exchange.methods
+        .removeLiquidity(caver.utils.toPeb(removeLp.current.value))
+        .send({
+          from: account,
+          gas: 2000000,
+        });
+
+      const balance = await kip7.balanceOf(account);
+
+      setLp(caver.utils.fromPeb(balance));
+      dispatch(successNoti({ msg: `성공적으로 출금되었습니다!` }));
+    } catch (error) {
+      dispatch(failNoti());
     }
-
-    await exchange.methods
-      .removeLiquidity(caver.utils.toPeb(removeLp.current.value))
-      .send({
-        from: account,
-        gas: 2000000,
-      });
-
-    const balance = await kip7.balanceOf(account);
-
-    setLp(caver.utils.fromPeb(balance));
+    setTimeout(() => {
+      dispatch(clearState());
+    }, 5000);
   };
 
   return (

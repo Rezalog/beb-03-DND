@@ -3,12 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Caver from "caver-js";
 import { closeV2SwapModal } from "../modal/v2SwapModalSlice";
 import TokenSelectModal from "./V2TokenSelectModal";
-import {
-  openSubModal,
-  clearState,
-  changeToken0,
-  changeToken1,
-} from "./v2SwapSlice";
+import { openSubModal, changeToken0, changeToken1 } from "./v2SwapSlice";
 import { startLoading, stopLoading } from "../loading/loadingSlice";
 import {
   Modal,
@@ -34,6 +29,13 @@ import {
   factoryAddress,
 } from "./v2Contract";
 
+import {
+  pendingNoti,
+  successNoti,
+  failNoti,
+  clearState,
+} from "../notification/notifiactionSlice";
+
 const V2SwapModal = () => {
   const dispatch = useDispatch();
   const { isSubModalOpen, tokens, token0, token1 } = useSelector(
@@ -51,7 +53,9 @@ const V2SwapModal = () => {
   const [price, setPrice] = useState("");
   const [inputTokenAddress, setInputTokenAddress] = useState("");
   const [outputTokenAddress, setOutputTokenAddress] = useState("");
+  const [swapPath, setSwapPath] = useState([]);
 
+  // DFS를 이용해서 토큰 Path 찾기
   const getPath = () => {
     return new Promise(async (resolve, reject) => {
       try {
@@ -102,12 +106,14 @@ const V2SwapModal = () => {
    */
   const getOutputAmount = async () => {
     const path = await getPath();
+    setSwapPath(path);
     const caver = new Caver(window.klaytn);
     const input = token0InputRef.current.value || 0;
     // input field가 비어있는지 확인하고
     // 비어있지 않으면 블록체인에서 output amount를 가져온다.
     // 비어있다면 초기화한다.
-    if (input > 0) {
+    // path가 존재할 때만 output을 가져온다.
+    if (input > 0 && path.length) {
       const router = new caver.klay.Contract(routerABI, routerAddress);
       const output = await router.methods
         .getOutput(caver.utils.toPeb(input), [...path])
@@ -127,8 +133,9 @@ const V2SwapModal = () => {
    * 클레이와 토큰을 교환한다.
    */
   const swapToken = async () => {
+    dispatch(pendingNoti());
+
     const caver = new Caver(window.klaytn);
-    dispatch(startLoading());
     const token1Address = tokens[token0].address;
     const token2Address = tokens[token1].address;
     const kip7 = new caver.klay.KIP7(token1Address);
@@ -141,54 +148,67 @@ const V2SwapModal = () => {
           from: account,
         });
       } catch (err) {
-        console.log(err);
+        dispatch(failNoti());
       }
     }
+    try {
+      const router = new caver.klay.Contract(routerABI, routerAddress);
 
-    const router = new caver.klay.Contract(routerABI, routerAddress);
-
-    const input = token0InputRef.current.value;
-    await router.methods
-      .swapExactTokensForTokens(
-        caver.utils.toPeb(input),
-        caver.utils.toPeb(minOutput.toString()),
-        [token1Address, token2Address],
-        account
-      )
-      .send({ from: account, gas: 20000000 });
-    dispatch(stopLoading());
-    if (token2Address.symbol === "URU") {
-      const tokenAdded = localStorage.getItem("tokenAdded");
-      if (!tokenAdded) {
-        window.klaytn.sendAsync(
-          {
-            method: "wallet_watchAsset",
-            params: {
-              type: "ERC20", // Initially only supports ERC20, but eventually more!
-              options: {
-                address: token2Address.address, // The address that the token is at.
-                symbol: token2Address.symbol, // A ticker symbol or shorthand, up to 5 chars.
-                decimals: 18, // The number of decimals in the token
-                image: "", // A string url of the token logo
+      const input = token0InputRef.current.value;
+      await router.methods
+        .swapExactTokensForTokens(
+          caver.utils.toPeb(input),
+          caver.utils.toPeb(minOutput.toString()),
+          [...swapPath],
+          account
+        )
+        .send({ from: account, gas: 20000000 });
+      dispatch(stopLoading());
+      if (tokens[token1].symbol === "URU") {
+        const tokenAdded = localStorage.getItem("tokenAdded");
+        if (!tokenAdded) {
+          window.klaytn.sendAsync(
+            {
+              method: "wallet_watchAsset",
+              params: {
+                type: "ERC20", // Initially only supports ERC20, but eventually more!
+                options: {
+                  address: tokens[token1].address, // The address that the token is at.
+                  symbol: tokens[token1].symbol, // A ticker symbol or shorthand, up to 5 chars.
+                  decimals: 18, // The number of decimals in the token
+                  image: "", // A string url of the token logo
+                },
               },
+              id: Math.round(Math.random() * 100000),
             },
-            id: Math.round(Math.random() * 100000),
-          },
-          (err, added) => {
-            if (added) {
-              console.log("Thanks for your interest!");
-            } else {
-              console.log("Your loss!");
+            (err, added) => {
+              if (added) {
+                console.log("Thanks for your interest!");
+              } else {
+                console.log("Your loss!");
+              }
             }
-          }
-        );
-        localStorage.setItem("tokenAdded", "true");
+          );
+          localStorage.setItem("tokenAdded", "true");
+        }
       }
+      getToken0();
+      getToken1();
+      token0InputRef.current.value = 0;
+      token1InputRef.current.value = 0;
+      dispatch(
+        successNoti({
+          msg: `최소 ${Number(minOutput).toFixed(6)} ${
+            tokens[token1].symbol
+          }을 받았습니다!`,
+        })
+      );
+    } catch (error) {
+      dispatch(failNoti());
     }
-    getToken0();
-    getToken1();
-    token0InputRef.current.value = 0;
-    token1InputRef.current.value = 0;
+    setTimeout(() => {
+      dispatch(clearState());
+    }, 5000);
   };
 
   const getToken0 = async () => {
@@ -248,7 +268,7 @@ const V2SwapModal = () => {
               <button
                 onClick={() => {
                   dispatch(closeV2SwapModal());
-                  dispatch(clearState());
+                  //dispatch(clearState());
                 }}
               ></button>
             </Header>

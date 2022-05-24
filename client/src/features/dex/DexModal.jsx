@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Caver from "caver-js";
+import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { closeDexModal } from "../modal/dexModalSlice";
 import AddLiquidity from "./components/AddLiquidity";
@@ -12,6 +13,8 @@ import { ModalCenter } from "../../styles/ModalCenter.styled";
 import { DexNavbar } from "../../styles/DexNavbar.styled";
 import { exchangeABI } from "../dex/contractInfo";
 import { clearState } from "../tokenSwap/tokenSwapSlice";
+import { initTokenList } from "../tokenSwap/tokenSwapSlice";
+import { initExchange } from "./dexSlice";
 
 const DexModal = () => {
   const dispatch = useDispatch();
@@ -32,6 +35,41 @@ const DexModal = () => {
       }
     }
   };
+
+  const getTokenList = async () => {
+    const response = await axios.get(
+      "http://localhost:8080/contracts/token",
+      {}
+    );
+    const tokenList = response.data.map((token) => {
+      return {
+        symbol: token.token_symbol,
+        name: token.token_name,
+        address: token.token_address,
+      };
+    });
+    dispatch(initTokenList({ list: tokenList }));
+  };
+
+  const getExchangeList = async () => {
+    const response = await axios.get(
+      "http://localhost:8080/contracts/pair",
+      {}
+    );
+    const exchangeList = response.data.map((token) => {
+      return {
+        address: token.pair_address,
+        name: token.pair_name,
+        tokenAddress: token.token_address,
+      };
+    });
+    dispatch(initExchange({ list: exchangeList }));
+  };
+
+  useEffect(() => {
+    getTokenList();
+    getExchangeList();
+  }, []);
 
   return (
     <ModalCenter>

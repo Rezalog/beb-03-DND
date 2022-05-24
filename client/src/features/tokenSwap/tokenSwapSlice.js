@@ -2,18 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isSubModalOpen: false,
-  tokens: [
-    {
-      symbol: "KLAY",
-      name: "Klay",
-      address: null,
-    },
-    {
-      symbol: "URU",
-      name: "URU Token",
-      address: "0x481253AC3b7F9738461c70f8282435287915895d",
-    },
-  ],
+  tokens: [],
   token0: 0,
   token1: 1,
 };
@@ -47,6 +36,9 @@ const tokenSwapSlice = createSlice({
         address: action.payload.address,
       });
     },
+    initTokenList: (state, action) => {
+      state.tokens = action.payload.list;
+    },
   },
 });
 
@@ -57,6 +49,7 @@ export const {
   changeToken1,
   clearState,
   addNewToken,
+  initTokenList,
 } = tokenSwapSlice.actions;
 
 export default tokenSwapSlice.reducer;

@@ -22,7 +22,7 @@ const Notification = () => {
   }
   if (isSuccess) {
     return (
-      <NotificationCard style={{ backgroundColor: "#45CAB8" }}>
+      <NotificationCard style={{ backgroundColor: "#45CAB8", color: "black" }}>
         <p>{msg}</p>
       </NotificationCard>
     );
