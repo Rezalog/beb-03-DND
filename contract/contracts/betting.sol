@@ -89,8 +89,6 @@ contract Betting {
         }
     }
 
-    // assist function
-
     // '성공'에 베팅시 보상 계산
     function calculateRewardSuccees(uint256 _betNumber, address _player) public view returns (uint256) {
         uint256 value = userInfo[_betNumber][_player].amount;
@@ -106,6 +104,8 @@ contract Betting {
         uint256 reward = value.add(amountInfo[_betNumber].betAmountSuccees.mul(portion).div(100));
         return reward;
     }
+
+    // assist functiom
 
     // // 참여자 목록 
     // function getPlayerSuccees() public view returns (address[] memory) {
