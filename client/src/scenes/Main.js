@@ -8,6 +8,7 @@ export default class Main extends Phaser.Scene {
     this.princessOverlapped = false;
     this.merchantOverlapped = false;
     this.shoekeeperOverlapped = false;
+    this.blacksmithOverlapped = false;
   }
 
   init(data) {
@@ -58,6 +59,12 @@ export default class Main extends Phaser.Scene {
     this.anims.create({
       key: "shoekeeper_idle",
       frames: this.anims.generateFrameNumbers("shoekeeper"),
+      frameRate: 5,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: "blacksmith_idle",
+      frames: this.anims.generateFrameNumbers("blacksmith"),
       frameRate: 5,
       repeat: -1,
     });
@@ -164,6 +171,26 @@ export default class Main extends Phaser.Scene {
     this.shoekeeperText.x = this.nameTag.x - this.shoekeeperText.width / 2;
     this.shoekeeperText.y = this.nameTag.y - this.shoekeeperText.height / 2;
 
+    // 대장장이 NPC 생성
+    this.blacksmith = this.physics.add.sprite(
+      300,
+      game.config.height / 4,
+      "blacksmith"
+    );
+    this.blacksmith.setScale(2);
+
+    this.nameTag = this.add.sprite(
+      this.blacksmith.x,
+      this.blacksmith.y - 16,
+      "nametag"
+    );
+    this.blacksmithText = this.add.text(0, 0, "무기합성", {
+      color: "black",
+      fontSize: "10px",
+    });
+    this.blacksmithText.x = this.nameTag.x - this.blacksmithText.width / 2;
+    this.blacksmithText.y = this.nameTag.y - this.blacksmithText.height / 2;
+
     // 캐릭터와 NPC overlap 이벤트
     this.physics.add.overlap(this.player, this.king, () => {
       this.kingOverlapped = true;
@@ -176,6 +203,9 @@ export default class Main extends Phaser.Scene {
     });
     this.physics.add.overlap(this.player, this.shoekeeper, () => {
       this.shoekeeperOverlapped = true;
+    });
+    this.physics.add.overlap(this.player, this.blacksmith, () => {
+      this.blacksmithOverlapped = true;
     });
 
     // 캐릭터와 벽 Collider
@@ -194,6 +224,7 @@ export default class Main extends Phaser.Scene {
     this.princess.play("princess_idle");
     this.merchant.play("merchant_idle");
     this.shoekeeper.play("shoekeeper_idle");
+    this.blacksmith.play("blacksmith_idle");
 
     this.spacebar = this.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.SPACE
@@ -221,6 +252,7 @@ export default class Main extends Phaser.Scene {
       if (this.princessOverlapped) game.events.emit("enter", "2");
       if (this.merchantOverlapped) game.events.emit("enter", "3");
       if (this.shoekeeperOverlapped) game.events.emit("enter", "4");
+      if (this.blacksmithOverlapped) game.events.emit("enter", "5");
     }
 
     if (
@@ -245,5 +277,6 @@ export default class Main extends Phaser.Scene {
     this.princessOverlapped = false;
     this.merchantOverlapped = false;
     this.shoekeeperOverlapped = false;
+    this.blacksmithOverlapped = false;
   }
 }

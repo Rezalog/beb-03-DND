@@ -21,6 +21,8 @@ import {
 import Inventory from "./features/inventory/Inventory";
 import { openMarketplaceModal } from "./features/modal/marketplaceModalSlice";
 import Marketplace from "./features/marketplace/Marketplace";
+import WeaponCompoundModal from "./features/weaponCompound/WeaponCompoundModal";
+import { openWeaponCompoundModal } from "./features/modal/weaponCompoundModalSlice";
 
 function App() {
   const { isOpen: isDexOpen } = useSelector((state) => state.dexModal);
@@ -35,6 +37,9 @@ function App() {
   // const { isOpen: isInventoryOpen } = useSelector(
   //   (state) => state.inventoryModal
   // );
+  const { isOpen: isWeaponCompoundOpen } = useSelector(
+    (state) => state.weaponCompoundModal
+  );
   const [isInventoryOpen, setIsInventoryOpen] = useState(false);
   const { isLoading } = useSelector((state) => state.loading);
   const dispatch = useDispatch();
@@ -133,6 +138,10 @@ function App() {
           dispatch(openMarketplaceModal());
           break;
         }
+        case "5": {
+          dispatch(openWeaponCompoundModal());
+          break;
+        }
 
         default: {
           break;
@@ -159,7 +168,7 @@ function App() {
   }, [characterIndex, nickname]);
 
   return (
-    <div className='App'>
+    <div className="App">
       {isSignIn ? null : (
         <div>
           <h1>Dungeon & Defi</h1>
@@ -174,6 +183,17 @@ function App() {
       {isMarketplaceOpen && <Marketplace />}
       {isLoading && <Loading />}
       {isInventoryOpen && <Inventory />}
+
+      {isWeaponCompoundOpen && <WeaponCompoundModal />}
+      <div>
+        <button
+          onClick={() => {
+            dispatch(openWeaponCompoundModal());
+          }}
+        >
+          weaponCompound
+        </button>
+      </div>
     </div>
   );
 }
