@@ -18,8 +18,10 @@ contract Betting {
     // iteration을 위한 배열 선언
     address[] public playerOnSuccees;
     address[] public playerOnFailure;
+    address[] public tokenPair;
 
-    mapping(address => betInfo) public playerInfo;
+    mapping(uint256 => mapping(address => betInfo)) public playerInfo;
+    mapping(tokenPair => uint256) public tokenInfo;
 
     address public token; // uru토큰
     uint256 public startTime; // 베팅 시간제한 두기 위해서
@@ -32,7 +34,14 @@ contract Betting {
         startTime = block.timestamp;
     }
 
-    function bet(uint256 _amount, bool _side ) public {
+    function createBet(uint256 _token1Id, uint256 _token2Id) public {
+        uint256 count = 0;
+        tokenPair.push({_token1Id, _token2Id});
+        tokenInfo[{_token1Id, _token2Id}] = count;
+        count = count.add(1);
+    }
+
+    function bet(uint256 _amount, bool _side, uint _betId) public {
         require(startTime.add(1200) > block.timestamp, "time over to betting!");
         
         // approve 필요!
