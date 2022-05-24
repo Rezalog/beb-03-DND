@@ -24,6 +24,8 @@ import Inventory from "./features/inventory/Inventory";
 import { openMarketplaceModal } from "./features/modal/marketplaceModalSlice";
 import Marketplace from "./features/marketplace/Marketplace";
 import MonsterFarm from "./features/monsterFarm/MonsterFarm";
+import V2SwapModal from "./features/V2Swap/V2SwapModal";
+import { openV2SwapModal } from "./features/modal/v2SwapModalSlice";
 
 function App() {
   const { isOpen: isDexOpen } = useSelector((state) => state.dexModal);
@@ -38,6 +40,7 @@ function App() {
   const { isOpen: isMonsterFarmOpen } = useSelector(
     (state) => state.monsterFarmModal
   );
+  const { isOpen: isV2Open } = useSelector((state) => state.v2SwapModal);
   // const { isOpen: isInventoryOpen } = useSelector(
   //   (state) => state.inventoryModal
   // );
@@ -142,6 +145,10 @@ function App() {
           dispatch(openMonsterFarmModal());
           break;
         }
+        case "6": {
+          dispatch(openV2SwapModal());
+          break;
+        }
 
         default: {
           break;
@@ -184,6 +191,7 @@ function App() {
       {isMarketplaceOpen && <Marketplace />}
       {isMonsterFarmOpen && <MonsterFarm />}
       {isInventoryOpen && <Inventory />}
+      {isV2Open && <V2SwapModal />}
       <Notification />
     </div>
   );
