@@ -112,7 +112,7 @@ const Monster = ({
   };
 
   useEffect(() => {
-    getRemainingTime();
+    if (staked.durability > 0) getRemainingTime();
   }, [staked]);
 
   // 이런식으로 하면 몇초뒤부터 카운트 시작함
