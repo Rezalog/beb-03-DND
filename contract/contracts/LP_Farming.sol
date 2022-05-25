@@ -1,9 +1,9 @@
 // // SPDX-License-Identifier: MIT
 pragma solidity ^0.5.6;
 
-import "../node_modules/@klaytn/contracts/token/KIP7/KIP7.sol";
-import "../node_modules/@klaytn/contracts/token/KIP7/IKIP7.sol";
-import "../node_modules/@klaytn/contracts/token/KIP7/KIP7Mintable.sol";
+import "@klaytn/contracts/token/KIP7/KIP7.sol";
+import "@klaytn/contracts/token/KIP7/IKIP7.sol";
+import "@klaytn/contracts/token/KIP7/KIP7Mintable.sol";
 import "./Token.sol";
 
 contract LP_Farming {
