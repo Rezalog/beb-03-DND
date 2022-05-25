@@ -9,7 +9,10 @@ import { closeWeaponCompoundModal } from "../modal/weaponCompoundModalSlice";
 import Inventory from "../inventory/Inventory";
 import SelectWeapon from "./components/SelectWeapon";
 import CompoundInfo from "./components/CompoundInfo";
+import Loading from "../loading/Loading";
+import { stopLoading } from "../loading/loadingSlice";
 
+import { nftAddress, nftABI } from "./nftContractInfo";
 // 무기 합성 모달창을 열면 보유중인 무기(nft)리스트를 가져옴
 // 합성할 두 개의 무기를 선택
 // 합성시 선택된 두 개의 무기 id값을 무기컴파운드 함수 컨트랙트에 보냄
@@ -31,6 +34,54 @@ import CompoundInfo from "./components/CompoundInfo";
 
 const WeaponCompoundModal = () => {
   const dispatch = useDispatch();
+  const [weapons, setWeapons] = useState([]);
+  const { address } = useSelector((state) => state.userInfo);
+  const { firstWeapon, secondWeapon } = useSelector(
+    (state) => state.compoundInfo
+  );
+  const [compoundResult, setCompoundResult] = useState();
+  const caver = new Caver(window.klaytn);
+  const nft = new caver.klay.Contract(nftABI, nftAddress);
+
+  //   const weapon = await nft.methods.weapons(tokenId - 1).call();
+
+  useEffect(() => {
+    const getWeapons = async () => {
+      const list = await getOwnedWeapons(address);
+
+      setWeapons(list);
+    };
+    getWeapons();
+  }, []);
+
+  const weaponCompound = async () => {
+    if (!firstWeapon || !secondWeapon) {
+      alert("Select Weapon Please");
+    } else if (weapons[firstWeapon].id === weapons[secondWeapon].id) {
+      alert("Select Two Weapon Please");
+    } else {
+      await nft.methods
+        .compoundWeapon(weapons[firstWeapon].id, weapons[secondWeapon].id)
+        .send({ from: address, gas: 2000000 });
+      console.log(weapons[firstWeapon].id);
+      console.log(weapons[secondWeapon].id);
+
+      //   const weapon1info = await nft.methods
+      //     .weapons(weapons[firstWeapon].id - 1)
+      //     .call();
+
+      //   const compoundResult = await nft.methods
+      //     .getCompoundResult(weapons[firstWeapon].id, weapons[secondWeapon].id)
+      //     .call();
+
+      //   console.log(weapon1info);
+    }
+  };
+
+  useEffect(() => {
+    console.log(firstWeapon);
+    console.log(secondWeapon);
+  }, [firstWeapon, secondWeapon]);
 
   return (
     <div
@@ -45,7 +96,8 @@ const WeaponCompoundModal = () => {
       <div>
         <SelectWeapon />
         <CompoundInfo />
-        <button>합성</button>
+        <button onClick={() => weaponCompound()}>합성</button>
+        <button onClick={() => console.log(compoundResult)}>결과확인</button>
         <button
           onClick={() => {
             dispatch(closeWeaponCompoundModal());
