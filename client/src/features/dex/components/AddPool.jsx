@@ -144,6 +144,7 @@ const AddPool = ({ account }) => {
         successNoti({ msg: `${currentTokenSymbol}/KLAY 풀이 추가되었습니다!` })
       );
     } catch (error) {
+      console.log(error);
       dispatch(failNoti());
     }
     setTimeout(() => {

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Caver from "caver-js";
 
 import { useSelector } from "react-redux";
 
@@ -14,20 +15,34 @@ import {
 import { RewardContainer } from "../../../styles/Reward.styled";
 import { Button } from "../../../styles/Modal.styled";
 
+import { exchangeABI } from "../../dex/contractInfo";
+
 const Farm = ({ address, name, tokenAddress }) => {
   const { address: account } = useSelector((state) => state.userInfo);
   const [showMore, setShowMore] = useState(false);
   const [tokenAmount, setTokenAmount] = useState(0);
   const [unlocked, setUnlocked] = useState(0);
   const [locked, setLocked] = useState(0);
+  const [exchange, setExchange] = useState(null);
 
   useEffect(() => {
-    const intervalID = setInterval(() => {
-      setTokenAmount((prev) => prev + 1);
+    const caver = new Caver(window.klaytn);
+    const _exchange = new caver.klay.Contract(exchangeABI, address);
+    setExchange(_exchange);
+  }, []);
+
+  useEffect(() => {
+    const intervalID = setInterval(async () => {
+      if (exchange) {
+        const reward = await exchange.methods
+          .calculateYieldTotal(account)
+          .call();
+        console.log(reward);
+      }
     }, 1000);
 
     return () => clearInterval(intervalID);
-  });
+  }, [exchange]);
 
   useEffect(() => {
     setUnlocked(parseFloat(Number(tokenAmount * 0.05).toFixed(6)));

@@ -35,6 +35,7 @@ import {
   failNoti,
   clearState as clear,
 } from "../notification/notifiactionSlice";
+import { initExchange } from "../dex/dexSlice";
 
 const TokenSwapModal = () => {
   const dispatch = useDispatch();
@@ -64,8 +65,6 @@ const TokenSwapModal = () => {
    *
    */
   const getOutputAmount = async () => {
-    console.log(tokens);
-    console.log(exchange);
     const caver = new Caver(window.klaytn);
     const input = token0InputRef.current.value || 0;
     // input field가 비어있는지 확인하고
@@ -281,8 +280,23 @@ const TokenSwapModal = () => {
     dispatch(initTokenList({ list: tokenList }));
   };
 
+  const getExchangeList = async () => {
+    const response = await axios.get(
+      "http://localhost:8080/contracts/pair",
+      {}
+    );
+    const exchangeList = response.data.map((token) => {
+      return {
+        address: token.pair_address,
+        name: token.pair_name,
+        tokenAddress: token.token_address,
+      };
+    });
+    dispatch(initExchange({ list: exchangeList }));
+  };
+
   useEffect(() => {
-    if (tokens.length) {
+    if (tokens.length && exchanges.length) {
       getToken0();
       getToken1();
     }
@@ -290,6 +304,7 @@ const TokenSwapModal = () => {
 
   useEffect(() => {
     getTokenList();
+    getExchangeList();
   }, []);
 
   return (
