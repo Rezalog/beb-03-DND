@@ -54,6 +54,7 @@ contract Betting {
 
     function bet(uint256 _amount, bool _side, uint256 _betNumber) public {
         require(userInfo[_betNumber][msg.sender].isBet != true, "you already bet in this game");
+        require(tokenInfo[_betNumber].timeStamp.add(600) > block.timestamp, "this betting is closed");
 
         // approve 필요!
         KIP7(token).transferFrom(msg.sender, address(this), _amount);
@@ -73,6 +74,7 @@ contract Betting {
     }
 
     function distribution(uint256 _betNumber) public {
+        require(tokenInfo[_betNumber].timeStamp.add(120) < block.timestamp, "distribution is allowed after 10 minutes opened betting");
 
         bool betResult = nft.getCompoundResult(tokenInfo[_betNumber].token1Id, tokenInfo[_betNumber].token2Id);
 
@@ -89,7 +91,7 @@ contract Betting {
         }
     }
 
-    // '성공'에 베팅시 보상 계산
+    // 각 결과에 따른 현재 보상 계산
     function calculateRewardSuccees(uint256 _betNumber, address _player) public view returns (uint256) {
         uint256 value = userInfo[_betNumber][_player].amount;
         uint256 portion = value.mul(100).div(amountInfo[_betNumber].betAmountSuccees);
@@ -97,41 +99,30 @@ contract Betting {
         return reward;
     }
 
-    
     function calculateRewardFailure(uint256 _betNumber, address _player) public view returns (uint256) {
         uint256 value = userInfo[_betNumber][_player].amount;
         uint256 portion = value.mul(100).div(amountInfo[_betNumber].betAmountFailure);
         uint256 reward = value.add(amountInfo[_betNumber].betAmountSuccees.mul(portion).div(100));
         return reward;
     }
-
-    // assist functiom
-
-    // // 참여자 목록 
-    // function getPlayerSuccees() public view returns (address[] memory) {
-    //     return playerOnSuccees;
-    // }
-
-    // function getPlayerFailure() public view returns (address[] memory) {
-    //     return playerOnFailure;
-    // }
-
-    // // 각 결과에 걸린 베팅 총액
-    // function amountForSuccees() public view returns (uint256 amount) {
-    //     return betAmountSuccees;
-    // }
     
-    // function amountForFailure() public view returns (uint256 amount) {
-    //     return betAmountFailure;
-    // }
+    // assist function
 
-    // 배당률 계산
-    // function oddsForSuccees() public view returns (uint256 odds) {
+    // 각 결과에 걸린 베팅 총액
+    function amountForSuccees(uint256 _betNumber) public view returns (uint256) {
+        return amountInfo[_betNumber].betAmountSuccees;
+    }
+    
+    function amountForFailure(uint256 _betNumber) public view returns (uint256) {
+        return amountInfo[_betNumber].betAmountFailure;
+    }
 
-    // }
+    // 배당률 계산 (%)
+    function oddsForSuccees(uint256 _betNumber, uint256 _amount) public view returns (uint256) {
+        return amountInfo[_betNumber].betAmountFailure.mul(100).div(amountInfo[_betNumber].betAmountSuccees.add(_amount));
+    }
 
-    // function oddsForFailure() public view returns (uint256 odds) {
-
-    // }
-
+    function oddsForFailure(uint256 _betNumber, uint256 _amount) public view returns (uint256) {
+        return amountInfo[_betNumber].betAmountSuccees.mul(100).div(amountInfo[_betNumber].betAmountFailure.add(_amount));
+    }
 }
