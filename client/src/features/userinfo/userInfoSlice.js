@@ -4,6 +4,8 @@ const initialState = {
   nickname: "",
   characterIndex: "",
   address: "",
+  uru: 0,
+  lockedUru: 0,
 };
 
 const userInfoSlice = createSlice({

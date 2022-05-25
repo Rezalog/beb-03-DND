@@ -71,7 +71,6 @@ const V2SwapModal = () => {
           const pairAddress = await factory.methods
             .pairs(tokens[next.token].address, tokens[token1].address)
             .call();
-
           if (pairAddress !== "0x0000000000000000000000000000000000000000") {
             result = [...next.path, tokens[token1].address];
             break;

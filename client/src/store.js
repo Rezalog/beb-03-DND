@@ -19,6 +19,7 @@ import notifiactionSlice from "./features/notification/notifiactionSlice";
 import v2SwapModalSlice from "./features/modal/v2SwapModalSlice";
 import v2SwapSlice from "./features/V2Swap/v2SwapSlice";
 import v2DexModalSlice from "./features/modal/v2DexModalSlice";
+import V2DexSlice from "./features/v2dex/V2DexSlice";
 
 export const store = configureStore({
   reducer: {
@@ -42,5 +43,6 @@ export const store = configureStore({
     v2SwapModal: v2SwapModalSlice,
     v2Swap: v2SwapSlice,
     v2DexModal: v2DexModalSlice,
+    v2Dex: V2DexSlice,
   },
 });

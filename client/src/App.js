@@ -28,6 +28,7 @@ import V2SwapModal from "./features/V2Swap/V2SwapModal";
 import { openV2SwapModal } from "./features/modal/v2SwapModalSlice";
 import { openV2DexModal } from "./features/modal/v2DexModalSlice";
 import V2DexModal from "./features/v2dex/V2DexModal";
+import UserInfo from "./features/userinfo/UserInfo";
 
 function App() {
   const { isOpen: isDexOpen } = useSelector((state) => state.dexModal);
