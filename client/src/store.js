@@ -18,6 +18,7 @@ import monsterFarmSlice from "./features/monsterFarm/monsterFarmSlice";
 import notifiactionSlice from "./features/notification/notifiactionSlice";
 import v2SwapModalSlice from "./features/modal/v2SwapModalSlice";
 import v2SwapSlice from "./features/V2Swap/v2SwapSlice";
+import v2DexModalSlice from "./features/modal/v2DexModalSlice";
 
 export const store = configureStore({
   reducer: {
@@ -40,5 +41,6 @@ export const store = configureStore({
     notification: notifiactionSlice,
     v2SwapModal: v2SwapModalSlice,
     v2Swap: v2SwapSlice,
+    v2DexModal: v2DexModalSlice,
   },
 });

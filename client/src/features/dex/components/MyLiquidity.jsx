@@ -9,12 +9,14 @@ import { ListContainer } from "../../../styles/LPContainer.styled";
 import { Container } from "../../../styles/Modal.styled";
 import { startLoading, stopLoading } from "../../loading/loadingSlice";
 import Loading from "../../loading/Loading";
+import { exchangeABI } from "../contractInfo";
 
 const MyLiquidity = ({ account }) => {
   const dispatch = useDispatch();
   const { exchanges } = useSelector((state) => state.dex);
   const { isLoading } = useSelector((state) => state.loading);
   const [ownedLP, setOwnedLP] = useState([]);
+  const [lp, setLp] = useState([]);
   const [isWithdrawal, setIsWithdrawal] = useState(false);
   const [selectedExchange, setSelectedExchange] = useState("");
 
@@ -22,15 +24,32 @@ const MyLiquidity = ({ account }) => {
     dispatch(startLoading());
     const caver = new Caver(window.klaytn);
     let tempArr = [];
+    let tempLp = [];
     console.log(exchanges);
     for (let i = 0; i < exchanges.length; i++) {
       const kip7 = new caver.klay.KIP7(exchanges[i].address);
-      const balacne = await kip7.balanceOf(account);
-      if (balacne.toString() !== "0") {
+      const balance = await kip7.balanceOf(account);
+      const exchange = new caver.klay.Contract(
+        exchangeABI,
+        exchanges[i].address
+      );
+      const stakedBalance = await exchange.methods
+        .stakingBalance(account)
+        .call();
+      if (balance.toString() !== "0" || stakedBalance.toString() !== "0") {
         tempArr.push(exchanges[i]);
+        tempLp.push(
+          caver.utils.fromPeb(
+            caver.utils
+              .toBN(balance.toString())
+              .add(caver.utils.toBN(stakedBalance))
+              .toString()
+          )
+        );
       }
     }
     setOwnedLP([...tempArr]);
+    setLp([...tempLp]);
     dispatch(stopLoading());
   };
 
@@ -53,10 +72,12 @@ const MyLiquidity = ({ account }) => {
           <Loading />
         ) : (
           ownedLP.map((exchange, idx) => {
+            console.log(lp);
             return (
               <Exchange
                 key={idx}
                 {...exchange}
+                lp={lp[idx]}
                 account={account}
                 setIsWithdrawal={setIsWithdrawal}
                 setSelectedExchange={setSelectedExchange}

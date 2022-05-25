@@ -35,6 +35,10 @@ export default class Preloader extends Phaser.Scene {
       frameWidth: 16,
       frameHeight: 20,
     });
+    this.load.spritesheet("queen", "assets/queen.png", {
+      frameWidth: 16,
+      frameHeight: 32,
+    });
   }
 
   create() {

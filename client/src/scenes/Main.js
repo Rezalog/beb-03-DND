@@ -10,6 +10,7 @@ export default class Main extends Phaser.Scene {
     this.merchantOverlapped = false;
     this.shoekeeperOverlapped = false;
     this.dungeonOverlapped = false;
+    this.queenOverlapped = false;
   }
 
   init(data) {
@@ -42,6 +43,12 @@ export default class Main extends Phaser.Scene {
     this.anims.create({
       key: "king_idle",
       frames: this.anims.generateFrameNumbers("king"),
+      frameRate: 5,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: "queen_idle",
+      frames: this.anims.generateFrameNumbers("queen"),
       frameRate: 5,
       repeat: -1,
     });
@@ -111,6 +118,18 @@ export default class Main extends Phaser.Scene {
     });
     this.kingText.x = this.nameTag.x - this.kingText.width / 2;
     this.kingText.y = this.nameTag.y - this.kingText.height / 2;
+
+    // 여왕 NPC 생성
+    this.queen = this.physics.add.sprite(500, game.config.height / 3, "queen");
+    this.queen.setScale(2);
+
+    this.nameTag = this.add.sprite(this.queen.x, this.queen.y - 16, "nametag");
+    this.queenText = this.add.text(0, 0, "여왕", {
+      color: "black",
+      fontSize: "10px",
+    });
+    this.queenText.x = this.nameTag.x - this.queenText.width / 2;
+    this.queenText.y = this.nameTag.y - this.queenText.height / 2;
 
     // 공주 NPC 생성
     this.princess = this.physics.add.sprite(
@@ -231,6 +250,9 @@ export default class Main extends Phaser.Scene {
     this.physics.add.overlap(this.player, this.dungeon, () => {
       this.dungeonOverlapped = true;
     });
+    this.physics.add.overlap(this.player, this.queen, () => {
+      this.queenOverlapped = true;
+    });
 
     // 캐릭터와 벽 Collider
     this.physics.add.collider(this.player, this.wallslayer);
@@ -249,6 +271,7 @@ export default class Main extends Phaser.Scene {
     this.princess2.play("princess_idle");
     this.merchant.play("merchant_idle");
     this.shoekeeper.play("shoekeeper_idle");
+    this.queen.play("queen_idle");
 
     this.spacebar = this.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.SPACE
@@ -278,6 +301,7 @@ export default class Main extends Phaser.Scene {
       if (this.shoekeeperOverlapped) game.events.emit("enter", "4");
       if (this.dungeonOverlapped) game.events.emit("enter", "5");
       if (this.princess2Overlapped) game.events.emit("enter", "6");
+      if (this.queenOverlapped) game.events.emit("enter", "7");
     }
 
     if (
@@ -304,5 +328,6 @@ export default class Main extends Phaser.Scene {
     this.merchantOverlapped = false;
     this.shoekeeperOverlapped = false;
     this.dungeonOverlapped = false;
+    this.queenOverlapped = false;
   }
 }
