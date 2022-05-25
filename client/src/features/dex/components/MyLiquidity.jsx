@@ -22,6 +22,7 @@ const MyLiquidity = ({ account }) => {
     dispatch(startLoading());
     const caver = new Caver(window.klaytn);
     let tempArr = [];
+    console.log(exchanges);
     for (let i = 0; i < exchanges.length; i++) {
       const kip7 = new caver.klay.KIP7(exchanges[i].address);
       const balacne = await kip7.balanceOf(account);
@@ -35,7 +36,8 @@ const MyLiquidity = ({ account }) => {
 
   useEffect(() => {
     getOwnedLPAsync();
-  }, []);
+  }, [exchanges]);
+
   if (isWithdrawal) {
     return (
       <RemoveLiquidity

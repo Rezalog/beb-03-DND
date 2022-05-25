@@ -1,16 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Caver from "caver-js";
-import axios from "axios";
-import { closeTokenSwapModal } from "../modal/tokenSwapModalSlice";
-import TokenSelectModal from "./TokenSelectModal";
-import {
-  openSubModal,
-  clearState,
-  changeToken0,
-  changeToken1,
-  initTokenList,
-} from "./tokenSwapSlice";
+import { closeV2SwapModal } from "../modal/v2SwapModalSlice";
+import TokenSelectModal from "./V2TokenSelectModal";
+import { openSubModal, changeToken0, changeToken1 } from "./v2SwapSlice";
 import { startLoading, stopLoading } from "../loading/loadingSlice";
 import {
   Modal,
@@ -28,18 +21,25 @@ import {
   SwapInfoContainer,
   InfoContainer,
 } from "../../styles/TokenSwap.styled";
-import { factoryABI, factoryAddress, exchangeABI } from "../dex/contractInfo";
+//import { factoryABI, factoryAddress, exchangeABI } from "../dex/contractInfo";
+import {
+  routerABI,
+  routerAddress,
+  factoryABI,
+  factoryAddress,
+} from "./v2Contract";
+
 import {
   pendingNoti,
   successNoti,
   failNoti,
-  clearState as clear,
+  clearState,
 } from "../notification/notifiactionSlice";
 
-const TokenSwapModal = () => {
+const V2SwapModal = () => {
   const dispatch = useDispatch();
   const { isSubModalOpen, tokens, token0, token1 } = useSelector(
-    (state) => state.tokenSwap
+    (state) => state.v2Swap
   );
   const { address: account } = useSelector((state) => state.userInfo);
   const { exchanges } = useSelector((state) => state.dex);
@@ -51,7 +51,48 @@ const TokenSwapModal = () => {
   const [exchange, setExchange] = useState({});
   const [minOutput, setMinOutput] = useState(0);
   const [price, setPrice] = useState("");
+  const [inputTokenAddress, setInputTokenAddress] = useState("");
+  const [outputTokenAddress, setOutputTokenAddress] = useState("");
+  const [swapPath, setSwapPath] = useState([]);
 
+  // DFS를 이용해서 토큰 Path 찾기
+  const getPath = () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const caver = new Caver(window.klaytn);
+        const factory = new caver.klay.Contract(factoryABI, factoryAddress);
+        const visited = Array(tokens.length).fill(false);
+        let stacks = [];
+        stacks.push({ token: token0, path: [tokens[token0].address] });
+        visited[token0] = true;
+        let result = [];
+        while (stacks.length) {
+          const next = stacks.pop();
+          const pairAddress = await factory.methods
+            .pairs(tokens[next.token].address, tokens[token1].address)
+            .call();
+
+          if (pairAddress !== "0x0000000000000000000000000000000000000000") {
+            result = [...next.path, tokens[token1].address];
+            break;
+          }
+
+          for (let i = 0; i < visited.length; i++) {
+            if (!visited[i]) {
+              stacks.push({
+                token: i,
+                path: [...next.path, tokens[i].address],
+              });
+              visited[i] = true;
+            }
+          }
+        }
+        resolve(result);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
   /*
    * 현재 보유중인 전체 수량을 input으로 넣어준다.
    */
@@ -64,30 +105,23 @@ const TokenSwapModal = () => {
    *
    */
   const getOutputAmount = async () => {
-    console.log(tokens);
-    console.log(exchange);
+    const path = await getPath();
+    setSwapPath(path);
     const caver = new Caver(window.klaytn);
     const input = token0InputRef.current.value || 0;
     // input field가 비어있는지 확인하고
     // 비어있지 않으면 블록체인에서 output amount를 가져온다.
     // 비어있다면 초기화한다.
-    if (input > 0) {
-      let output;
-      // 토큰을 지불하려 한다면 output이 klay이기 때문에 getKlayAmount를 호출하고
-      // 클레이를 지불하려 하면 output이 토큰이기 때문에 getTokenAmount를 호출한다.
-      if (token0 > 0) {
-        output = await exchange.methods
-          .getKlayAmount(caver.utils.toPeb(input))
-          .call();
-      } else {
-        output = await exchange.methods
-          .getTokenAmount(caver.utils.toPeb(input))
-          .call();
-      }
+    // path가 존재할 때만 output을 가져온다.
+    if (input > 0 && path.length) {
+      const router = new caver.klay.Contract(routerABI, routerAddress);
+      const output = await router.methods
+        .getOutput(caver.utils.toPeb(input), [...path])
+        .call();
       token1InputRef.current.value = Number(
-        caver.utils.fromPeb(output)
+        caver.utils.fromPeb(output[output.length - 1])
       ).toFixed(6);
-      setMinOutput(caver.utils.fromPeb(output) * 0.99);
+      setMinOutput(caver.utils.fromPeb(output[output.length - 1]) * 0.99);
     } else {
       token1InputRef.current.value = "";
       setMinOutput(0);
@@ -100,78 +134,38 @@ const TokenSwapModal = () => {
    */
   const swapToken = async () => {
     dispatch(pendingNoti());
+
     const caver = new Caver(window.klaytn);
-    //만약 지불하는게 토큰이면 tokenToKlay 함수를 호출하고
-    // 클레이를 지불한다면 klayToToken 함수를 호출한다.
-    if (token0 > 0) {
-      const tokenAddress = tokens[token0].address;
-      const kip7 = new caver.klay.KIP7(tokenAddress);
-      let exchangeAddress;
-      console.log(exchange);
+    const token1Address = tokens[token0].address;
+    const token2Address = tokens[token1].address;
+    const kip7 = new caver.klay.KIP7(token1Address);
 
-      for (let i = 0; i < exchanges.length; i++) {
-        if (
-          exchanges[i].tokenAddress.toLowerCase() === tokenAddress.toLowerCase()
-        ) {
-          exchangeAddress = exchanges[i].address;
-        }
-      }
-      const allowed = await kip7.allowance(account, exchangeAddress);
-      // allowed가 적을경우에 approve 다시한다.
-      if (allowed.toString() === "0") {
-        try {
-          await kip7.approve(exchangeAddress, caver.utils.toPeb("100000000"), {
-            from: account,
-          });
-        } catch (err) {
-          dispatch(failNoti());
-        }
-      }
+    const allowed = await kip7.allowance(account, routerAddress);
+    // allowed가 적을경우에 approve 다시한다.
+    if (allowed.toString() === "0") {
       try {
-        const input = token0InputRef.current.value;
-        await exchange.methods
-          .tokenToKlaySwap(
-            caver.utils.toPeb(input),
-            caver.utils.toPeb(minOutput.toString())
-          )
-          .send({ from: account, gas: 20000000 });
-        dispatch(
-          successNoti({
-            msg: `최소 ${Number(minOutput).toFixed(6)} ${
-              tokens[token1].symbol
-            }을 받았습니다!`,
-          })
-        );
-      } catch (error) {
+        await kip7.approve(routerAddress, caver.utils.toPeb("100000000"), {
+          from: account,
+        });
+      } catch (err) {
         dispatch(failNoti());
       }
-    } else {
-      try {
-        const input = token0InputRef.current.value;
-        await exchange.methods
-          .klayToTokenSwap(caver.utils.toPeb(minOutput.toString()))
-          .send({
-            from: account,
-            value: caver.utils.toPeb(input),
-            gas: 20000000,
-          });
+    }
+    try {
+      const router = new caver.klay.Contract(routerABI, routerAddress);
 
-        dispatch(
-          successNoti({
-            msg: `최소 ${Number(minOutput).toFixed(6)} ${
-              tokens[token1].symbol
-            }을 받았습니다!`,
-          })
-        );
-      } catch (error) {
-        console.log(error);
-        dispatch(failNoti());
-      }
-      //만약 URU 토큰으로 교환을 한다면
-      //카이카스에 URU 토큰을 등록해준다.
+      const input = token0InputRef.current.value;
+      await router.methods
+        .swapExactTokensForTokens(
+          caver.utils.toPeb(input),
+          caver.utils.toPeb(minOutput.toString()),
+          [...swapPath],
+          account
+        )
+        .send({ from: account, gas: 20000000 });
+      dispatch(stopLoading());
       if (tokens[token1].symbol === "URU") {
         const tokenAdded = localStorage.getItem("tokenAdded");
-        console.log(tokenAdded);
         if (!tokenAdded) {
           window.klaytn.sendAsync(
             {
@@ -198,51 +192,42 @@ const TokenSwapModal = () => {
           localStorage.setItem("tokenAdded", "true");
         }
       }
+      getToken0();
+      getToken1();
+      token0InputRef.current.value = 0;
+      token1InputRef.current.value = 0;
+      dispatch(
+        successNoti({
+          msg: `최소 ${Number(minOutput).toFixed(6)} ${
+            tokens[token1].symbol
+          }을 받았습니다!`,
+        })
+      );
+    } catch (error) {
+      dispatch(failNoti());
     }
-    getToken0();
-    getToken1();
-    token0InputRef.current.value = 0;
-    token1InputRef.current.value = 0;
     setTimeout(() => {
-      dispatch(clear());
+      dispatch(clearState());
     }, 5000);
   };
 
   const getToken0 = async () => {
     const caver = new Caver(window.klaytn);
-    if (token0 > 0) {
-      const address = tokens[token0].address;
-      const kip7 = new caver.klay.KIP7(address);
-      const _balance = await kip7.balanceOf(account);
-      setBalance(caver.utils.fromPeb(_balance));
-      getExchangeContract(address);
-    } else {
-      const _balance = await caver.klay.getBalance(account);
-      setBalance(caver.utils.fromPeb(_balance));
-    }
+    const address = tokens[token0].address;
+    const kip7 = new caver.klay.KIP7(address);
+    const _balance = await kip7.balanceOf(account);
+    setBalance(caver.utils.fromPeb(_balance));
+    //getExchangeContract(address);
+    setInputTokenAddress(address);
   };
 
   const getToken1 = async () => {
     const caver = new Caver(window.klaytn);
-    if (token1 > 0) {
-      const address = tokens[token1].address;
-      const kip7 = new caver.klay.KIP7(address);
-      const _balance = await kip7.balanceOf(account);
-      setBalance1(caver.utils.fromPeb(_balance));
-      getExchangeContract(address);
-    } else {
-      const _balance = await caver.klay.getBalance(account);
-      setBalance1(caver.utils.fromPeb(_balance));
-    }
-  };
-
-  const getExchangeContract = (address) => {
-    const caver = new Caver(window.klaytn);
-    for (let i = 0; i < exchanges.length; i++) {
-      if (exchanges[i].tokenAddress.toLowerCase() === address.toLowerCase()) {
-        setExchange(new caver.klay.Contract(exchangeABI, exchanges[i].address));
-      }
-    }
+    const address = tokens[token1].address;
+    const kip7 = new caver.klay.KIP7(address);
+    const _balance = await kip7.balanceOf(account);
+    setBalance1(caver.utils.fromPeb(_balance));
+    setOutputTokenAddress(address);
   };
 
   const getPrice = () => {
@@ -266,31 +251,12 @@ const TokenSwapModal = () => {
     dispatch(changeToken1({ index: currentToken0 }));
   };
 
-  const getTokenList = async () => {
-    const response = await axios.get(
-      "http://localhost:8080/contracts/token",
-      {}
-    );
-    const tokenList = response.data.map((token) => {
-      return {
-        symbol: token.token_symbol,
-        name: token.token_name,
-        address: token.token_address,
-      };
-    });
-    dispatch(initTokenList({ list: tokenList }));
-  };
-
   useEffect(() => {
-    if (tokens.length) {
+    if (account) {
       getToken0();
       getToken1();
     }
-  }, [tokens, token0, token1]);
-
-  useEffect(() => {
-    getTokenList();
-  }, []);
+  }, [account, token0, token1]);
 
   return (
     <ModalCenter>
@@ -301,19 +267,19 @@ const TokenSwapModal = () => {
               <h1>토큰 교환</h1>
               <button
                 onClick={() => {
-                  dispatch(closeTokenSwapModal());
-                  dispatch(clearState());
+                  dispatch(closeV2SwapModal());
+                  //dispatch(clearState());
                 }}
               ></button>
             </Header>
-            <InputContainer>
+            <InputContainer type='number'>
               <button
                 onClick={() => {
                   dispatch(openSubModal());
                   setSelectedToken(0);
                 }}
               >
-                {tokens[token0]?.symbol}
+                {tokens[token0].symbol}
                 <img src='assets/arrowDown.png' />
               </button>
               <input
@@ -325,7 +291,7 @@ const TokenSwapModal = () => {
                 <div onClick={inputMaxToken}>Max</div>
                 <span>
                   잔액: {parseFloat(Number(balance).toFixed(2))}{" "}
-                  {tokens[token0]?.symbol}
+                  {tokens[token0].symbol}
                 </span>
               </BalanceContainer>
             </InputContainer>
@@ -337,7 +303,7 @@ const TokenSwapModal = () => {
                   setSelectedToken(1);
                 }}
               >
-                {tokens[token1]?.symbol}
+                {tokens[token1].symbol}
                 <img src='assets/arrowDown.png' />
               </button>
               <input placeholder='0.0' disabled ref={token1InputRef} />
@@ -348,7 +314,7 @@ const TokenSwapModal = () => {
                   {token1 < 0
                     ? "0.0"
                     : `${parseFloat(Number(balance1).toFixed(2))} ${
-                        tokens[token1]?.symbol
+                        tokens[token1].symbol
                       }`}
                 </span>
               </BalanceContainer>
@@ -358,8 +324,7 @@ const TokenSwapModal = () => {
                 <InfoContainer>
                   <span>가격</span>
                   <span>
-                    {price} {tokens[token1]?.symbol} per{" "}
-                    {tokens[token0]?.symbol}{" "}
+                    {price} {tokens[token1].symbol} per {tokens[token0].symbol}{" "}
                   </span>
                 </InfoContainer>
               )}
@@ -376,14 +341,9 @@ const TokenSwapModal = () => {
           </Container>
         </Modal>
       )}
-      {isSubModalOpen && (
-        <TokenSelectModal
-          selectedToken={selectedToken}
-          getExchangeContract={getExchangeContract}
-        />
-      )}
+      {isSubModalOpen && <TokenSelectModal selectedToken={selectedToken} />}
     </ModalCenter>
   );
 };
 
-export default TokenSwapModal;
+export default V2SwapModal;

@@ -11,6 +11,13 @@ import { BuySellButton, PriceInput } from "../../../styles/Inventory.styled";
 import { update, updateOnSaleList } from "../marketplaceSlice";
 
 import {
+  pendingNoti,
+  successNoti,
+  failNoti,
+  clearState,
+} from "../../notification/notifiactionSlice";
+
+import {
   marketAddress,
   nftAddress,
   marketABI,
@@ -27,37 +34,53 @@ const ManageList = ({ getMarketplaceList }) => {
   );
 
   const sellWeapon = async (price) => {
+    dispatch(pendingNoti());
     const caver = new Caver(window.klaytn);
-    const market = new caver.klay.Contract(marketABI, marketAddress);
+    try {
+      const market = new caver.klay.Contract(marketABI, marketAddress);
 
-    const nft = new caver.klay.KIP17(nftAddress);
-    const isApproved = await nft.isApprovedForAll(address, marketAddress);
-    console.log(isApproved);
-    if (!isApproved) {
-      console.log("here");
-      await nft.setApprovalForAll(marketAddress, true, { from: address });
+      const nft = new caver.klay.KIP17(nftAddress);
+      const isApproved = await nft.isApprovedForAll(address, marketAddress);
+      console.log(isApproved);
+      if (!isApproved) {
+        await nft.setApprovalForAll(marketAddress, true, { from: address });
+      }
+
+      await market.methods
+        .addNftToMarket(sellingItem, caver.utils.toPeb(price))
+        .send({
+          from: address,
+          gas: 200000,
+        });
+      getMarketplaceList();
+      setIsSell(!isSell);
+      dispatch(successNoti({ msg: `NFT 등록 성공!` }));
+    } catch (error) {
+      dispatch(failNoti());
     }
-
-    await market.methods
-      .addNftToMarket(sellingItem, caver.utils.toPeb(price))
-      .send({
-        from: address,
-        gas: 200000,
-      });
-    getMarketplaceList();
-    setIsSell(!isSell);
+    setTimeout(() => {
+      dispatch(clearState());
+    }, 5000);
   };
 
   const removeItem = async (id) => {
+    dispatch(pendingNoti());
     const caver = new Caver(window.klaytn);
-    const market = new caver.klay.Contract(marketABI, marketAddress);
+    try {
+      const market = new caver.klay.Contract(marketABI, marketAddress);
 
-    await market.methods.removeNft(id).send({
-      from: address,
-      gas: 200000,
-    });
-    getMarketplaceList();
-    setIsSell(!isSell);
+      await market.methods.removeNft(id).send({
+        from: address,
+        gas: 200000,
+      });
+      getMarketplaceList();
+      dispatch(successNoti({ msg: `NFT 거래소에서 삭제 성공!` }));
+    } catch (error) {
+      dispatch(failNoti());
+    }
+    setTimeout(() => {
+      dispatch(clearState());
+    }, 5000);
   };
 
   return (

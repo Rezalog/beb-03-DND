@@ -4,6 +4,13 @@ import WeaponRenderer from "../../weapon/WeaponRenderer";
 import { useDispatch, useSelector } from "react-redux";
 
 import { closeSubModal } from "../monsterFarmSlice";
+import {
+  pendingNoti,
+  stopPendingNoti,
+  successNoti,
+  failNoti,
+  clearState,
+} from "../../notification/notifiactionSlice";
 
 import { InventoryContainer } from "../../../styles/Inventory.styled";
 import { BuySellButton } from "../../../styles/Inventory.styled";
@@ -17,34 +24,42 @@ const WeaponList = ({
 }) => {
   const dispatch = useDispatch();
   const { address } = useSelector((state) => state.userInfo);
+  const { isPending } = useSelector((state) => state.notification);
 
   const stakeWeapon = async (id) => {
+    dispatch(pendingNoti());
     const caver = new Caver(window.klaytn);
-    const monsterContract = new caver.klay.Contract(
-      farmingABI,
-      selectedMonsterAddress
-    );
+    try {
+      const monsterContract = new caver.klay.Contract(
+        farmingABI,
+        selectedMonsterAddress
+      );
 
-    const nft = new caver.klay.KIP17(nftAddress);
-    const isApproved = await nft.isApprovedForAll(
-      address,
-      selectedMonsterAddress
-    );
-    if (!isApproved) {
-      await nft.setApprovalForAll(selectedMonsterAddress, true, {
+      const nft = new caver.klay.KIP17(nftAddress);
+      const isApproved = await nft.isApprovedForAll(
+        address,
+        selectedMonsterAddress
+      );
+      if (!isApproved) {
+        await nft.setApprovalForAll(selectedMonsterAddress, true, {
+          from: address,
+        });
+      }
+
+      await monsterContract.methods.stake(id).send({
         from: address,
+        gas: 300000,
       });
+
+      dispatch(closeSubModal());
+      updateWeapons();
+      dispatch(successNoti({ msg: "NFT 스테이킹 완료!" }));
+    } catch (err) {
+      dispatch(failNoti());
     }
-
-    console.log(id);
-
-    await monsterContract.methods.stake(id).send({
-      from: address,
-      gas: 300000,
-    });
-
-    dispatch(closeSubModal());
-    updateWeapons();
+    setTimeout(() => {
+      dispatch(clearState());
+    }, 5000);
   };
   return (
     <InventoryContainer>

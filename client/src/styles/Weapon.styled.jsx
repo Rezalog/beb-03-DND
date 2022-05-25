@@ -10,7 +10,15 @@ export const WeaponContainer = styled.div`
   align-items: center;
 
   background-color: #8f5765;
-  border: 5px solid black;
+  border: ${(props) => {
+    if (props.durability === "3") {
+      return "5px solid black";
+    } else if (props.durability === "0") {
+      return "5px solid red";
+    } else {
+      return "5px solid orange";
+    }
+  }};
   & > img {
     width: 90%;
   }

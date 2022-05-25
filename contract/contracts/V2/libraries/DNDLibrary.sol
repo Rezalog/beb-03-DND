@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.5.6;
 
-import '../interfaces/IDNDFactory.sol';
-import '../interfaces/IDNDPair.sol';
+import "../interfaces/IDNDFactory.sol";
+import "../interfaces/IDNDPair.sol";
 import "./SafeMath.sol";
 
 library DNDLibrary {
@@ -13,7 +13,7 @@ library DNDLibrary {
         address factoryAddress,
         address tokenA,
         address tokenB
-    ) public returns (uint256 reserveA, uint256 reserveB) {
+    ) public view returns (uint256 reserveA, uint256 reserveB) {
         (address token0, address token1) = sortTokens(tokenA, tokenB);
         (uint256 reserve0, uint256 reserve1, ) = IDNDPair(
             pairFor(factoryAddress, token0, token1)
@@ -39,7 +39,7 @@ library DNDLibrary {
     function sortTokens(address tokenA, address tokenB)
         internal
         pure
-        returns (address token0, address token1)
+        returns (address, address)
     {
         return tokenA < tokenB ? (tokenA, tokenB) : (tokenB, tokenA);
     }
@@ -68,7 +68,7 @@ library DNDLibrary {
                             hex"ff",
                             factoryAddress,
                             keccak256(abi.encodePacked(token0, token1)),
-                            hex"1664ae3c9ccd204ab2a16c6cda9c850db451167e132a5bf42af591dab9c47df4"
+                            hex"8fc089c77dba5f7172b01e4eac15cdf8cebbc7ac893164e00a15968ab031467d"
                         )
                     )
                 )
@@ -97,7 +97,7 @@ library DNDLibrary {
         address factory,
         uint256 amountIn,
         address[] memory path
-    ) public returns (uint256[] memory) {
+    ) public view returns (uint256[] memory) {
         require(path.length >= 2, 'DNDLibrary: INVALID_PATH');
         uint256[] memory amounts = new uint256[](path.length);
         amounts[0] = amountIn;
@@ -134,7 +134,7 @@ library DNDLibrary {
         address factory,
         uint256 amountOut,
         address[] memory path
-    ) public returns (uint256[] memory) {
+    ) public view returns (uint256[] memory) {
         require(path.length >= 2, 'DNDLibrary: INVALID_PATH');
 
         uint256[] memory amounts = new uint256[](path.length);

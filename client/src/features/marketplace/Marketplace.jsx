@@ -29,13 +29,18 @@ const Marketplace = () => {
   const dispatch = useDispatch();
   const { address } = useSelector((state) => state.userInfo);
   const { isLoading } = useSelector((state) => state.loading);
+  const [owned, setOwned] = useState([]);
   const [currentNav, setCurrentNav] = useState(0);
 
   const getMarketplaceList = async () => {
     const caver = new Caver(window.klaytn);
     const market = new caver.klay.Contract(marketABI, marketAddress);
     const nft = new caver.klay.Contract(nftABI, nftAddress);
-    const owned = await getOwnedWeapons(address);
+    let _owned = [...owned];
+    if (!owned.length) {
+      _owned = await getOwnedWeapons(address);
+      setOwned(_owned);
+    }
 
     const _list = await market.methods.getNfts().call();
     const tempList = [];
@@ -67,11 +72,11 @@ const Marketplace = () => {
     const ownedList = [];
     const remainingList = [];
 
-    for (let i = 0; i < owned.length; i++) {
-      if (tempOnSale[owned[i].id]) {
-        ownedList.push(tempOnSale[owned[i].id]);
+    for (let i = 0; i < _owned.length; i++) {
+      if (tempOnSale[_owned[i].id]) {
+        ownedList.push(tempOnSale[_owned[i].id]);
       } else {
-        remainingList.push(owned[i]);
+        remainingList.push(_owned[i]);
       }
     }
 

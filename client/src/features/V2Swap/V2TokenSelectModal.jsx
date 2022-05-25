@@ -1,13 +1,13 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { closeSubModal, changeToken0, changeToken1 } from "./tokenSwapSlice";
+import { closeSubModal, changeToken0, changeToken1 } from "./v2SwapSlice";
 
 import { Modal, Container, Header } from "../../styles/Modal.styled";
 import { TokenList, TokenContainer } from "../../styles/TokenList.styled";
 
-const TokenSelectModal = ({ selectedToken, getExchangeContract }) => {
+const V2TokenSelectModal = ({ selectedToken }) => {
   const dispatch = useDispatch();
-  const { tokens, token0, token1 } = useSelector((state) => state.tokenSwap);
+  const { tokens, token0, token1 } = useSelector((state) => state.v2Swap);
   return (
     <Modal>
       <Container>
@@ -24,7 +24,7 @@ const TokenSelectModal = ({ selectedToken, getExchangeContract }) => {
             const selected =
               index === token0 || index === token1 ? true : false;
             return (
-              <TokenContainer key={index}>
+              <TokenContainer>
                 {selected ? (
                   <li key={index} style={{ opacity: "0.7" }}>
                     <h5>{token.symbol}</h5>
@@ -36,15 +36,12 @@ const TokenSelectModal = ({ selectedToken, getExchangeContract }) => {
                     onClick={() => {
                       console.log(tokens[index].address);
                       if (index > 0) {
-                        getExchangeContract(tokens[index].address);
                       }
                       if (selectedToken === 0) {
                         dispatch(changeToken0({ index }));
-                        dispatch(changeToken1({ index: 0 }));
                       }
                       if (selectedToken === 1) {
                         dispatch(changeToken1({ index }));
-                        dispatch(changeToken0({ index: 0 }));
                       }
                       dispatch(closeSubModal());
                     }}
@@ -63,4 +60,4 @@ const TokenSelectModal = ({ selectedToken, getExchangeContract }) => {
   );
 };
 
-export default TokenSelectModal;
+export default V2TokenSelectModal;
