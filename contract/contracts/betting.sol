@@ -117,7 +117,7 @@ contract Betting {
         return amountInfo[_betNumber].betAmountFailure;
     }
 
-    // 배당률 계산 (%)
+    // 예상수익률 계산 (%)
     function oddsForSuccees(uint256 _betNumber, uint256 _amount) public view returns (uint256) {
         return amountInfo[_betNumber].betAmountFailure.mul(100).div(amountInfo[_betNumber].betAmountSuccees.add(_amount));
     }
