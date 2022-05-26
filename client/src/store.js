@@ -13,6 +13,7 @@ import weaponCompoundModalSlice from "./features/modal/weaponCompoundModalSlice"
 import TooltipSlice from "./features/tooltip/TooltipSlice";
 import marketplaceModalSlice from "./features/modal/marketplaceModalSlice";
 import marketplaceSlice from "./features/marketplace/marketplaceSlice";
+import compoundInfoSlice from "./features/weaponCompound/compoundInfoSlice";
 import monsterFarmModalSlice from "./features/modal/monsterFarmModalSlice";
 import monsterFarmSlice from "./features/monsterFarm/monsterFarmSlice";
 import notifiactionSlice from "./features/notification/notifiactionSlice";
@@ -37,6 +38,7 @@ export const store = configureStore({
     tooltip: TooltipSlice,
     marketplaceModal: marketplaceModalSlice,
     marketplace: marketplaceSlice,
+    compoundInfo: compoundInfoSlice,
     monsterFarmModal: monsterFarmModalSlice,
     monsterFarm: monsterFarmSlice,
     notification: notifiactionSlice,

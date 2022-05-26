@@ -23,6 +23,8 @@ import { openMonsterFarmModal } from "./features/modal/monsterFarmModalSlice";
 import Inventory from "./features/inventory/Inventory";
 import { openMarketplaceModal } from "./features/modal/marketplaceModalSlice";
 import Marketplace from "./features/marketplace/Marketplace";
+import WeaponCompoundModal from "./features/weaponCompound/WeaponCompoundModal";
+import { openWeaponCompoundModal } from "./features/modal/weaponCompoundModalSlice";
 import MonsterFarm from "./features/monsterFarm/MonsterFarm";
 import V2SwapModal from "./features/V2Swap/V2SwapModal";
 import { openV2SwapModal } from "./features/modal/v2SwapModalSlice";
@@ -50,6 +52,9 @@ function App() {
   // const { isOpen: isInventoryOpen } = useSelector(
   //   (state) => state.inventoryModal
   // );
+  const { isOpen: isWeaponCompoundOpen } = useSelector(
+    (state) => state.weaponCompoundModal
+  );
   const [isInventoryOpen, setIsInventoryOpen] = useState(false);
   const dispatch = useDispatch();
   const [isSignIn, setIsSignIn] = useState(false);
@@ -153,10 +158,14 @@ function App() {
           break;
         }
         case "6": {
-          dispatch(openV2SwapModal());
+          dispatch(openWeaponCompoundModal());
           break;
         }
         case "7": {
+          dispatch(openV2SwapModal());
+          break;
+        }
+        case "8": {
           dispatch(openV2DexModal());
           break;
         }
@@ -217,6 +226,7 @@ function App() {
       {isMarketplaceOpen && <Marketplace />}
       {isMonsterFarmOpen && <MonsterFarm />}
       {isInventoryOpen && <Inventory />}
+      {isWeaponCompoundOpen && <WeaponCompoundModal />}
       {isV2Open && <V2SwapModal />}
       {isV2DexOpen && <V2DexModal />}
       <Notification />

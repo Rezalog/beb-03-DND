@@ -10,6 +10,7 @@ export default class Main extends Phaser.Scene {
     this.merchantOverlapped = false;
     this.shoekeeperOverlapped = false;
     this.dungeonOverlapped = false;
+    this.blacksmithOverlapped = false;
     this.queenOverlapped = false;
   }
 
@@ -73,6 +74,12 @@ export default class Main extends Phaser.Scene {
     this.anims.create({
       key: "shoekeeper_idle",
       frames: this.anims.generateFrameNumbers("shoekeeper"),
+      frameRate: 5,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: "blacksmith_idle",
+      frames: this.anims.generateFrameNumbers("blacksmith"),
       frameRate: 5,
       repeat: -1,
     });
@@ -211,6 +218,26 @@ export default class Main extends Phaser.Scene {
     this.shoekeeperText.x = this.nameTag.x - this.shoekeeperText.width / 2;
     this.shoekeeperText.y = this.nameTag.y - this.shoekeeperText.height / 2;
 
+    // 대장장이 NPC 생성
+    this.blacksmith = this.physics.add.sprite(
+      300,
+      game.config.height / 4,
+      "blacksmith"
+    );
+    this.blacksmith.setScale(2);
+
+    this.nameTag = this.add.sprite(
+      this.blacksmith.x,
+      this.blacksmith.y - 16,
+      "nametag"
+    );
+    this.blacksmithText = this.add.text(0, 0, "무기합성", {
+      color: "black",
+      fontSize: "10px",
+    });
+    this.blacksmithText.x = this.nameTag.x - this.blacksmithText.width / 2;
+    this.blacksmithText.y = this.nameTag.y - this.blacksmithText.height / 2;
+
     // 던전 입구 생성
     this.dungeon = this.physics.add.sprite(
       200,
@@ -247,6 +274,9 @@ export default class Main extends Phaser.Scene {
     this.physics.add.overlap(this.player, this.shoekeeper, () => {
       this.shoekeeperOverlapped = true;
     });
+    this.physics.add.overlap(this.player, this.blacksmith, () => {
+      this.blacksmithOverlapped = true;
+    });
     this.physics.add.overlap(this.player, this.dungeon, () => {
       this.dungeonOverlapped = true;
     });
@@ -271,6 +301,7 @@ export default class Main extends Phaser.Scene {
     this.princess2.play("princess_idle");
     this.merchant.play("merchant_idle");
     this.shoekeeper.play("shoekeeper_idle");
+    this.blacksmith.play("blacksmith_idle");
     this.queen.play("queen_idle");
 
     this.spacebar = this.input.keyboard.addKey(
@@ -300,8 +331,9 @@ export default class Main extends Phaser.Scene {
       if (this.merchantOverlapped) game.events.emit("enter", "3");
       if (this.shoekeeperOverlapped) game.events.emit("enter", "4");
       if (this.dungeonOverlapped) game.events.emit("enter", "5");
-      if (this.princess2Overlapped) game.events.emit("enter", "6");
-      if (this.queenOverlapped) game.events.emit("enter", "7");
+      if (this.blacksmithOverlapped) game.events.emit("enter", "6");
+      if (this.princess2Overlapped) game.events.emit("enter", "7");
+      if (this.queenOverlapped) game.events.emit("enter", "8");
     }
 
     if (
@@ -328,6 +360,7 @@ export default class Main extends Phaser.Scene {
     this.merchantOverlapped = false;
     this.shoekeeperOverlapped = false;
     this.dungeonOverlapped = false;
+    this.blacksmithOverlapped = false;
     this.queenOverlapped = false;
   }
 }

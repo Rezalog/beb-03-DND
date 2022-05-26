@@ -20,9 +20,7 @@ const weaponCompoundModalSlice = createSlice({
   },
 });
 
-export const {
-  openWeaponCompoundModalSliceModal,
-  closeWeaponCompoundModalSliceModal,
-} = weaponCompoundModalSlice.actions;
+export const { openWeaponCompoundModal, closeWeaponCompoundModal } =
+  weaponCompoundModalSlice.actions;
 
 export default weaponCompoundModalSlice.reducer;

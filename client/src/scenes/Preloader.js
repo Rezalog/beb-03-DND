@@ -27,6 +27,10 @@ export default class Preloader extends Phaser.Scene {
       frameWidth: 16,
       frameHeight: 32,
     });
+    this.load.spritesheet("blacksmith", "assets/blacksmith.png", {
+      frameWidth: 16,
+      frameHeight: 32,
+    });
     this.load.spritesheet("nametag", "assets/nametag.png", {
       frameWidth: 64,
       frameHeight: 16,
