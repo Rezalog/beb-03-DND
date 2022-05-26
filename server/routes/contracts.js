@@ -15,4 +15,12 @@ router.post("/pair", contractsController.pair.post);
 // GET : /contracts/pair
 router.get("/pair", contractsController.pair.get);
 
+// POST : /contracts/v2pair
+router.post("/v2pair", contractsController.v2pair.post);
+
+// GET : /contracts/v2pair
+router.get("/v2pair", contractsController.v2pair.get);
+
+
+
 module.exports = router;

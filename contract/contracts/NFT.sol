@@ -172,6 +172,8 @@ contract NFT is KIP17Full{
     }
     
     }
+
+    // 무기 합성 결과를 알려주는 함수 
     function getCompoundResult (uint256 _weapon1Id, uint256 _weapon2Id) public view returns (bool) {
         return compoundResult[_weapon1Id][_weapon2Id];
     }
