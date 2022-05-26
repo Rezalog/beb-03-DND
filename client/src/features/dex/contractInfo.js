@@ -1,5 +1,5 @@
 module.exports = {
-  factoryAddress: "0x801Bc872bD1b533807EeCaa66329363AD17ABe06",
+  factoryAddress: "0xd8b934580fcE35a11B58C6D73aDeE468a2833fa8",
   factoryABI: [
     {
       constant: true,

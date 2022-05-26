@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Caver from "caver-js";
-import { exchangeABI } from "../contractInfo";
+import { exchangeABI } from "../../dex/contractInfo";
+import { pairABI } from "../../V2Swap/v2Contract";
 import {
   LPContainer,
   LPHeader,
@@ -12,19 +13,24 @@ import {
 } from "../../../styles/TokenSwap.styled";
 import { Button } from "../../../styles/Modal.styled";
 
-const Exchange = ({
+const V2Exchange = ({
   address,
   name,
   lp,
-  tokenAddress,
+  tokenAddress1,
+  tokenAddress2,
   account,
   setIsWithdrawal,
   setSelectedExchange,
 }) => {
   const [reservedKlay, setReservedKlay] = useState(0);
   const [reservedToken, setReservedToken] = useState(0);
-  const [tokenName, setTokenName] = useState("");
-  const [tokenSymbol, setTokenSymbol] = useState("");
+  const [reservedTokenA, setReservedTokenA] = useState(0);
+  const [reservedTokenB, setReservedTokenB] = useState(0);
+  const [tokenAName, setTokenAName] = useState("");
+  const [tokenASymbol, setTokenASymbol] = useState("");
+  const [tokenBName, setTokenBName] = useState("");
+  const [tokenBSymbol, setTokenBSymbol] = useState("");
   const [share, setShare] = useState("");
   const input1 = useRef(null);
   const input2 = useRef(null);
@@ -35,23 +41,29 @@ const Exchange = ({
   useEffect(() => {
     const getReserved = async () => {
       const caver = new Caver(window.klaytn);
-      const exchange = new caver.klay.Contract(exchangeABI, address);
+      const pair = new caver.klay.Contract(pairABI, address);
 
-      const klayInExchange = await exchange.methods.getKlay().call();
-      const tokenInExchange = await exchange.methods.getReserve().call();
+      const reserved = await pair.methods.getReserves().call();
+      setReservedTokenA(caver.utils.fromPeb(reserved[0]));
+      setReservedTokenB(caver.utils.fromPeb(reserved[1]));
 
-      setReservedKlay(caver.utils.fromPeb(klayInExchange));
-      setReservedToken(caver.utils.fromPeb(tokenInExchange));
+      let token = new caver.klay.KIP7(tokenAddress1);
+      let name = await token.name();
+      let symbol = await token.symbol();
 
-      const token = new caver.klay.KIP7(tokenAddress);
-      const name = await token.name();
-      const symbol = await token.symbol();
+      setTokenAName(name);
+      setTokenASymbol(symbol);
 
-      setTokenName(name);
-      setTokenSymbol(symbol);
-      getShareOfLP(lp);
+      token = new caver.klay.KIP7(tokenAddress2);
+      name = await token.name();
+      symbol = await token.symbol();
+
+      setTokenBName(name);
+      setTokenBSymbol(symbol);
+
+      //getShareOfLP(lp);
     };
-
+    console.log(lp);
     getReserved();
   }, []);
 
@@ -86,16 +98,12 @@ const Exchange = ({
         </LPHeader>
         <SwapInfoContainer>
           <InfoContainer>
-            <span>Pooled {tokenSymbol}</span>
-            <span>{parseFloat(Number(reservedToken).toFixed(6))}</span>
+            <span>Pooled {tokenASymbol}</span>
+            <span>{parseFloat(Number(reservedTokenA).toFixed(6))}</span>
           </InfoContainer>
           <InfoContainer>
-            <span>Pooled KLAY</span>
-            <span>{parseFloat(Number(reservedKlay).toFixed(6))}</span>
-          </InfoContainer>
-          <InfoContainer>
-            <span>Share of Pool</span>
-            <span>{share < 0.01 ? `<0.01` : share}%</span>
+            <span>Pooled {tokenBSymbol}</span>
+            <span>{parseFloat(Number(reservedTokenB).toFixed(6))}</span>
           </InfoContainer>
         </SwapInfoContainer>
         <Button
@@ -112,4 +120,4 @@ const Exchange = ({
   );
 };
 
-export default Exchange;
+export default V2Exchange;

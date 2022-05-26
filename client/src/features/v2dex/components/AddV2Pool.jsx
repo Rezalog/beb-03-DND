@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import Caver from "caver-js";
 import axios from "axios";
-import { factoryABI, exchangeABI, factoryAddress } from "../contractInfo";
+import {
+  factoryABI,
+  exchangeABI,
+  factoryAddress,
+} from "../../dex/contractInfo";
 import { useDispatch, useSelector } from "react-redux";
-import { addExchange } from "../dexSlice";
+import { addV2Exchange } from "../V2DexSlice";
 import { addNewToken } from "../../tokenSwap/tokenSwapSlice";
 
 import {
@@ -24,7 +28,7 @@ import {
 import { uruABI, uruAddress } from "../../userinfo/TokenContract";
 import { updateBalance } from "../../userinfo/userInfoSlice";
 
-const AddPool = ({ account }) => {
+const AddV2Pool = ({ account }) => {
   const [klayBalance, setKlayBalance] = useState(0);
   const [tokenBalance, setTokenBalance] = useState(0);
   const [isValidAddress, setIsValidAddress] = useState(false);
@@ -78,7 +82,7 @@ const AddPool = ({ account }) => {
       //const lpName = await lpKip7.name();
 
       dispatch(
-        addExchange({
+        addV2Exchange({
           address: exchangeAddress,
           name: `${currentTokenSymbol}/KLAY`,
           tokenAddress: selectedToken,
@@ -91,18 +95,8 @@ const AddPool = ({ account }) => {
       };
       dispatch(addNewToken(newToken));
 
-      const token = new caver.klay.Contract(uruABI, uruAddress);
-      const balance = await token.methods.balanceOf(account).call();
-      const locked = await token.methods.getLockedTokenAmount(account).call();
-      dispatch(
-        updateBalance({
-          uru: parseFloat(Number(caver.utils.fromPeb(balance)).toFixed(2)),
-          locked: parseFloat(Number(caver.utils.fromPeb(locked)).toFixed(2)),
-        })
-      );
-
       await axios.post(
-        "http://localhost:8080/Contracts/token",
+        "http://localhost:8080/contracts/token",
         [
           {
             token_symbol: currentTokenSymbol,
@@ -118,7 +112,7 @@ const AddPool = ({ account }) => {
       );
 
       await axios.post(
-        "http://localhost:8080/Contract/pair",
+        "http://localhost:8080/contracts/pair",
         {
           pair_address: exchangeAddress,
           pair_name: `${currentTokenSymbol}/KLAY`,
@@ -154,6 +148,15 @@ const AddPool = ({ account }) => {
       );
       dispatch(
         successNoti({ msg: `${currentTokenSymbol}/KLAY 풀이 추가되었습니다!` })
+      );
+      const token = new caver.klay.Contract(uruABI, uruAddress);
+      const balance = await token.methods.balanceOf(account).call();
+      const locked = await token.methods.getLockedTokenAmount(account).call();
+      dispatch(
+        updateBalance({
+          uru: parseFloat(Number(caver.utils.fromPeb(balance)).toFixed(2)),
+          locked: parseFloat(Number(caver.utils.fromPeb(locked)).toFixed(2)),
+        })
       );
     } catch (error) {
       console.log(error);
@@ -250,4 +253,4 @@ const AddPool = ({ account }) => {
   );
 };
 
-export default AddPool;
+export default AddV2Pool;

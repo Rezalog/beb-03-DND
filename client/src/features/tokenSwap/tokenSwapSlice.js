@@ -4,7 +4,7 @@ const initialState = {
   isSubModalOpen: false,
   tokens: [],
   token0: 0,
-  token1: 1,
+  token1: 0,
 };
 
 const tokenSwapSlice = createSlice({

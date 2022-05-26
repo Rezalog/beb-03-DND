@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
 import Caver from "caver-js";
 import { useDispatch, useSelector } from "react-redux";
-import Exchange from "./Exchange";
-import RemoveLiquidity from "./RemoveLiquidity";
+import V2Exchange from "./V2Exchange";
+import RemoveV2Liquidity from "./RemoveV2Liquidity";
 
 import { ListContainer } from "../../../styles/LPContainer.styled";
 
 import { Container } from "../../../styles/Modal.styled";
 import { startLoading, stopLoading } from "../../loading/loadingSlice";
 import Loading from "../../loading/Loading";
-import { exchangeABI } from "../contractInfo";
+import { exchangeABI } from "../../dex/contractInfo";
+import { pairABI } from "../../V2Swap/v2Contract";
 
-const MyLiquidity = ({ account }) => {
+const MyV2Liquidity = ({ account }) => {
   const dispatch = useDispatch();
-  const { exchanges } = useSelector((state) => state.dex);
+  const { exchanges } = useSelector((state) => state.v2Dex);
   const { isLoading } = useSelector((state) => state.loading);
   const [ownedLP, setOwnedLP] = useState([]);
   const [lp, setLp] = useState([]);
@@ -25,27 +26,12 @@ const MyLiquidity = ({ account }) => {
     const caver = new Caver(window.klaytn);
     let tempArr = [];
     let tempLp = [];
-    console.log(exchanges);
     for (let i = 0; i < exchanges.length; i++) {
       const kip7 = new caver.klay.KIP7(exchanges[i].address);
       const balance = await kip7.balanceOf(account);
-      const exchange = new caver.klay.Contract(
-        exchangeABI,
-        exchanges[i].address
-      );
-      const stakedBalance = await exchange.methods
-        .stakingBalance(account)
-        .call();
-      if (balance.toString() !== "0" || stakedBalance.toString() !== "0") {
+      if (balance.toString() !== "0") {
         tempArr.push(exchanges[i]);
-        tempLp.push(
-          caver.utils.fromPeb(
-            caver.utils
-              .toBN(balance.toString())
-              .add(caver.utils.toBN(stakedBalance))
-              .toString()
-          )
-        );
+        tempLp.push(caver.utils.toBN(balance.toString()));
       }
     }
     setOwnedLP([...tempArr]);
@@ -59,7 +45,7 @@ const MyLiquidity = ({ account }) => {
 
   if (isWithdrawal) {
     return (
-      <RemoveLiquidity
+      <RemoveV2Liquidity
         account={account}
         selectedExchange={selectedExchange}
         setIsWithdrawal={setIsWithdrawal}
@@ -71,12 +57,11 @@ const MyLiquidity = ({ account }) => {
         {isLoading ? (
           <Loading />
         ) : (
-          ownedLP.map((exchange, idx) => {
-            console.log(lp);
+          ownedLP.map((pair, idx) => {
             return (
-              <Exchange
+              <V2Exchange
                 key={idx}
-                {...exchange}
+                {...pair}
                 lp={lp[idx]}
                 account={account}
                 setIsWithdrawal={setIsWithdrawal}
@@ -90,4 +75,4 @@ const MyLiquidity = ({ account }) => {
   }
 };
 
-export default MyLiquidity;
+export default MyV2Liquidity;
