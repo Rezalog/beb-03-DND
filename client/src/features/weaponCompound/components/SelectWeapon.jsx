@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Caver from "caver-js";
 
 import { getOwnedWeapons } from "../../../helper/getOwnedWeapons";
 import WeaponRenderer from "../../weapon/WeaponRenderer";
 
-import { setFirstWeapon, setSecondWeapon } from "../compoundInfoSlice";
+import { Container } from "../../../styles/SelectWeapon.styled";
 
-import { nftAddress, nftABI } from "../nftContractInfo";
-import { InventoryContainer } from "../../../styles/Inventory.styled";
+import {
+  setFirstWeapon,
+  setSecondWeapon,
+  setWeapons,
+} from "../compoundInfoSlice";
 
 const SelectWeapon = () => {
-  const [weapons, setWeapons] = useState([]);
   const { address } = useSelector((state) => state.userInfo);
-  const { firstWeapon, secondWeapon } = useSelector(
+  const { firstWeapon, secondWeapon, weapons } = useSelector(
     (state) => state.compoundInfo
   );
   const dispatch = useDispatch();
@@ -22,87 +23,68 @@ const SelectWeapon = () => {
     const getWeapons = async () => {
       const list = await getOwnedWeapons(address);
 
-      setWeapons(list);
+      dispatch(setWeapons({ weapons: list }));
     };
     getWeapons();
   }, []);
 
   return (
-    <div>
+    <div style={{ display: "flex", justifyContent: "center" }}>
       <div
         style={{
           display: "flex",
           flexDirection: "row",
-          justifyContent: "center",
+          //   alignItems: "center",
+          height: "400px",
+          //   justifyContent: "center",
+          padding: "20px",
         }}
       >
-        {/* <InventoryContainer> */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-          }}
-        >
-          <span>무기 1</span>
-          {weapons.map((weapon, idx) => {
-            return (
-              <div key={idx}>
-                <WeaponRenderer {...weapon} />
-                <button
-                  value={idx}
-                  onClick={(event) =>
-                    dispatch(
-                      setFirstWeapon({ firstWeapon: event.target.value })
-                    )
-                  }
-                >
-                  선택
-                </button>
-              </div>
-            );
-          })}
+        <div>
+          무기1
+          <Container>
+            {weapons.map((weapon, idx) => {
+              return (
+                <div key={idx}>
+                  <WeaponRenderer {...weapon} />
+                  <button
+                    value={idx}
+                    onClick={(event) =>
+                      dispatch(
+                        setFirstWeapon({ firstWeapon: event.target.value })
+                      )
+                    }
+                  >
+                    선택
+                  </button>
+                </div>
+              );
+            })}
+          </Container>
         </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-          }}
-        >
-          <span>무기 2</span>
-          {weapons.map((weapon, idx) => {
-            return (
-              <div key={idx}>
-                <WeaponRenderer {...weapon} />
-                <button
-                  value={idx}
-                  onClick={(event) =>
-                    dispatch(
-                      setSecondWeapon({ secondWeapon: event.target.value })
-                    )
-                  }
-                >
-                  선택
-                </button>
-              </div>
-            );
-          })}
+
+        <div>
+          무기2
+          <Container>
+            {weapons.map((weapon, idx) => {
+              return (
+                <div key={idx}>
+                  <WeaponRenderer {...weapon} />
+                  <button
+                    value={idx}
+                    onClick={(event) =>
+                      dispatch(
+                        setSecondWeapon({ secondWeapon: event.target.value })
+                      )
+                    }
+                  >
+                    선택
+                  </button>
+                </div>
+              );
+            })}
+          </Container>
         </div>
-        {/* </InventoryContainer> */}
-        <button
-          onClick={() => {
-            if (firstWeapon === "" || secondWeapon === "") {
-              console.log("nothing selected");
-            } else {
-              console.log(weapons[firstWeapon].id);
-              console.log(weapons[secondWeapon].id);
-              console.log(weapons);
-            }
-          }}
-        >
-          check
-        </button>
       </div>
     </div>
   );

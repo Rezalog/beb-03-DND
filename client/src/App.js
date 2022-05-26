@@ -193,17 +193,7 @@ function App() {
       {isMarketplaceOpen && <Marketplace />}
       {isMonsterFarmOpen && <MonsterFarm />}
       {isInventoryOpen && <Inventory />}
-
       {isWeaponCompoundOpen && <WeaponCompoundModal />}
-      <div>
-        <button
-          onClick={() => {
-            dispatch(openWeaponCompoundModal());
-          }}
-        >
-          weaponCompound
-        </button>
-      </div>
     </div>
   );
 }

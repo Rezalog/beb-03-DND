@@ -1,29 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Caver from "caver-js";
 
 import { getOwnedWeapons } from "../../../helper/getOwnedWeapons";
 import WeaponRenderer from "../../weapon/WeaponRenderer";
-import { convertDNA } from "../../../helper/convertDNA";
+import { setWeapons } from "../compoundInfoSlice";
 
-import { weapons } from "../../../weapons";
-
-const CompoundInfo = ({ dna, lvl }) => {
-  const [weaponInfo, setWeaponInfo] = useState({});
+const CompoundInfo = () => {
   const dispatch = useDispatch();
-  // useEffect(() => {
-  //   setWeaponInfo({ ...convertDNA(dna, lvl) });
-  // }, []);
+  // const [weapons, setWeapons] = useState([]);
   const { address } = useSelector((state) => state.userInfo);
-  const [weapons, setWeapons] = useState([]);
-  const { firstWeapon, secondWeapon } = useSelector(
+  const { firstWeapon, secondWeapon, compoundResult, weapons } = useSelector(
     (state) => state.compoundInfo
   );
   useEffect(() => {
     const getWeapons = async () => {
       const list = await getOwnedWeapons(address);
 
-      setWeapons(list);
+      dispatch(setWeapons({ weapons: list }));
     };
     getWeapons();
   }, []);
@@ -40,15 +33,30 @@ const CompoundInfo = ({ dna, lvl }) => {
             backgroundColor: "gray",
           }}
         >
-          <div>
-            무기 1<img src={weaponInfo.img}></img>
-          </div>
-          <div>
-            무기 2<img src={weaponInfo.img}></img>
-          </div>
+          {firstWeapon ? (
+            <div>
+              <WeaponRenderer
+                dna={weapons[firstWeapon].dna}
+                lvl={weapons[firstWeapon].lvl}
+              />
+              무기 1
+            </div>
+          ) : (
+            <div>첫번째 무기를 선택해주세요.</div>
+          )}
+          {secondWeapon ? (
+            <div>
+              <WeaponRenderer
+                dna={weapons[secondWeapon].dna}
+                lvl={weapons[secondWeapon].lvl}
+              />
+              무기2
+            </div>
+          ) : (
+            <div>두번째 무기를 선택해주세요.</div>
+          )}
         </div>
       </div>
-      <button onClick={() => console.log(weapons)}>weaponInfo</button>
     </div>
   );
 };
