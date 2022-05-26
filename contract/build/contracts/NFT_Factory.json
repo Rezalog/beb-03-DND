@@ -115,14 +115,14 @@
     "absolutePath": "project:/contracts/NFT_Factory.sol",
     "exportedSymbols": {
       "NFT_Factory": [
-        5606
+        5725
       ]
     },
-    "id": 5607,
+    "id": 5726,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 5510,
+        "id": 5629,
         "literals": [
           "solidity",
           "^",
@@ -135,10 +135,10 @@
       {
         "absolutePath": "project:/contracts/NFT_Farming.sol",
         "file": "./NFT_Farming.sol",
-        "id": 5511,
+        "id": 5630,
         "nodeType": "ImportDirective",
-        "scope": 5607,
-        "sourceUnit": 5880,
+        "scope": 5726,
+        "sourceUnit": 5999,
         "src": "57:27:26",
         "symbolAliases": [],
         "unitAlias": ""
@@ -146,10 +146,10 @@
       {
         "absolutePath": "project:/contracts/Token.sol",
         "file": "./Token.sol",
-        "id": 5512,
+        "id": 5631,
         "nodeType": "ImportDirective",
-        "scope": 5607,
-        "sourceUnit": 6059,
+        "scope": 5726,
+        "sourceUnit": 6178,
         "src": "85:21:26",
         "symbolAliases": [],
         "unitAlias": ""
@@ -157,10 +157,10 @@
       {
         "absolutePath": "project:/contracts/NFT.sol",
         "file": "./NFT.sol",
-        "id": 5513,
+        "id": 5632,
         "nodeType": "ImportDirective",
-        "scope": 5607,
-        "sourceUnit": 5509,
+        "scope": 5726,
+        "sourceUnit": 5628,
         "src": "107:19:26",
         "symbolAliases": [],
         "unitAlias": ""
@@ -168,40 +168,40 @@
       {
         "baseContracts": [],
         "contractDependencies": [
-          5879
+          5998
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 5606,
+        "id": 5725,
         "linearizedBaseContracts": [
-          5606
+          5725
         ],
         "name": "NFT_Factory",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 5515,
+            "id": 5634,
             "name": "nft",
             "nodeType": "VariableDeclaration",
-            "scope": 5606,
+            "scope": 5725,
             "src": "156:14:26",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_NFT_$5508",
+              "typeIdentifier": "t_contract$_NFT_$5627",
               "typeString": "contract NFT"
             },
             "typeName": {
               "contractScope": null,
-              "id": 5514,
+              "id": 5633,
               "name": "NFT",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 5508,
+              "referencedDeclaration": 5627,
               "src": "156:3:26",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_NFT_$5508",
+                "typeIdentifier": "t_contract$_NFT_$5627",
                 "typeString": "contract NFT"
               }
             },
@@ -210,26 +210,26 @@
           },
           {
             "constant": false,
-            "id": 5517,
+            "id": 5636,
             "name": "uru",
             "nodeType": "VariableDeclaration",
-            "scope": 5606,
+            "scope": 5725,
             "src": "176:16:26",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_Token_$6058",
+              "typeIdentifier": "t_contract$_Token_$6177",
               "typeString": "contract Token"
             },
             "typeName": {
               "contractScope": null,
-              "id": 5516,
+              "id": 5635,
               "name": "Token",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 6058,
+              "referencedDeclaration": 6177,
               "src": "176:5:26",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Token_$6058",
+                "typeIdentifier": "t_contract$_Token_$6177",
                 "typeString": "contract Token"
               }
             },
@@ -238,30 +238,30 @@
           },
           {
             "canonicalName": "NFT_Factory.Monster",
-            "id": 5528,
+            "id": 5647,
             "members": [
               {
                 "constant": false,
-                "id": 5519,
+                "id": 5638,
                 "name": "NFTAddress",
                 "nodeType": "VariableDeclaration",
-                "scope": 5528,
+                "scope": 5647,
                 "src": "224:14:26",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_contract$_NFT_$5508",
+                  "typeIdentifier": "t_contract$_NFT_$5627",
                   "typeString": "contract NFT"
                 },
                 "typeName": {
                   "contractScope": null,
-                  "id": 5518,
+                  "id": 5637,
                   "name": "NFT",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 5508,
+                  "referencedDeclaration": 5627,
                   "src": "224:3:26",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_contract$_NFT_$5508",
+                    "typeIdentifier": "t_contract$_NFT_$5627",
                     "typeString": "contract NFT"
                   }
                 },
@@ -270,10 +270,10 @@
               },
               {
                 "constant": false,
-                "id": 5521,
+                "id": 5640,
                 "name": "name",
                 "nodeType": "VariableDeclaration",
-                "scope": 5528,
+                "scope": 5647,
                 "src": "248:11:26",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -282,7 +282,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 5520,
+                  "id": 5639,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "248:6:26",
@@ -296,10 +296,10 @@
               },
               {
                 "constant": false,
-                "id": 5523,
+                "id": 5642,
                 "name": "level",
                 "nodeType": "VariableDeclaration",
-                "scope": 5528,
+                "scope": 5647,
                 "src": "269:13:26",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -308,7 +308,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5522,
+                  "id": 5641,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "269:7:26",
@@ -322,10 +322,10 @@
               },
               {
                 "constant": false,
-                "id": 5525,
+                "id": 5644,
                 "name": "coolDownTime",
                 "nodeType": "VariableDeclaration",
-                "scope": 5528,
+                "scope": 5647,
                 "src": "292:20:26",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -334,7 +334,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5524,
+                  "id": 5643,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "292:7:26",
@@ -348,10 +348,10 @@
               },
               {
                 "constant": false,
-                "id": 5527,
+                "id": 5646,
                 "name": "reward",
                 "nodeType": "VariableDeclaration",
-                "scope": 5528,
+                "scope": 5647,
                 "src": "322:14:26",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -360,7 +360,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5526,
+                  "id": 5645,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "322:7:26",
@@ -375,42 +375,42 @@
             ],
             "name": "Monster",
             "nodeType": "StructDefinition",
-            "scope": 5606,
+            "scope": 5725,
             "src": "199:144:26",
             "visibility": "public"
           },
           {
             "constant": false,
-            "id": 5531,
+            "id": 5650,
             "name": "monsters",
             "nodeType": "VariableDeclaration",
-            "scope": 5606,
+            "scope": 5725,
             "src": "348:25:26",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_array$_t_struct$_Monster_$5528_storage_$dyn_storage",
+              "typeIdentifier": "t_array$_t_struct$_Monster_$5647_storage_$dyn_storage",
               "typeString": "struct NFT_Factory.Monster[]"
             },
             "typeName": {
               "baseType": {
                 "contractScope": null,
-                "id": 5529,
+                "id": 5648,
                 "name": "Monster",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 5528,
+                "referencedDeclaration": 5647,
                 "src": "348:7:26",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Monster_$5528_storage_ptr",
+                  "typeIdentifier": "t_struct$_Monster_$5647_storage_ptr",
                   "typeString": "struct NFT_Factory.Monster"
                 }
               },
-              "id": 5530,
+              "id": 5649,
               "length": null,
               "nodeType": "ArrayTypeName",
               "src": "348:9:26",
               "typeDescriptions": {
-                "typeIdentifier": "t_array$_t_struct$_Monster_$5528_storage_$dyn_storage_ptr",
+                "typeIdentifier": "t_array$_t_struct$_Monster_$5647_storage_$dyn_storage_ptr",
                 "typeString": "struct NFT_Factory.Monster[]"
               }
             },
@@ -419,28 +419,28 @@
           },
           {
             "body": {
-              "id": 5604,
+              "id": 5723,
               "nodeType": "Block",
               "src": "543:436:26",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 5550,
+                    "id": 5669,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 5548,
+                      "id": 5667,
                       "name": "nft",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5515,
+                      "referencedDeclaration": 5634,
                       "src": "562:3:26",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_NFT_$5508",
+                        "typeIdentifier": "t_contract$_NFT_$5627",
                         "typeString": "contract NFT"
                       }
                     },
@@ -448,45 +448,45 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 5549,
+                      "id": 5668,
                       "name": "_NFTAddress",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5533,
+                      "referencedDeclaration": 5652,
                       "src": "568:11:26",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_NFT_$5508",
+                        "typeIdentifier": "t_contract$_NFT_$5627",
                         "typeString": "contract NFT"
                       }
                     },
                     "src": "562:17:26",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_NFT_$5508",
+                      "typeIdentifier": "t_contract$_NFT_$5627",
                       "typeString": "contract NFT"
                     }
                   },
-                  "id": 5551,
+                  "id": 5670,
                   "nodeType": "ExpressionStatement",
                   "src": "562:17:26"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 5554,
+                    "id": 5673,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 5552,
+                      "id": 5671,
                       "name": "uru",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5517,
+                      "referencedDeclaration": 5636,
                       "src": "589:3:26",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_Token_$6058",
+                        "typeIdentifier": "t_contract$_Token_$6177",
                         "typeString": "contract Token"
                       }
                     },
@@ -494,24 +494,24 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 5553,
+                      "id": 5672,
                       "name": "_tokenAddress",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5535,
+                      "referencedDeclaration": 5654,
                       "src": "595:13:26",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_Token_$6058",
+                        "typeIdentifier": "t_contract$_Token_$6177",
                         "typeString": "contract Token"
                       }
                     },
                     "src": "589:19:26",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_Token_$6058",
+                      "typeIdentifier": "t_contract$_Token_$6177",
                       "typeString": "contract Token"
                     }
                   },
-                  "id": 5555,
+                  "id": 5674,
                   "nodeType": "ExpressionStatement",
                   "src": "589:19:26"
                 },
@@ -525,7 +525,7 @@
                           "typeIdentifier": "t_address",
                           "typeString": "address"
                         },
-                        "id": 5563,
+                        "id": 5682,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -535,14 +535,14 @@
                           "arguments": [
                             {
                               "argumentTypes": null,
-                              "id": 5558,
+                              "id": 5677,
                               "name": "_NFTAddress",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 5533,
+                              "referencedDeclaration": 5652,
                               "src": "634:11:26",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_contract$_NFT_$5508",
+                                "typeIdentifier": "t_contract$_NFT_$5627",
                                 "typeString": "contract NFT"
                               }
                             }
@@ -550,11 +550,11 @@
                           "expression": {
                             "argumentTypes": [
                               {
-                                "typeIdentifier": "t_contract$_NFT_$5508",
+                                "typeIdentifier": "t_contract$_NFT_$5627",
                                 "typeString": "contract NFT"
                               }
                             ],
-                            "id": 5557,
+                            "id": 5676,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -567,7 +567,7 @@
                             },
                             "typeName": "address"
                           },
-                          "id": 5559,
+                          "id": 5678,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -589,7 +589,7 @@
                             {
                               "argumentTypes": null,
                               "hexValue": "30",
-                              "id": 5561,
+                              "id": 5680,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": true,
@@ -612,7 +612,7 @@
                                 "typeString": "int_const 0"
                               }
                             ],
-                            "id": 5560,
+                            "id": 5679,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -625,7 +625,7 @@
                             },
                             "typeName": "address"
                           },
-                          "id": 5562,
+                          "id": 5681,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -648,7 +648,7 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "696e76616c6964204e46542061646472657373",
-                        "id": 5564,
+                        "id": 5683,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -675,21 +675,21 @@
                           "typeString": "literal_string \"invalid NFT address\""
                         }
                       ],
-                      "id": 5556,
+                      "id": 5675,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        8936,
-                        8937
+                        8505,
+                        8506
                       ],
-                      "referencedDeclaration": 8937,
+                      "referencedDeclaration": 8506,
                       "src": "618:7:26",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 5565,
+                    "id": 5684,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -703,7 +703,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 5566,
+                  "id": 5685,
                   "nodeType": "ExpressionStatement",
                   "src": "618:66:26"
                 },
@@ -717,7 +717,7 @@
                           "typeIdentifier": "t_address",
                           "typeString": "address"
                         },
-                        "id": 5574,
+                        "id": 5693,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -727,14 +727,14 @@
                           "arguments": [
                             {
                               "argumentTypes": null,
-                              "id": 5569,
+                              "id": 5688,
                               "name": "_tokenAddress",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 5535,
+                              "referencedDeclaration": 5654,
                               "src": "710:13:26",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_contract$_Token_$6058",
+                                "typeIdentifier": "t_contract$_Token_$6177",
                                 "typeString": "contract Token"
                               }
                             }
@@ -742,11 +742,11 @@
                           "expression": {
                             "argumentTypes": [
                               {
-                                "typeIdentifier": "t_contract$_Token_$6058",
+                                "typeIdentifier": "t_contract$_Token_$6177",
                                 "typeString": "contract Token"
                               }
                             ],
-                            "id": 5568,
+                            "id": 5687,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -759,7 +759,7 @@
                             },
                             "typeName": "address"
                           },
-                          "id": 5570,
+                          "id": 5689,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -781,7 +781,7 @@
                             {
                               "argumentTypes": null,
                               "hexValue": "30",
-                              "id": 5572,
+                              "id": 5691,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": true,
@@ -804,7 +804,7 @@
                                 "typeString": "int_const 0"
                               }
                             ],
-                            "id": 5571,
+                            "id": 5690,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -817,7 +817,7 @@
                             },
                             "typeName": "address"
                           },
-                          "id": 5573,
+                          "id": 5692,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -840,7 +840,7 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "696e76616c696420746f6b656e2061646472657373",
-                        "id": 5575,
+                        "id": 5694,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -867,21 +867,21 @@
                           "typeString": "literal_string \"invalid token address\""
                         }
                       ],
-                      "id": 5567,
+                      "id": 5686,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        8936,
-                        8937
+                        8505,
+                        8506
                       ],
-                      "referencedDeclaration": 8937,
+                      "referencedDeclaration": 8506,
                       "src": "694:7:26",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 5576,
+                    "id": 5695,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -895,37 +895,37 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 5577,
+                  "id": 5696,
                   "nodeType": "ExpressionStatement",
                   "src": "694:70:26"
                 },
                 {
                   "assignments": [
-                    5579
+                    5698
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 5579,
+                      "id": 5698,
                       "name": "nft_farming",
                       "nodeType": "VariableDeclaration",
-                      "scope": 5604,
+                      "scope": 5723,
                       "src": "775:23:26",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_NFT_Farming_$5879",
+                        "typeIdentifier": "t_contract$_NFT_Farming_$5998",
                         "typeString": "contract NFT_Farming"
                       },
                       "typeName": {
                         "contractScope": null,
-                        "id": 5578,
+                        "id": 5697,
                         "name": "NFT_Farming",
                         "nodeType": "UserDefinedTypeName",
-                        "referencedDeclaration": 5879,
+                        "referencedDeclaration": 5998,
                         "src": "775:11:26",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_NFT_Farming_$5879",
+                          "typeIdentifier": "t_contract$_NFT_Farming_$5998",
                           "typeString": "contract NFT_Farming"
                         }
                       },
@@ -933,43 +933,43 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 5587,
+                  "id": 5706,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 5582,
+                        "id": 5701,
                         "name": "nft",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5515,
+                        "referencedDeclaration": 5634,
                         "src": "817:3:26",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_NFT_$5508",
+                          "typeIdentifier": "t_contract$_NFT_$5627",
                           "typeString": "contract NFT"
                         }
                       },
                       {
                         "argumentTypes": null,
-                        "id": 5583,
+                        "id": 5702,
                         "name": "uru",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5517,
+                        "referencedDeclaration": 5636,
                         "src": "822:3:26",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_Token_$6058",
+                          "typeIdentifier": "t_contract$_Token_$6177",
                           "typeString": "contract Token"
                         }
                       },
                       {
                         "argumentTypes": null,
-                        "id": 5584,
+                        "id": 5703,
                         "name": "_level",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5539,
+                        "referencedDeclaration": 5658,
                         "src": "827:6:26",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -978,11 +978,11 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 5585,
+                        "id": 5704,
                         "name": "_coolDownTime",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5541,
+                        "referencedDeclaration": 5660,
                         "src": "835:13:26",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -993,11 +993,11 @@
                     "expression": {
                       "argumentTypes": [
                         {
-                          "typeIdentifier": "t_contract$_NFT_$5508",
+                          "typeIdentifier": "t_contract$_NFT_$5627",
                           "typeString": "contract NFT"
                         },
                         {
-                          "typeIdentifier": "t_contract$_Token_$6058",
+                          "typeIdentifier": "t_contract$_Token_$6177",
                           "typeString": "contract Token"
                         },
                         {
@@ -1009,7 +1009,7 @@
                           "typeString": "uint256"
                         }
                       ],
-                      "id": 5581,
+                      "id": 5700,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -1017,23 +1017,23 @@
                       "nodeType": "NewExpression",
                       "src": "801:15:26",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_function_creation_nonpayable$_t_contract$_NFT_$5508_$_t_contract$_Token_$6058_$_t_uint256_$_t_uint256_$returns$_t_contract$_NFT_Farming_$5879_$",
+                        "typeIdentifier": "t_function_creation_nonpayable$_t_contract$_NFT_$5627_$_t_contract$_Token_$6177_$_t_uint256_$_t_uint256_$returns$_t_contract$_NFT_Farming_$5998_$",
                         "typeString": "function (contract NFT,contract Token,uint256,uint256) returns (contract NFT_Farming)"
                       },
                       "typeName": {
                         "contractScope": null,
-                        "id": 5580,
+                        "id": 5699,
                         "name": "NFT_Farming",
                         "nodeType": "UserDefinedTypeName",
-                        "referencedDeclaration": 5879,
+                        "referencedDeclaration": 5998,
                         "src": "805:11:26",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_NFT_Farming_$5879",
+                          "typeIdentifier": "t_contract$_NFT_Farming_$5998",
                           "typeString": "contract NFT_Farming"
                         }
                       }
                     },
-                    "id": 5586,
+                    "id": 5705,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1043,7 +1043,7 @@
                     "nodeType": "FunctionCall",
                     "src": "801:48:26",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_NFT_Farming_$5879",
+                      "typeIdentifier": "t_contract$_NFT_Farming_$5998",
                       "typeString": "contract NFT_Farming"
                     }
                   },
@@ -1059,24 +1059,24 @@
                         "arguments": [
                           {
                             "argumentTypes": null,
-                            "id": 5592,
+                            "id": 5711,
                             "name": "_NFTAddress",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 5533,
+                            "referencedDeclaration": 5652,
                             "src": "882:11:26",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_contract$_NFT_$5508",
+                              "typeIdentifier": "t_contract$_NFT_$5627",
                               "typeString": "contract NFT"
                             }
                           },
                           {
                             "argumentTypes": null,
-                            "id": 5593,
+                            "id": 5712,
                             "name": "_name",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 5537,
+                            "referencedDeclaration": 5656,
                             "src": "895:5:26",
                             "typeDescriptions": {
                               "typeIdentifier": "t_string_memory_ptr",
@@ -1085,11 +1085,11 @@
                           },
                           {
                             "argumentTypes": null,
-                            "id": 5594,
+                            "id": 5713,
                             "name": "_level",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 5539,
+                            "referencedDeclaration": 5658,
                             "src": "902:6:26",
                             "typeDescriptions": {
                               "typeIdentifier": "t_uint256",
@@ -1098,11 +1098,11 @@
                           },
                           {
                             "argumentTypes": null,
-                            "id": 5595,
+                            "id": 5714,
                             "name": "_coolDownTime",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 5541,
+                            "referencedDeclaration": 5660,
                             "src": "910:13:26",
                             "typeDescriptions": {
                               "typeIdentifier": "t_uint256",
@@ -1111,11 +1111,11 @@
                           },
                           {
                             "argumentTypes": null,
-                            "id": 5596,
+                            "id": 5715,
                             "name": "_reward",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 5543,
+                            "referencedDeclaration": 5662,
                             "src": "925:7:26",
                             "typeDescriptions": {
                               "typeIdentifier": "t_uint256",
@@ -1126,7 +1126,7 @@
                         "expression": {
                           "argumentTypes": [
                             {
-                              "typeIdentifier": "t_contract$_NFT_$5508",
+                              "typeIdentifier": "t_contract$_NFT_$5627",
                               "typeString": "contract NFT"
                             },
                             {
@@ -1146,18 +1146,18 @@
                               "typeString": "uint256"
                             }
                           ],
-                          "id": 5591,
+                          "id": 5710,
                           "name": "Monster",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 5528,
+                          "referencedDeclaration": 5647,
                           "src": "874:7:26",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_struct$_Monster_$5528_storage_ptr_$",
+                            "typeIdentifier": "t_type$_t_struct$_Monster_$5647_storage_ptr_$",
                             "typeString": "type(struct NFT_Factory.Monster storage pointer)"
                           }
                         },
-                        "id": 5597,
+                        "id": 5716,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1167,7 +1167,7 @@
                         "nodeType": "FunctionCall",
                         "src": "874:59:26",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Monster_$5528_memory",
+                          "typeIdentifier": "t_struct$_Monster_$5647_memory",
                           "typeString": "struct NFT_Factory.Monster memory"
                         }
                       }
@@ -1175,24 +1175,24 @@
                     "expression": {
                       "argumentTypes": [
                         {
-                          "typeIdentifier": "t_struct$_Monster_$5528_memory",
+                          "typeIdentifier": "t_struct$_Monster_$5647_memory",
                           "typeString": "struct NFT_Factory.Monster memory"
                         }
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 5588,
+                        "id": 5707,
                         "name": "monsters",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5531,
+                        "referencedDeclaration": 5650,
                         "src": "860:8:26",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_array$_t_struct$_Monster_$5528_storage_$dyn_storage",
+                          "typeIdentifier": "t_array$_t_struct$_Monster_$5647_storage_$dyn_storage",
                           "typeString": "struct NFT_Factory.Monster storage ref[] storage ref"
                         }
                       },
-                      "id": 5590,
+                      "id": 5709,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -1202,11 +1202,11 @@
                       "referencedDeclaration": null,
                       "src": "860:13:26",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_function_arraypush_nonpayable$_t_struct$_Monster_$5528_storage_$returns$_t_uint256_$",
+                        "typeIdentifier": "t_function_arraypush_nonpayable$_t_struct$_Monster_$5647_storage_$returns$_t_uint256_$",
                         "typeString": "function (struct NFT_Factory.Monster storage ref) returns (uint256)"
                       }
                     },
-                    "id": 5598,
+                    "id": 5717,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1220,7 +1220,7 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 5599,
+                  "id": 5718,
                   "nodeType": "ExpressionStatement",
                   "src": "860:74:26"
                 },
@@ -1230,14 +1230,14 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 5601,
+                        "id": 5720,
                         "name": "nft_farming",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5579,
+                        "referencedDeclaration": 5698,
                         "src": "960:11:26",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_NFT_Farming_$5879",
+                          "typeIdentifier": "t_contract$_NFT_Farming_$5998",
                           "typeString": "contract NFT_Farming"
                         }
                       }
@@ -1245,11 +1245,11 @@
                     "expression": {
                       "argumentTypes": [
                         {
-                          "typeIdentifier": "t_contract$_NFT_Farming_$5879",
+                          "typeIdentifier": "t_contract$_NFT_Farming_$5998",
                           "typeString": "contract NFT_Farming"
                         }
                       ],
-                      "id": 5600,
+                      "id": 5719,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -1262,7 +1262,7 @@
                       },
                       "typeName": "address"
                     },
-                    "id": 5602,
+                    "id": 5721,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1276,46 +1276,46 @@
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 5547,
-                  "id": 5603,
+                  "functionReturnParameters": 5666,
+                  "id": 5722,
                   "nodeType": "Return",
                   "src": "945:27:26"
                 }
               ]
             },
             "documentation": null,
-            "id": 5605,
+            "id": 5724,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "createNFTFarm",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5544,
+              "id": 5663,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5533,
+                  "id": 5652,
                   "name": "_NFTAddress",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5605,
+                  "scope": 5724,
                   "src": "403:15:26",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_contract$_NFT_$5508",
+                    "typeIdentifier": "t_contract$_NFT_$5627",
                     "typeString": "contract NFT"
                   },
                   "typeName": {
                     "contractScope": null,
-                    "id": 5532,
+                    "id": 5651,
                     "name": "NFT",
                     "nodeType": "UserDefinedTypeName",
-                    "referencedDeclaration": 5508,
+                    "referencedDeclaration": 5627,
                     "src": "403:3:26",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_NFT_$5508",
+                      "typeIdentifier": "t_contract$_NFT_$5627",
                       "typeString": "contract NFT"
                     }
                   },
@@ -1324,26 +1324,26 @@
                 },
                 {
                   "constant": false,
-                  "id": 5535,
+                  "id": 5654,
                   "name": "_tokenAddress",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5605,
+                  "scope": 5724,
                   "src": "420:19:26",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_contract$_Token_$6058",
+                    "typeIdentifier": "t_contract$_Token_$6177",
                     "typeString": "contract Token"
                   },
                   "typeName": {
                     "contractScope": null,
-                    "id": 5534,
+                    "id": 5653,
                     "name": "Token",
                     "nodeType": "UserDefinedTypeName",
-                    "referencedDeclaration": 6058,
+                    "referencedDeclaration": 6177,
                     "src": "420:5:26",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_Token_$6058",
+                      "typeIdentifier": "t_contract$_Token_$6177",
                       "typeString": "contract Token"
                     }
                   },
@@ -1352,10 +1352,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 5537,
+                  "id": 5656,
                   "name": "_name",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5605,
+                  "scope": 5724,
                   "src": "441:19:26",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1364,7 +1364,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 5536,
+                    "id": 5655,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "441:6:26",
@@ -1378,10 +1378,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 5539,
+                  "id": 5658,
                   "name": "_level",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5605,
+                  "scope": 5724,
                   "src": "462:14:26",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1390,7 +1390,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5538,
+                    "id": 5657,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "462:7:26",
@@ -1404,10 +1404,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 5541,
+                  "id": 5660,
                   "name": "_coolDownTime",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5605,
+                  "scope": 5724,
                   "src": "478:21:26",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1416,7 +1416,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5540,
+                    "id": 5659,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "478:7:26",
@@ -1430,10 +1430,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 5543,
+                  "id": 5662,
                   "name": "_reward",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5605,
+                  "scope": 5724,
                   "src": "501:15:26",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1442,7 +1442,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5542,
+                    "id": 5661,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "501:7:26",
@@ -1458,15 +1458,15 @@
               "src": "402:115:26"
             },
             "returnParameters": {
-              "id": 5547,
+              "id": 5666,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5546,
+                  "id": 5665,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5605,
+                  "scope": 5724,
                   "src": "534:7:26",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1475,7 +1475,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5545,
+                    "id": 5664,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "534:7:26",
@@ -1491,14 +1491,14 @@
               ],
               "src": "533:9:26"
             },
-            "scope": 5606,
+            "scope": 5725,
             "src": "380:599:26",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 5607,
+        "scope": 5726,
         "src": "128:853:26"
       }
     ],
@@ -1509,7 +1509,7 @@
       "absolutePath": "project:/contracts/NFT_Factory.sol",
       "exportedSymbols": {
         "NFT_Factory": [
-          5606
+          5725
         ]
       }
     },
@@ -1523,52 +1523,52 @@
             ".6"
           ]
         },
-        "id": 5510,
+        "id": 5629,
         "name": "PragmaDirective",
         "src": "32:23:26"
       },
       {
         "attributes": {
-          "SourceUnit": 5880,
+          "SourceUnit": 5999,
           "absolutePath": "project:/contracts/NFT_Farming.sol",
           "file": "./NFT_Farming.sol",
-          "scope": 5607,
+          "scope": 5726,
           "symbolAliases": [
             null
           ],
           "unitAlias": ""
         },
-        "id": 5511,
+        "id": 5630,
         "name": "ImportDirective",
         "src": "57:27:26"
       },
       {
         "attributes": {
-          "SourceUnit": 6059,
+          "SourceUnit": 6178,
           "absolutePath": "project:/contracts/Token.sol",
           "file": "./Token.sol",
-          "scope": 5607,
+          "scope": 5726,
           "symbolAliases": [
             null
           ],
           "unitAlias": ""
         },
-        "id": 5512,
+        "id": 5631,
         "name": "ImportDirective",
         "src": "85:21:26"
       },
       {
         "attributes": {
-          "SourceUnit": 5509,
+          "SourceUnit": 5628,
           "absolutePath": "project:/contracts/NFT.sol",
           "file": "./NFT.sol",
-          "scope": 5607,
+          "scope": 5726,
           "symbolAliases": [
             null
           ],
           "unitAlias": ""
         },
-        "id": 5513,
+        "id": 5632,
         "name": "ImportDirective",
         "src": "107:19:26"
       },
@@ -1578,23 +1578,23 @@
             null
           ],
           "contractDependencies": [
-            5879
+            5998
           ],
           "contractKind": "contract",
           "documentation": null,
           "fullyImplemented": true,
           "linearizedBaseContracts": [
-            5606
+            5725
           ],
           "name": "NFT_Factory",
-          "scope": 5607
+          "scope": 5726
         },
         "children": [
           {
             "attributes": {
               "constant": false,
               "name": "nft",
-              "scope": 5606,
+              "scope": 5725,
               "stateVariable": true,
               "storageLocation": "default",
               "type": "contract NFT",
@@ -1606,15 +1606,15 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "NFT",
-                  "referencedDeclaration": 5508,
+                  "referencedDeclaration": 5627,
                   "type": "contract NFT"
                 },
-                "id": 5514,
+                "id": 5633,
                 "name": "UserDefinedTypeName",
                 "src": "156:3:26"
               }
             ],
-            "id": 5515,
+            "id": 5634,
             "name": "VariableDeclaration",
             "src": "156:14:26"
           },
@@ -1622,7 +1622,7 @@
             "attributes": {
               "constant": false,
               "name": "uru",
-              "scope": 5606,
+              "scope": 5725,
               "stateVariable": true,
               "storageLocation": "default",
               "type": "contract Token",
@@ -1634,15 +1634,15 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "Token",
-                  "referencedDeclaration": 6058,
+                  "referencedDeclaration": 6177,
                   "type": "contract Token"
                 },
-                "id": 5516,
+                "id": 5635,
                 "name": "UserDefinedTypeName",
                 "src": "176:5:26"
               }
             ],
-            "id": 5517,
+            "id": 5636,
             "name": "VariableDeclaration",
             "src": "176:16:26"
           },
@@ -1650,7 +1650,7 @@
             "attributes": {
               "canonicalName": "NFT_Factory.Monster",
               "name": "Monster",
-              "scope": 5606,
+              "scope": 5725,
               "visibility": "public"
             },
             "children": [
@@ -1658,7 +1658,7 @@
                 "attributes": {
                   "constant": false,
                   "name": "NFTAddress",
-                  "scope": 5528,
+                  "scope": 5647,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "contract NFT",
@@ -1670,15 +1670,15 @@
                     "attributes": {
                       "contractScope": null,
                       "name": "NFT",
-                      "referencedDeclaration": 5508,
+                      "referencedDeclaration": 5627,
                       "type": "contract NFT"
                     },
-                    "id": 5518,
+                    "id": 5637,
                     "name": "UserDefinedTypeName",
                     "src": "224:3:26"
                   }
                 ],
-                "id": 5519,
+                "id": 5638,
                 "name": "VariableDeclaration",
                 "src": "224:14:26"
               },
@@ -1686,7 +1686,7 @@
                 "attributes": {
                   "constant": false,
                   "name": "name",
-                  "scope": 5528,
+                  "scope": 5647,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "string",
@@ -1699,12 +1699,12 @@
                       "name": "string",
                       "type": "string"
                     },
-                    "id": 5520,
+                    "id": 5639,
                     "name": "ElementaryTypeName",
                     "src": "248:6:26"
                   }
                 ],
-                "id": 5521,
+                "id": 5640,
                 "name": "VariableDeclaration",
                 "src": "248:11:26"
               },
@@ -1712,7 +1712,7 @@
                 "attributes": {
                   "constant": false,
                   "name": "level",
-                  "scope": 5528,
+                  "scope": 5647,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint256",
@@ -1725,12 +1725,12 @@
                       "name": "uint256",
                       "type": "uint256"
                     },
-                    "id": 5522,
+                    "id": 5641,
                     "name": "ElementaryTypeName",
                     "src": "269:7:26"
                   }
                 ],
-                "id": 5523,
+                "id": 5642,
                 "name": "VariableDeclaration",
                 "src": "269:13:26"
               },
@@ -1738,7 +1738,7 @@
                 "attributes": {
                   "constant": false,
                   "name": "coolDownTime",
-                  "scope": 5528,
+                  "scope": 5647,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint256",
@@ -1751,12 +1751,12 @@
                       "name": "uint256",
                       "type": "uint256"
                     },
-                    "id": 5524,
+                    "id": 5643,
                     "name": "ElementaryTypeName",
                     "src": "292:7:26"
                   }
                 ],
-                "id": 5525,
+                "id": 5644,
                 "name": "VariableDeclaration",
                 "src": "292:20:26"
               },
@@ -1764,7 +1764,7 @@
                 "attributes": {
                   "constant": false,
                   "name": "reward",
-                  "scope": 5528,
+                  "scope": 5647,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint256",
@@ -1777,17 +1777,17 @@
                       "name": "uint256",
                       "type": "uint256"
                     },
-                    "id": 5526,
+                    "id": 5645,
                     "name": "ElementaryTypeName",
                     "src": "322:7:26"
                   }
                 ],
-                "id": 5527,
+                "id": 5646,
                 "name": "VariableDeclaration",
                 "src": "322:14:26"
               }
             ],
-            "id": 5528,
+            "id": 5647,
             "name": "StructDefinition",
             "src": "199:144:26"
           },
@@ -1795,7 +1795,7 @@
             "attributes": {
               "constant": false,
               "name": "monsters",
-              "scope": 5606,
+              "scope": 5725,
               "stateVariable": true,
               "storageLocation": "default",
               "type": "struct NFT_Factory.Monster[]",
@@ -1813,20 +1813,20 @@
                     "attributes": {
                       "contractScope": null,
                       "name": "Monster",
-                      "referencedDeclaration": 5528,
+                      "referencedDeclaration": 5647,
                       "type": "struct NFT_Factory.Monster"
                     },
-                    "id": 5529,
+                    "id": 5648,
                     "name": "UserDefinedTypeName",
                     "src": "348:7:26"
                   }
                 ],
-                "id": 5530,
+                "id": 5649,
                 "name": "ArrayTypeName",
                 "src": "348:9:26"
               }
             ],
-            "id": 5531,
+            "id": 5650,
             "name": "VariableDeclaration",
             "src": "348:25:26"
           },
@@ -1840,7 +1840,7 @@
                 null
               ],
               "name": "createNFTFarm",
-              "scope": 5606,
+              "scope": 5725,
               "stateMutability": "nonpayable",
               "superFunction": null,
               "visibility": "public"
@@ -1852,7 +1852,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_NFTAddress",
-                      "scope": 5605,
+                      "scope": 5724,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "contract NFT",
@@ -1864,15 +1864,15 @@
                         "attributes": {
                           "contractScope": null,
                           "name": "NFT",
-                          "referencedDeclaration": 5508,
+                          "referencedDeclaration": 5627,
                           "type": "contract NFT"
                         },
-                        "id": 5532,
+                        "id": 5651,
                         "name": "UserDefinedTypeName",
                         "src": "403:3:26"
                       }
                     ],
-                    "id": 5533,
+                    "id": 5652,
                     "name": "VariableDeclaration",
                     "src": "403:15:26"
                   },
@@ -1880,7 +1880,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_tokenAddress",
-                      "scope": 5605,
+                      "scope": 5724,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "contract Token",
@@ -1892,15 +1892,15 @@
                         "attributes": {
                           "contractScope": null,
                           "name": "Token",
-                          "referencedDeclaration": 6058,
+                          "referencedDeclaration": 6177,
                           "type": "contract Token"
                         },
-                        "id": 5534,
+                        "id": 5653,
                         "name": "UserDefinedTypeName",
                         "src": "420:5:26"
                       }
                     ],
-                    "id": 5535,
+                    "id": 5654,
                     "name": "VariableDeclaration",
                     "src": "420:19:26"
                   },
@@ -1908,7 +1908,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_name",
-                      "scope": 5605,
+                      "scope": 5724,
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "type": "string",
@@ -1921,12 +1921,12 @@
                           "name": "string",
                           "type": "string"
                         },
-                        "id": 5536,
+                        "id": 5655,
                         "name": "ElementaryTypeName",
                         "src": "441:6:26"
                       }
                     ],
-                    "id": 5537,
+                    "id": 5656,
                     "name": "VariableDeclaration",
                     "src": "441:19:26"
                   },
@@ -1934,7 +1934,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_level",
-                      "scope": 5605,
+                      "scope": 5724,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -1947,12 +1947,12 @@
                           "name": "uint256",
                           "type": "uint256"
                         },
-                        "id": 5538,
+                        "id": 5657,
                         "name": "ElementaryTypeName",
                         "src": "462:7:26"
                       }
                     ],
-                    "id": 5539,
+                    "id": 5658,
                     "name": "VariableDeclaration",
                     "src": "462:14:26"
                   },
@@ -1960,7 +1960,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_coolDownTime",
-                      "scope": 5605,
+                      "scope": 5724,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -1973,12 +1973,12 @@
                           "name": "uint256",
                           "type": "uint256"
                         },
-                        "id": 5540,
+                        "id": 5659,
                         "name": "ElementaryTypeName",
                         "src": "478:7:26"
                       }
                     ],
-                    "id": 5541,
+                    "id": 5660,
                     "name": "VariableDeclaration",
                     "src": "478:21:26"
                   },
@@ -1986,7 +1986,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_reward",
-                      "scope": 5605,
+                      "scope": 5724,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -1999,17 +1999,17 @@
                           "name": "uint256",
                           "type": "uint256"
                         },
-                        "id": 5542,
+                        "id": 5661,
                         "name": "ElementaryTypeName",
                         "src": "501:7:26"
                       }
                     ],
-                    "id": 5543,
+                    "id": 5662,
                     "name": "VariableDeclaration",
                     "src": "501:15:26"
                   }
                 ],
-                "id": 5544,
+                "id": 5663,
                 "name": "ParameterList",
                 "src": "402:115:26"
               },
@@ -2019,7 +2019,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "",
-                      "scope": 5605,
+                      "scope": 5724,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "address",
@@ -2033,17 +2033,17 @@
                           "stateMutability": "nonpayable",
                           "type": "address"
                         },
-                        "id": 5545,
+                        "id": 5664,
                         "name": "ElementaryTypeName",
                         "src": "534:7:26"
                       }
                     ],
-                    "id": 5546,
+                    "id": 5665,
                     "name": "VariableDeclaration",
                     "src": "534:7:26"
                   }
                 ],
-                "id": 5547,
+                "id": 5666,
                 "name": "ParameterList",
                 "src": "533:9:26"
               },
@@ -2068,11 +2068,11 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 5515,
+                              "referencedDeclaration": 5634,
                               "type": "contract NFT",
                               "value": "nft"
                             },
-                            "id": 5548,
+                            "id": 5667,
                             "name": "Identifier",
                             "src": "562:3:26"
                           },
@@ -2082,21 +2082,21 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 5533,
+                              "referencedDeclaration": 5652,
                               "type": "contract NFT",
                               "value": "_NFTAddress"
                             },
-                            "id": 5549,
+                            "id": 5668,
                             "name": "Identifier",
                             "src": "568:11:26"
                           }
                         ],
-                        "id": 5550,
+                        "id": 5669,
                         "name": "Assignment",
                         "src": "562:17:26"
                       }
                     ],
-                    "id": 5551,
+                    "id": 5670,
                     "name": "ExpressionStatement",
                     "src": "562:17:26"
                   },
@@ -2119,11 +2119,11 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 5517,
+                              "referencedDeclaration": 5636,
                               "type": "contract Token",
                               "value": "uru"
                             },
-                            "id": 5552,
+                            "id": 5671,
                             "name": "Identifier",
                             "src": "589:3:26"
                           },
@@ -2133,21 +2133,21 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 5535,
+                              "referencedDeclaration": 5654,
                               "type": "contract Token",
                               "value": "_tokenAddress"
                             },
-                            "id": 5553,
+                            "id": 5672,
                             "name": "Identifier",
                             "src": "595:13:26"
                           }
                         ],
-                        "id": 5554,
+                        "id": 5673,
                         "name": "Assignment",
                         "src": "589:19:26"
                       }
                     ],
-                    "id": 5555,
+                    "id": 5674,
                     "name": "ExpressionStatement",
                     "src": "589:19:26"
                   },
@@ -2181,14 +2181,14 @@
                                 }
                               ],
                               "overloadedDeclarations": [
-                                8936,
-                                8937
+                                8505,
+                                8506
                               ],
-                              "referencedDeclaration": 8937,
+                              "referencedDeclaration": 8506,
                               "type": "function (bool,string memory) pure",
                               "value": "require"
                             },
-                            "id": 5556,
+                            "id": 5675,
                             "name": "Identifier",
                             "src": "618:7:26"
                           },
@@ -2226,7 +2226,7 @@
                                     "attributes": {
                                       "argumentTypes": [
                                         {
-                                          "typeIdentifier": "t_contract$_NFT_$5508",
+                                          "typeIdentifier": "t_contract$_NFT_$5627",
                                           "typeString": "contract NFT"
                                         }
                                       ],
@@ -2237,7 +2237,7 @@
                                       "type": "type(address)",
                                       "value": "address"
                                     },
-                                    "id": 5557,
+                                    "id": 5676,
                                     "name": "ElementaryTypeNameExpression",
                                     "src": "626:7:26"
                                   },
@@ -2247,16 +2247,16 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 5533,
+                                      "referencedDeclaration": 5652,
                                       "type": "contract NFT",
                                       "value": "_NFTAddress"
                                     },
-                                    "id": 5558,
+                                    "id": 5677,
                                     "name": "Identifier",
                                     "src": "634:11:26"
                                   }
                                 ],
-                                "id": 5559,
+                                "id": 5678,
                                 "name": "FunctionCall",
                                 "src": "626:20:26"
                               },
@@ -2290,7 +2290,7 @@
                                       "type": "type(address)",
                                       "value": "address"
                                     },
-                                    "id": 5560,
+                                    "id": 5679,
                                     "name": "ElementaryTypeNameExpression",
                                     "src": "650:7:26"
                                   },
@@ -2307,17 +2307,17 @@
                                       "type": "int_const 0",
                                       "value": "0"
                                     },
-                                    "id": 5561,
+                                    "id": 5680,
                                     "name": "Literal",
                                     "src": "658:1:26"
                                   }
                                 ],
-                                "id": 5562,
+                                "id": 5681,
                                 "name": "FunctionCall",
                                 "src": "650:10:26"
                               }
                             ],
-                            "id": 5563,
+                            "id": 5682,
                             "name": "BinaryOperation",
                             "src": "626:34:26"
                           },
@@ -2334,17 +2334,17 @@
                               "type": "literal_string \"invalid NFT address\"",
                               "value": "invalid NFT address"
                             },
-                            "id": 5564,
+                            "id": 5683,
                             "name": "Literal",
                             "src": "662:21:26"
                           }
                         ],
-                        "id": 5565,
+                        "id": 5684,
                         "name": "FunctionCall",
                         "src": "618:66:26"
                       }
                     ],
-                    "id": 5566,
+                    "id": 5685,
                     "name": "ExpressionStatement",
                     "src": "618:66:26"
                   },
@@ -2378,14 +2378,14 @@
                                 }
                               ],
                               "overloadedDeclarations": [
-                                8936,
-                                8937
+                                8505,
+                                8506
                               ],
-                              "referencedDeclaration": 8937,
+                              "referencedDeclaration": 8506,
                               "type": "function (bool,string memory) pure",
                               "value": "require"
                             },
-                            "id": 5567,
+                            "id": 5686,
                             "name": "Identifier",
                             "src": "694:7:26"
                           },
@@ -2423,7 +2423,7 @@
                                     "attributes": {
                                       "argumentTypes": [
                                         {
-                                          "typeIdentifier": "t_contract$_Token_$6058",
+                                          "typeIdentifier": "t_contract$_Token_$6177",
                                           "typeString": "contract Token"
                                         }
                                       ],
@@ -2434,7 +2434,7 @@
                                       "type": "type(address)",
                                       "value": "address"
                                     },
-                                    "id": 5568,
+                                    "id": 5687,
                                     "name": "ElementaryTypeNameExpression",
                                     "src": "702:7:26"
                                   },
@@ -2444,16 +2444,16 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 5535,
+                                      "referencedDeclaration": 5654,
                                       "type": "contract Token",
                                       "value": "_tokenAddress"
                                     },
-                                    "id": 5569,
+                                    "id": 5688,
                                     "name": "Identifier",
                                     "src": "710:13:26"
                                   }
                                 ],
-                                "id": 5570,
+                                "id": 5689,
                                 "name": "FunctionCall",
                                 "src": "702:22:26"
                               },
@@ -2487,7 +2487,7 @@
                                       "type": "type(address)",
                                       "value": "address"
                                     },
-                                    "id": 5571,
+                                    "id": 5690,
                                     "name": "ElementaryTypeNameExpression",
                                     "src": "728:7:26"
                                   },
@@ -2504,17 +2504,17 @@
                                       "type": "int_const 0",
                                       "value": "0"
                                     },
-                                    "id": 5572,
+                                    "id": 5691,
                                     "name": "Literal",
                                     "src": "736:1:26"
                                   }
                                 ],
-                                "id": 5573,
+                                "id": 5692,
                                 "name": "FunctionCall",
                                 "src": "728:10:26"
                               }
                             ],
-                            "id": 5574,
+                            "id": 5693,
                             "name": "BinaryOperation",
                             "src": "702:36:26"
                           },
@@ -2531,24 +2531,24 @@
                               "type": "literal_string \"invalid token address\"",
                               "value": "invalid token address"
                             },
-                            "id": 5575,
+                            "id": 5694,
                             "name": "Literal",
                             "src": "740:23:26"
                           }
                         ],
-                        "id": 5576,
+                        "id": 5695,
                         "name": "FunctionCall",
                         "src": "694:70:26"
                       }
                     ],
-                    "id": 5577,
+                    "id": 5696,
                     "name": "ExpressionStatement",
                     "src": "694:70:26"
                   },
                   {
                     "attributes": {
                       "assignments": [
-                        5579
+                        5698
                       ]
                     },
                     "children": [
@@ -2556,7 +2556,7 @@
                         "attributes": {
                           "constant": false,
                           "name": "nft_farming",
-                          "scope": 5604,
+                          "scope": 5723,
                           "stateVariable": false,
                           "storageLocation": "default",
                           "type": "contract NFT_Farming",
@@ -2568,15 +2568,15 @@
                             "attributes": {
                               "contractScope": null,
                               "name": "NFT_Farming",
-                              "referencedDeclaration": 5879,
+                              "referencedDeclaration": 5998,
                               "type": "contract NFT_Farming"
                             },
-                            "id": 5578,
+                            "id": 5697,
                             "name": "UserDefinedTypeName",
                             "src": "775:11:26"
                           }
                         ],
-                        "id": 5579,
+                        "id": 5698,
                         "name": "VariableDeclaration",
                         "src": "775:23:26"
                       },
@@ -2599,11 +2599,11 @@
                             "attributes": {
                               "argumentTypes": [
                                 {
-                                  "typeIdentifier": "t_contract$_NFT_$5508",
+                                  "typeIdentifier": "t_contract$_NFT_$5627",
                                   "typeString": "contract NFT"
                                 },
                                 {
-                                  "typeIdentifier": "t_contract$_Token_$6058",
+                                  "typeIdentifier": "t_contract$_Token_$6177",
                                   "typeString": "contract Token"
                                 },
                                 {
@@ -2626,15 +2626,15 @@
                                 "attributes": {
                                   "contractScope": null,
                                   "name": "NFT_Farming",
-                                  "referencedDeclaration": 5879,
+                                  "referencedDeclaration": 5998,
                                   "type": "contract NFT_Farming"
                                 },
-                                "id": 5580,
+                                "id": 5699,
                                 "name": "UserDefinedTypeName",
                                 "src": "805:11:26"
                               }
                             ],
-                            "id": 5581,
+                            "id": 5700,
                             "name": "NewExpression",
                             "src": "801:15:26"
                           },
@@ -2644,11 +2644,11 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 5515,
+                              "referencedDeclaration": 5634,
                               "type": "contract NFT",
                               "value": "nft"
                             },
-                            "id": 5582,
+                            "id": 5701,
                             "name": "Identifier",
                             "src": "817:3:26"
                           },
@@ -2658,11 +2658,11 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 5517,
+                              "referencedDeclaration": 5636,
                               "type": "contract Token",
                               "value": "uru"
                             },
-                            "id": 5583,
+                            "id": 5702,
                             "name": "Identifier",
                             "src": "822:3:26"
                           },
@@ -2672,11 +2672,11 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 5539,
+                              "referencedDeclaration": 5658,
                               "type": "uint256",
                               "value": "_level"
                             },
-                            "id": 5584,
+                            "id": 5703,
                             "name": "Identifier",
                             "src": "827:6:26"
                           },
@@ -2686,21 +2686,21 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 5541,
+                              "referencedDeclaration": 5660,
                               "type": "uint256",
                               "value": "_coolDownTime"
                             },
-                            "id": 5585,
+                            "id": 5704,
                             "name": "Identifier",
                             "src": "835:13:26"
                           }
                         ],
-                        "id": 5586,
+                        "id": 5705,
                         "name": "FunctionCall",
                         "src": "801:48:26"
                       }
                     ],
-                    "id": 5587,
+                    "id": 5706,
                     "name": "VariableDeclarationStatement",
                     "src": "775:74:26"
                   },
@@ -2725,7 +2725,7 @@
                             "attributes": {
                               "argumentTypes": [
                                 {
-                                  "typeIdentifier": "t_struct$_Monster_$5528_memory",
+                                  "typeIdentifier": "t_struct$_Monster_$5647_memory",
                                   "typeString": "struct NFT_Factory.Monster memory"
                                 }
                               ],
@@ -2744,16 +2744,16 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 5531,
+                                  "referencedDeclaration": 5650,
                                   "type": "struct NFT_Factory.Monster storage ref[] storage ref",
                                   "value": "monsters"
                                 },
-                                "id": 5588,
+                                "id": 5707,
                                 "name": "Identifier",
                                 "src": "860:8:26"
                               }
                             ],
-                            "id": 5590,
+                            "id": 5709,
                             "name": "MemberAccess",
                             "src": "860:13:26"
                           },
@@ -2776,7 +2776,7 @@
                                 "attributes": {
                                   "argumentTypes": [
                                     {
-                                      "typeIdentifier": "t_contract$_NFT_$5508",
+                                      "typeIdentifier": "t_contract$_NFT_$5627",
                                       "typeString": "contract NFT"
                                     },
                                     {
@@ -2799,11 +2799,11 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 5528,
+                                  "referencedDeclaration": 5647,
                                   "type": "type(struct NFT_Factory.Monster storage pointer)",
                                   "value": "Monster"
                                 },
-                                "id": 5591,
+                                "id": 5710,
                                 "name": "Identifier",
                                 "src": "874:7:26"
                               },
@@ -2813,11 +2813,11 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 5533,
+                                  "referencedDeclaration": 5652,
                                   "type": "contract NFT",
                                   "value": "_NFTAddress"
                                 },
-                                "id": 5592,
+                                "id": 5711,
                                 "name": "Identifier",
                                 "src": "882:11:26"
                               },
@@ -2827,11 +2827,11 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 5537,
+                                  "referencedDeclaration": 5656,
                                   "type": "string memory",
                                   "value": "_name"
                                 },
-                                "id": 5593,
+                                "id": 5712,
                                 "name": "Identifier",
                                 "src": "895:5:26"
                               },
@@ -2841,11 +2841,11 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 5539,
+                                  "referencedDeclaration": 5658,
                                   "type": "uint256",
                                   "value": "_level"
                                 },
-                                "id": 5594,
+                                "id": 5713,
                                 "name": "Identifier",
                                 "src": "902:6:26"
                               },
@@ -2855,11 +2855,11 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 5541,
+                                  "referencedDeclaration": 5660,
                                   "type": "uint256",
                                   "value": "_coolDownTime"
                                 },
-                                "id": 5595,
+                                "id": 5714,
                                 "name": "Identifier",
                                 "src": "910:13:26"
                               },
@@ -2869,32 +2869,32 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 5543,
+                                  "referencedDeclaration": 5662,
                                   "type": "uint256",
                                   "value": "_reward"
                                 },
-                                "id": 5596,
+                                "id": 5715,
                                 "name": "Identifier",
                                 "src": "925:7:26"
                               }
                             ],
-                            "id": 5597,
+                            "id": 5716,
                             "name": "FunctionCall",
                             "src": "874:59:26"
                           }
                         ],
-                        "id": 5598,
+                        "id": 5717,
                         "name": "FunctionCall",
                         "src": "860:74:26"
                       }
                     ],
-                    "id": 5599,
+                    "id": 5718,
                     "name": "ExpressionStatement",
                     "src": "860:74:26"
                   },
                   {
                     "attributes": {
-                      "functionReturnParameters": 5547
+                      "functionReturnParameters": 5666
                     },
                     "children": [
                       {
@@ -2916,7 +2916,7 @@
                             "attributes": {
                               "argumentTypes": [
                                 {
-                                  "typeIdentifier": "t_contract$_NFT_Farming_$5879",
+                                  "typeIdentifier": "t_contract$_NFT_Farming_$5998",
                                   "typeString": "contract NFT_Farming"
                                 }
                               ],
@@ -2927,7 +2927,7 @@
                               "type": "type(address)",
                               "value": "address"
                             },
-                            "id": 5600,
+                            "id": 5719,
                             "name": "ElementaryTypeNameExpression",
                             "src": "952:7:26"
                           },
@@ -2937,41 +2937,41 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 5579,
+                              "referencedDeclaration": 5698,
                               "type": "contract NFT_Farming",
                               "value": "nft_farming"
                             },
-                            "id": 5601,
+                            "id": 5720,
                             "name": "Identifier",
                             "src": "960:11:26"
                           }
                         ],
-                        "id": 5602,
+                        "id": 5721,
                         "name": "FunctionCall",
                         "src": "952:20:26"
                       }
                     ],
-                    "id": 5603,
+                    "id": 5722,
                     "name": "Return",
                     "src": "945:27:26"
                   }
                 ],
-                "id": 5604,
+                "id": 5723,
                 "name": "Block",
                 "src": "543:436:26"
               }
             ],
-            "id": 5605,
+            "id": 5724,
             "name": "FunctionDefinition",
             "src": "380:599:26"
           }
         ],
-        "id": 5606,
+        "id": 5725,
         "name": "ContractDefinition",
         "src": "128:853:26"
       }
     ],
-    "id": 5607,
+    "id": 5726,
     "name": "SourceUnit",
     "src": "32:951:26"
   },
@@ -2988,7 +2988,7 @@
     }
   },
   "schemaVersion": "3.4.5",
-  "updatedAt": "2022-05-26T04:59:00.061Z",
+  "updatedAt": "2022-05-26T06:27:51.677Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}

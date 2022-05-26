@@ -96,12 +96,15 @@ contract Master {
     function harvest(uint256 _pid) public {
         poolinfo storage pool = poolInfo[_pid];
         userinfo storage user = userInfo[_pid][msg.sender];
-        
+
+        uint256 userContribution = calculateContribute(_pid, msg.sender);        
         // 현재 마지막으로 reward에 저장되어 있는 값(1) + 해당 풀의 lastUpdatedTime과 현재 블록시간의 차이에다가 현재 urupershare를 곱한 값(2)을 지급
         // 그리고 reward를 0으로 만들어 버린다. 그리고 인출한 '해당 풀에민' 모든 유저 정보를 업데이트 해줘야 한다.
         // 왜냐하면 lastUpdatedTime을 갱신해야 하기 때문. 갱신하지 않으면 바로 또 harvest를 했을 때 2가 중복 지급이 되어버리기 떄문임.
-        uint256 nowReward = block.timestamp.sub(pool.lastUpdatedTime).mul(pool.URUPerShare);
-        uint256 toTransfer = user.reward.add(nowReward);
+
+        uint256 nowReward = block.timestamp.sub(pool.lastUpdatedTime).mul(pool.URUPerShare).mul(userContribution);
+        // contribution이랑 urupershare계산할 때 각각 100씩 곱한거 10000으로 나눠줘서 디코딩
+        uint256 toTransfer = user.reward.add(nowReward).div(10000);
 
         uru.mint(msg.sender, toTransfer);
 
@@ -111,11 +114,28 @@ contract Master {
 
     // 예치량의 변동에 따라서 새롭게 풀 끼리의 분배비율을 업데이트 하고 모든 풀의 모든 유저의 그 때까지의 보상을 reward에 스냅샷
     function updatePool() internal {
-        // 풀 정보 업데이트 (마지막 업데이트 시기 기록, 분배비율 조정)
+
         for (uint256 i = 0; i < poolInfo.length; i++) {
+            // 모든 예치에 대해서 현재까지 reward 스냅샷
+
+            for (uint256 j = 0; i < userList[i].length; j++) {
+                address user = userList[i][j];
+                uint256 userContribution = calculateContribute(i, user);
+                userInfo[i][user].reward = block.timestamp.sub(poolInfo[i].lastUpdatedTime).mul(poolInfo[i].URUPerShare).mul(userContribution);
+            }
+            // 풀 정보 업데이트
             poolInfo[i].lastUpdatedTime = block.timestamp;
-            poolInfo[i].URUPerShare = poolInfo[i].stakeAmount.mul(100).div(totalStakeAmount);
+            poolInfo[i].URUPerShare = poolInfo[i].stakeAmount.mul(100).div(totalStakeAmount).mul(URUperblock);
         }
+    }
+
+    // 풀 내의 비율 계산
+    function calculateContribute(uint256 _pid, address _user) internal view returns(uint256) {
+        poolinfo storage pool = poolInfo[_pid];
+        userinfo storage user = userInfo[_pid][_user];
+
+        uint256 contribution = (user.amount.mul(100)).div((KIP7(pool.lpToken)).balanceOf(address(this)));
+        return contribution;
     }
 
     // // 저장된 lp-token 주소 반환
