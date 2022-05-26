@@ -25,6 +25,8 @@ import {
   failNoti,
   clearState,
 } from "../../notification/notifiactionSlice";
+import { uruABI, uruAddress } from "../../userinfo/TokenContract";
+import { updateBalance } from "../../userinfo/userInfoSlice";
 
 const AddV2Pool = ({ account }) => {
   const [klayBalance, setKlayBalance] = useState(0);
@@ -146,6 +148,15 @@ const AddV2Pool = ({ account }) => {
       );
       dispatch(
         successNoti({ msg: `${currentTokenSymbol}/KLAY 풀이 추가되었습니다!` })
+      );
+      const token = new caver.klay.Contract(uruABI, uruAddress);
+      const balance = await token.methods.balanceOf(account).call();
+      const locked = await token.methods.getLockedTokenAmount(account).call();
+      dispatch(
+        updateBalance({
+          uru: parseFloat(Number(caver.utils.fromPeb(balance)).toFixed(2)),
+          locked: parseFloat(Number(caver.utils.fromPeb(locked)).toFixed(2)),
+        })
       );
     } catch (error) {
       console.log(error);

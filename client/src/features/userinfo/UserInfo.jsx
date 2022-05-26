@@ -1,9 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { shallowEqual, useSelector } from "react-redux";
 
-import { UserInfoConatiner } from "../../styles/UserInfo.styled";
+import {
+  UserInfoConatiner,
+  UruBalance,
+  LockedUruBalance,
+} from "../../styles/UserInfo.styled";
 
 const UserInfo = () => {
-  return <UserInfoConatiner></UserInfoConatiner>;
+  const { uru, lockedUru } = useSelector(
+    (state) => state.userInfo,
+    shallowEqual
+  );
+
+  useEffect(() => {
+    console.log(uru, lockedUru);
+  }, [uru, lockedUru]);
+  return (
+    <UserInfoConatiner>
+      <UruBalance>{uru}</UruBalance>
+      <LockedUruBalance>{lockedUru}</LockedUruBalance>
+    </UserInfoConatiner>
+  );
 };
 
 export default UserInfo;

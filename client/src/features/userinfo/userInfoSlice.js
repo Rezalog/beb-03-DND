@@ -21,10 +21,17 @@ const userInfoSlice = createSlice({
     addAddress: (state, action) => {
       state.address = action.payload.address; // or state.address = action.payload
     },
+    updateBalance: (state, action) => {
+      return {
+        ...state,
+        uru: action.payload.uru,
+        lockedUru: action.payload.locked,
+      };
+    },
   },
 });
 
-export const { addNickname, addCharacterIndex, addAddress } =
+export const { addNickname, addCharacterIndex, addAddress, updateBalance } =
   userInfoSlice.actions;
 
 export default userInfoSlice.reducer;

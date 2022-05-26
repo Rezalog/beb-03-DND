@@ -21,6 +21,8 @@ import {
   failNoti,
   clearState,
 } from "../../notification/notifiactionSlice";
+import { uruABI, uruAddress } from "../../userinfo/TokenContract";
+import { updateBalance } from "../../userinfo/userInfoSlice";
 
 const AddPool = ({ account }) => {
   const [klayBalance, setKlayBalance] = useState(0);
@@ -89,8 +91,18 @@ const AddPool = ({ account }) => {
       };
       dispatch(addNewToken(newToken));
 
+      const token = new caver.klay.Contract(uruABI, uruAddress);
+      const balance = await token.methods.balanceOf(account).call();
+      const locked = await token.methods.getLockedTokenAmount(account).call();
+      dispatch(
+        updateBalance({
+          uru: parseFloat(Number(caver.utils.fromPeb(balance)).toFixed(2)),
+          locked: parseFloat(Number(caver.utils.fromPeb(locked)).toFixed(2)),
+        })
+      );
+
       await axios.post(
-        "http://localhost:8080/contracts/token",
+        "http://localhost:8080/Contracts/token",
         [
           {
             token_symbol: currentTokenSymbol,
@@ -106,7 +118,7 @@ const AddPool = ({ account }) => {
       );
 
       await axios.post(
-        "http://localhost:8080/contracts/pair",
+        "http://localhost:8080/Contract/pair",
         {
           pair_address: exchangeAddress,
           pair_name: `${currentTokenSymbol}/KLAY`,

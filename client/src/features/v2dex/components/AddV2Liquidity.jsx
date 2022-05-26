@@ -24,6 +24,8 @@ import {
   routerABI,
   pairABI,
 } from "../../V2Swap/v2Contract";
+import { uruABI, uruAddress } from "../../userinfo/TokenContract";
+import { updateBalance } from "../../userinfo/userInfoSlice";
 
 const AddV2Liquidity = ({
   setSelectedToken,
@@ -121,7 +123,6 @@ const AddV2Liquidity = ({
         input1.current.value = parseFloat(Number(result).toFixed(6));
         setTokenAAmount(result);
         setTokenBAmount(input2Value);
-        getPrice();
         //getShareOfLP();
       } else {
         input1.current.value = "";
@@ -129,6 +130,7 @@ const AddV2Liquidity = ({
         setReversePrice("");
       }
     }
+    getPrice();
   };
 
   const getInput2 = () => {
@@ -160,7 +162,6 @@ const AddV2Liquidity = ({
         setTokenAAmount(input1Value);
         console.log(result);
         console.log(input1Value);
-        getPrice();
         //getShareOfLP();
       } else {
         input2.current.value = "";
@@ -168,10 +169,10 @@ const AddV2Liquidity = ({
         setReversePrice("");
       }
     }
+    getPrice();
   };
 
   const addLiquidity = async () => {
-    console.log(account);
     dispatch(pendingNoti());
     const caver = new Caver(window.klaytn);
 
@@ -212,8 +213,17 @@ const AddV2Liquidity = ({
           from: account,
           gas: 2000000,
         });
-
-      const pair = new caver.klay.Contract(pairABI, pairAddress);
+      let pair;
+      if (pairAddress === "0x0000000000000000000000000000000000000000") {
+        const factory = new caver.klay.Contract(factoryABI, factoryAddress);
+        const _pairAddress = await factory.methods.pairs(
+          tokenAAddress,
+          tokenBAddress
+        );
+        pair = new caver.klay.Contract(pairABI, _pairAddress);
+      } else {
+        pair = new caver.klay.Contract(pairABI, pairAddress);
+      }
       const reserved = await pair.methods.getReserves().call();
       setReservedTokenA(caver.utils.fromPeb(reserved[0]));
       setReservedTokenB(caver.utils.fromPeb(reserved[1]));
@@ -224,6 +234,15 @@ const AddV2Liquidity = ({
            와 ${Number(tokenBAmount).toFixed(2)} ${
             tokens[token1].symbol
           } 가 추가되었습니다!`,
+        })
+      );
+      const token = new caver.klay.Contract(uruABI, uruAddress);
+      const balance = await token.methods.balanceOf(account).call();
+      const locked = await token.methods.getLockedTokenAmount(account).call();
+      dispatch(
+        updateBalance({
+          uru: parseFloat(Number(caver.utils.fromPeb(balance)).toFixed(2)),
+          locked: parseFloat(Number(caver.utils.fromPeb(locked)).toFixed(2)),
         })
       );
     } catch (error) {

@@ -86,10 +86,9 @@ const V2DexModal = () => {
                 }}
               ></button>
             </Header>
-            <DexNavbar left={currentNav * 120}>
+            <DexNavbar left={currentNav * 180} width={180}>
               <li onClick={() => setCurrentNav(0)}>나의 유동성</li>
               <li onClick={() => setCurrentNav(1)}>유동성 풀</li>
-              <li onClick={() => setCurrentNav(2)}>풀 추가</li>
               <div></div>
             </DexNavbar>
             {currentNav == 0 && account ? (

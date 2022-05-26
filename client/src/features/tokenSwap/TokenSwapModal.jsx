@@ -36,6 +36,8 @@ import {
   clearState as clear,
 } from "../notification/notifiactionSlice";
 import { initExchange } from "../dex/dexSlice";
+import { uruABI, uruAddress } from "../userinfo/TokenContract";
+import { updateBalance } from "../userinfo/userInfoSlice";
 
 const TokenSwapModal = () => {
   const dispatch = useDispatch();
@@ -160,6 +162,16 @@ const TokenSwapModal = () => {
             msg: `최소 ${Number(minOutput).toFixed(6)} ${
               tokens[token1].symbol
             }을 받았습니다!`,
+          })
+        );
+
+        const token = new caver.klay.Contract(uruABI, uruAddress);
+        const balance = await token.methods.balanceOf(account).call();
+        const locked = await token.methods.getLockedTokenAmount(account).call();
+        dispatch(
+          updateBalance({
+            uru: parseFloat(Number(caver.utils.fromPeb(balance)).toFixed(2)),
+            locked: parseFloat(Number(caver.utils.fromPeb(locked)).toFixed(2)),
           })
         );
       } catch (error) {
@@ -296,11 +308,9 @@ const TokenSwapModal = () => {
   };
 
   useEffect(() => {
-    if (tokens.length && exchanges.length) {
-      getToken0();
-      getToken1();
-    }
-  }, [tokens, token0, token1]);
+    getToken0();
+    getToken1();
+  }, [token0, token1]);
 
   useEffect(() => {
     getTokenList();

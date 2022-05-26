@@ -15,7 +15,6 @@ const V2SubModal = ({ selectedToken }) => {
         color: "white",
       }}
     >
-      Token Sub Modal Coming Soon!!!
       <button onClick={() => dispatch(closeSubModal())}>X</button>
       {tokens.map((token, index) => {
         return (

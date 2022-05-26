@@ -14,6 +14,8 @@ import {
   failNoti,
   clearState,
 } from "../../notification/notifiactionSlice";
+import { uruABI, uruAddress } from "../../userinfo/TokenContract";
+import { updateBalance } from "../../userinfo/userInfoSlice";
 
 const RemoveLiquidity = ({ account, selectedExchange, setIsWithdrawal }) => {
   const dispatch = useDispatch();
@@ -53,10 +55,20 @@ const RemoveLiquidity = ({ account, selectedExchange, setIsWithdrawal }) => {
           gas: 2000000,
         });
 
-      const balance = await kip7.balanceOf(account);
+      let balance = await kip7.balanceOf(account);
 
       setLp(caver.utils.fromPeb(balance));
       dispatch(successNoti({ msg: `성공적으로 출금되었습니다!` }));
+
+      const token = new caver.klay.Contract(uruABI, uruAddress);
+      balance = await token.methods.balanceOf(account).call();
+      const locked = await token.methods.getLockedTokenAmount(account).call();
+      dispatch(
+        updateBalance({
+          uru: parseFloat(Number(caver.utils.fromPeb(balance)).toFixed(2)),
+          locked: parseFloat(Number(caver.utils.fromPeb(locked)).toFixed(2)),
+        })
+      );
     } catch (error) {
       dispatch(failNoti());
     }

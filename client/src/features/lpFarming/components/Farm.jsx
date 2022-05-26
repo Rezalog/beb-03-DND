@@ -22,6 +22,8 @@ import {
   failNoti,
   clearState,
 } from "../../notification/notifiactionSlice";
+import { updateBalance } from "../../userinfo/userInfoSlice";
+import { uruAddress, uruABI } from "../../userinfo/TokenContract";
 
 const Farm = ({ address, name, tokenAddress }) => {
   const dispatch = useDispatch();
@@ -61,7 +63,65 @@ const Farm = ({ address, name, tokenAddress }) => {
         })
       );
     } catch (error) {
-      dispatch(failNoti);
+      dispatch(failNoti());
+    }
+    setTimeout(() => {
+      dispatch(clearState());
+    }, 5000);
+  };
+
+  const unStakeLPToken = async (e) => {
+    e.preventDefault();
+    dispatch(pendingNoti());
+    const caver = new Caver(window.klaytn);
+    try {
+      const balance = await exchange.methods.stakingBalance(account).call();
+
+      await exchange.methods.unstake(balance).send({
+        from: account,
+        gas: 200000,
+      });
+
+      dispatch(
+        successNoti({
+          msg: `LP 언스테이킹 성공!`,
+        })
+      );
+    } catch (error) {
+      dispatch(failNoti());
+    }
+    setTimeout(() => {
+      dispatch(clearState());
+    }, 5000);
+  };
+
+  const claimReward = async (e) => {
+    e.preventDefault();
+    dispatch(pendingNoti());
+    const caver = new Caver(window.klaytn);
+    try {
+      await exchange.methods.withdrawYield().send({
+        from: account,
+        gas: 200000,
+      });
+
+      dispatch(
+        successNoti({
+          msg: `${unlocked} URU 획득 성공!`,
+        })
+      );
+
+      const token = new caver.klay.Contract(uruABI, uruAddress);
+      const balance = await token.methods.balanceOf(account).call();
+      const locked = await token.methods.getLockedTokenAmount(account).call();
+      dispatch(
+        updateBalance({
+          uru: parseFloat(Number(caver.utils.fromPeb(balance)).toFixed(2)),
+          locked: parseFloat(Number(caver.utils.fromPeb(locked)).toFixed(2)),
+        })
+      );
+    } catch (error) {
+      dispatch(failNoti());
     }
     setTimeout(() => {
       dispatch(clearState());
@@ -86,7 +146,7 @@ const Farm = ({ address, name, tokenAddress }) => {
         .currentLockedPercentage()
         .call();
       setPercentage(_percentage);
-      setTokenAmount(Number(caver.utils.fromPeb(reward)).toString());
+      setTokenAmount(Number(reward).toString());
     }
   };
 
@@ -127,6 +187,7 @@ const Farm = ({ address, name, tokenAddress }) => {
               right: "50px",
               fontSize: "1rem",
             }}
+            onClick={claimReward}
           >
             Claim
           </Button>
@@ -152,7 +213,10 @@ const Farm = ({ address, name, tokenAddress }) => {
         >
           Stake
         </Button>
-        <Button style={{ width: "175px", bottom: "-100px", right: "5px" }}>
+        <Button
+          style={{ width: "175px", bottom: "-100px", right: "5px" }}
+          onClick={unStakeLPToken}
+        >
           Unstake
         </Button>
       </Content>
