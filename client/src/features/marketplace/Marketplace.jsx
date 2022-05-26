@@ -51,6 +51,7 @@ const Marketplace = () => {
       tempList.push({
         dna: weapon.weaponType,
         lvl: weapon.weaponLevel,
+        durability: weapon.durability,
         id: tokenId,
         marketId: id,
         owner: seller,
@@ -61,6 +62,7 @@ const Marketplace = () => {
         tempOnSale[tokenId] = {
           dna: weapon.weaponType,
           lvl: weapon.weaponLevel,
+          durability: weapon.durability,
           id: tokenId,
           marketId: id,
           owner: seller,

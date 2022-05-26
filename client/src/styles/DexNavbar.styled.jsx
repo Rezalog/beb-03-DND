@@ -20,7 +20,7 @@ export const DexNavbar = styled.ul`
 
   & > div {
     height: 4px;
-    width: 120px;
+    width: ${({ width }) => `${width || "120"}px`};
     background: white;
     position: absolute;
     bottom: -5px;

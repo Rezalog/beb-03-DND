@@ -9,9 +9,8 @@ const usersSchema = new mongoose.Schema({
   user_nickname : { type: String },  
   character_index: { type: String },
   user_uru_bal: { type: String, default: '0' },
-  user_dnd_bal: { type: String, default: '0' },
+  user_uru_lock_bal: { type: String, default: '0' },
   user_lp_bal: { type: String, default: '0'},
-  created_at: { type: Date, default: Date.now },
 //   privateKey: { type: String, required: true }
 },
 {

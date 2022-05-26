@@ -35,6 +35,8 @@ import {
   failNoti,
   clearState,
 } from "../notification/notifiactionSlice";
+import { uruABI, uruAddress } from "../userinfo/TokenContract";
+import { updateBalance } from "../userinfo/userInfoSlice";
 
 const V2SwapModal = () => {
   const dispatch = useDispatch();
@@ -71,7 +73,6 @@ const V2SwapModal = () => {
           const pairAddress = await factory.methods
             .pairs(tokens[next.token].address, tokens[token1].address)
             .call();
-
           if (pairAddress !== "0x0000000000000000000000000000000000000000") {
             result = [...next.path, tokens[token1].address];
             break;
@@ -201,6 +202,15 @@ const V2SwapModal = () => {
           msg: `최소 ${Number(minOutput).toFixed(6)} ${
             tokens[token1].symbol
           }을 받았습니다!`,
+        })
+      );
+      const token = new caver.klay.Contract(uruABI, uruAddress);
+      const balance = await token.methods.balanceOf(account).call();
+      const locked = await token.methods.getLockedTokenAmount(account).call();
+      dispatch(
+        updateBalance({
+          uru: parseFloat(Number(caver.utils.fromPeb(balance)).toFixed(2)),
+          locked: parseFloat(Number(caver.utils.fromPeb(locked)).toFixed(2)),
         })
       );
     } catch (error) {

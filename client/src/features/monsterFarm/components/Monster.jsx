@@ -25,6 +25,8 @@ import {
   failNoti,
   clearState,
 } from "../../notification/notifiactionSlice";
+import { uruABI, uruAddress } from "../../userinfo/TokenContract";
+import { updateBalance } from "../../userinfo/userInfoSlice";
 
 const Monster = ({
   name,
@@ -58,9 +60,18 @@ const Monster = ({
         from: address,
         gas: 200000,
       });
+      dispatch(successNoti({ msg: `${reward} URU 획득 완료!` }));
+      const token = new caver.klay.Contract(uruABI, uruAddress);
+      const balance = await token.methods.balanceOf(address).call();
+      const locked = await token.methods.getLockedTokenAmount(address).call();
+      dispatch(
+        updateBalance({
+          uru: parseFloat(Number(caver.utils.fromPeb(balance)).toFixed(2)),
+          locked: parseFloat(Number(caver.utils.fromPeb(locked)).toFixed(2)),
+        })
+      );
       getRemainingTime();
       updateWeapons();
-      dispatch(successNoti({ msg: `${reward} URU 획득 완료!` }));
     } catch (error) {
       dispatch(failNoti());
     }

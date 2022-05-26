@@ -17,6 +17,8 @@ import {
   failNoti,
   clearState,
 } from "../../notification/notifiactionSlice";
+import { uruABI, uruAddress } from "../../userinfo/TokenContract";
+import { updateBalance } from "../../userinfo/userInfoSlice";
 
 const AddLiquidity = ({
   account,
@@ -172,6 +174,16 @@ const AddLiquidity = ({
           msg: `${Number(tokenAmount).toFixed(2)} ${
             token0 === 0 ? tokens[token1].symbol : tokens[token0].symbol
           } 와 ${Number(klayAmount).toFixed(2)} KLAY 가 추가되었습니다!`,
+        })
+      );
+
+      const token = new caver.klay.Contract(uruABI, uruAddress);
+      const balance = await token.methods.balanceOf(account).call();
+      const locked = await token.methods.getLockedTokenAmount(account).call();
+      dispatch(
+        updateBalance({
+          uru: parseFloat(Number(caver.utils.fromPeb(balance)).toFixed(2)),
+          locked: parseFloat(Number(caver.utils.fromPeb(locked)).toFixed(2)),
         })
       );
     } catch (error) {
