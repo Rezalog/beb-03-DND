@@ -15,7 +15,12 @@ module.exports = function (deployer) {
   deployer.deploy(Migrations);
   // deployer.deploy(Token, "URUtoken", "URU", 18, value, 10000);
   // deployer.deploy(Factory, process.env.TOKEN_CONTRACT, process.env.TOKEN_CONTRACT, 120);
-  // deployer.deploy(Exchange, process.env.TOKEN_CONTRACT, process.env.TOKEN_CONTRACT, 120);
+  // deployer.deploy(
+  //   Exchange,
+  //   process.env.TOKEN_CONTRACT,
+  //   process.env.TOKEN_CONTRACT,
+  //   120
+  // );
   // deployer.deploy(LP_Farming, process.env.TOKEN_CONTRACT);
 
   // deployer.deploy(NFT, process.env.TOKEN_CONTRACT);
@@ -23,5 +28,5 @@ module.exports = function (deployer) {
   // deployer.deploy(NFT_Farming, process.env.NFT_CONTRACT, process.env.TOKEN_CONTRACT, 5, 15);
 
   // deployer.deploy(Betting,process.env.NFT_CONTRACT,process.env.TOKEN_CONTRACT);
-  deployer.deploy(Master, process.env.TOKEN_CONTRACT, 25);
+  deployer.deploy(Master, process.env.TOKEN_CONTRACT, 24);
 };

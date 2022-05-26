@@ -2,6 +2,7 @@
 pragma solidity ^0.5.6;
 
 import "@klaytn/contracts/token/KIP7/KIP7.sol";
+import "@klaytn/contracts/token/KIP7/IKIP7.sol";
 import "@klaytn/contracts/math/SafeMath.sol";
 import "./Token.sol";
 
@@ -15,7 +16,7 @@ contract Master {
     }
 
     struct poolinfo {
-        KIP7 lpToken;
+        address lpToken;
         uint256 stakeAmount; // 풀에 들어와 있는 돈
         uint256 lastUpdatedTime; // 마지막으로 갱신된 시간
         uint256 URUPerShare; // 해당 풀의 1단위당 지급할 uru;
@@ -46,7 +47,7 @@ contract Master {
     }
 
     // add pool
-    function add(KIP7 _lpToken) public {
+    function add(address _lpToken) public {
         uint256 lastUpdatedTime = block.timestamp;
         poolInfo.push(
             poolinfo({
@@ -63,19 +64,21 @@ contract Master {
         poolinfo storage pool = poolInfo[_pid];
         userinfo storage user = userInfo[_pid][msg.sender];
 
-        // 새로 예치시 해당 풀 유저 목록에 주소 저장
-        if(user.amount == 0) {
-            userList[_pid].push(msg.sender);
-        }
-
         // 입금 및 유저 입금량 저장
         totalStakeAmount = totalStakeAmount.add(_amount);
+        pool.stakeAmount = pool.stakeAmount.add(_amount);
         user.amount = user.amount.add(_amount);
-        pool.lpToken.transferFrom(address(msg.sender),address(this),_amount);
+        KIP7(pool.lpToken).transferFrom(msg.sender, address(this), _amount);
         emit Deposit(msg.sender, _pid, _amount);
 
         // 누군가 예치했으니 모든 풀에 대해서 분배 비율을 새롭게 조정해야함
         updatePool();
+
+        // 새로 예치하는 유저
+        if (user.amount == _amount) {
+            userList[_pid].push(msg.sender);
+            user.reward = 0;
+        }
     }
 
     function withdraw(uint256 _pid, uint256 _amount) public {
@@ -83,9 +86,15 @@ contract Master {
         userinfo storage user = userInfo[_pid][msg.sender];
         require(user.amount >= _amount, "can't withdraw over your deposit");
 
+        // 전액 인출시 이자도 자동 인출
+        if (user.amount == _amount) {
+            harvest(_pid);
+        }
+
         totalStakeAmount = totalStakeAmount.sub(_amount);
+        pool.stakeAmount = pool.stakeAmount.sub(_amount);
         user.amount = user.amount.sub(_amount);
-        pool.lpToken.transfer(address(msg.sender), _amount);
+        KIP7(pool.lpToken).transfer(msg.sender, _amount);
         emit Withdraw(msg.sender, _pid, _amount);
 
         // 누군가 인출했으니 모든 풀에 대해서 분배 비율을 새롭게 조정해야함
@@ -97,14 +106,15 @@ contract Master {
         poolinfo storage pool = poolInfo[_pid];
         userinfo storage user = userInfo[_pid][msg.sender];
 
-        uint256 userContribution = calculateContribute(_pid, msg.sender);        
+        uint256 userContribution = calculateContribute(_pid, msg.sender);  
+
         // 현재 마지막으로 reward에 저장되어 있는 값(1) + 해당 풀의 lastUpdatedTime과 현재 블록시간의 차이에다가 현재 urupershare를 곱한 값(2)을 지급
         // 그리고 reward를 0으로 만들어 버린다. 그리고 인출한 '해당 풀에민' 모든 유저 정보를 업데이트 해줘야 한다.
         // 왜냐하면 lastUpdatedTime을 갱신해야 하기 때문. 갱신하지 않으면 바로 또 harvest를 했을 때 2가 중복 지급이 되어버리기 떄문임.
 
-        uint256 nowReward = block.timestamp.sub(pool.lastUpdatedTime).mul(pool.URUPerShare).mul(userContribution);
+        uint256 nowReward = block.timestamp.sub(pool.lastUpdatedTime).mul(pool.URUPerShare).mul(userContribution).div(10000);
         // contribution이랑 urupershare계산할 때 각각 100씩 곱한거 10000으로 나눠줘서 디코딩
-        uint256 toTransfer = user.reward.add(nowReward).div(10000);
+        uint256 toTransfer = (user.reward).add(nowReward);
 
         uru.mint(msg.sender, toTransfer);
 
@@ -114,23 +124,20 @@ contract Master {
 
     // 예치량의 변동에 따라서 새롭게 풀 끼리의 분배비율을 업데이트 하고 모든 풀의 모든 유저의 그 때까지의 보상을 reward에 스냅샷
     function updatePool() internal {
-
         for (uint256 i = 0; i < poolInfo.length; i++) {
-            // 모든 예치에 대해서 현재까지 reward 스냅샷
-
-            for (uint256 j = 0; i < userList[i].length; j++) {
-                address user = userList[i][j];
-                uint256 userContribution = calculateContribute(i, user);
-                userInfo[i][user].reward = block.timestamp.sub(poolInfo[i].lastUpdatedTime).mul(poolInfo[i].URUPerShare).mul(userContribution);
+            for (uint256 j = 0; j < userList[i].length; j++) {
+                if (poolInfo[i].stakeAmount != 0) {
+                userInfo[i][userList[i][j]].reward = userInfo[i][userList[i][j]].reward.add(calculateCurrentReward(i, userList[i][j]));
+                }
             }
             // 풀 정보 업데이트
+            poolInfo[i].URUPerShare = (poolInfo[i].stakeAmount).mul(100).div(totalStakeAmount).mul(URUperblock);
             poolInfo[i].lastUpdatedTime = block.timestamp;
-            poolInfo[i].URUPerShare = poolInfo[i].stakeAmount.mul(100).div(totalStakeAmount).mul(URUperblock);
         }
     }
 
     // 풀 내의 비율 계산
-    function calculateContribute(uint256 _pid, address _user) internal view returns(uint256) {
+    function calculateContribute(uint256 _pid, address _user) public view returns(uint256) {
         poolinfo storage pool = poolInfo[_pid];
         userinfo storage user = userInfo[_pid][_user];
 
@@ -138,13 +145,17 @@ contract Master {
         return contribution;
     }
 
-    // // 저장된 lp-token 주소 반환
-    // function getLPAddress(uint256 _pid) public view returns (address) {
-    //     return address(poolInfo[_pid].lpToken);
-    // }
+    // 마지막 갱신 후 현재 쌓이고 있는 보상
+    function calculateCurrentReward(uint256 _pid, address _user) public view returns(uint256) {
+        poolinfo storage pool = poolInfo[_pid];
 
-    // // 저장된 lp-token 주소 반환
-    // function getPendingURU(uint256 _pid, address _user) public view returns (uint256) {
-    //     return ;
-    // }
+        uint256 userContribution = calculateContribute(_pid, _user); 
+        return block.timestamp.sub(pool.lastUpdatedTime).mul(pool.URUPerShare).mul(userContribution).div(10000);
+    }
+
+    // struct 내에 저장된 보상 반환
+    function calculateReward(uint256 _pid, address _user) public view returns(uint256) {
+        userinfo storage user = userInfo[_pid][_user];
+        return user.reward;
+    }
 }
