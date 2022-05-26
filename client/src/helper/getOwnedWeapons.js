@@ -1,5 +1,5 @@
 import Caver from "caver-js";
-import { nftABI, nftAddress } from "../features/weaponCompound/nftContractInfo"; // 무기 합성을 위해 import 위치 임시 변경
+import { nftABI, nftAddress } from "../features/marketplace/nftContractInfo"; // 무기 합성을 위해 import 위치 임시 변경
 
 export const getOwnedWeapons = (address) => {
   return new Promise(async (resolve, reject) => {

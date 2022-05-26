@@ -37,10 +37,11 @@ const TradingList = ({ getMarketplaceList }) => {
 
     try {
       //buyBasicWeapon으로 하면 노티가 안꺼짐
-      await nft.methods.mint().send({
+      await nft.methods.mint(address, 1).send({
         from: address,
         gas: 2000000,
       });
+      console.log("jere");
       getMarketplaceList();
       dispatch(successNoti({ msg: `NFT 구매 성공!` }));
 
@@ -54,6 +55,7 @@ const TradingList = ({ getMarketplaceList }) => {
         })
       );
     } catch (err) {
+      console.log(err);
       dispatch(failNoti());
     }
     setTimeout(() => {

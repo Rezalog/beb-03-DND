@@ -123,7 +123,8 @@ const Monster = ({
   };
 
   useEffect(() => {
-    if (staked.durability > 0) getRemainingTime();
+    console.log("staked", staked);
+    if (staked?.durability > 0) getRemainingTime();
   }, [staked]);
 
   // 이런식으로 하면 몇초뒤부터 카운트 시작함

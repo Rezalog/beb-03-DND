@@ -1,52 +1,69 @@
 module.exports = {
   tokenAddress: "0x481253AC3b7F9738461c70f8282435287915895d",
-  marketAddress: "0x82312aD04a587eAFb39a3860d399069a484e111f",
+  marketAddress: "0xEc17781fdaf32A9B2C29Ccf19270a3c20eeC6d67",
   nftAddress: "0x8C74C5269ebE531345b93EC828e71C03bF18A613",
   marketABI: [
     {
-      constant: false,
-      inputs: [
+      constant: true,
+      inputs: [],
+      name: "nft",
+      outputs: [
         {
-          name: "_tokenId",
-          type: "uint256",
-        },
-        {
-          name: "_price",
-          type: "uint256",
+          name: "",
+          type: "address",
         },
       ],
-      name: "addNftToMarket",
-      outputs: [],
       payable: false,
-      stateMutability: "nonpayable",
+      stateMutability: "view",
       type: "function",
     },
     {
-      constant: false,
+      constant: true,
       inputs: [
         {
-          name: "_id",
+          name: "",
           type: "uint256",
         },
       ],
-      name: "buyNft",
-      outputs: [],
+      name: "onSales",
+      outputs: [
+        {
+          name: "id",
+          type: "uint256",
+        },
+        {
+          name: "seller",
+          type: "address",
+        },
+        {
+          name: "tokenId",
+          type: "uint256",
+        },
+        {
+          name: "price",
+          type: "uint256",
+        },
+        {
+          name: "sold",
+          type: "bool",
+        },
+      ],
       payable: false,
-      stateMutability: "nonpayable",
+      stateMutability: "view",
       type: "function",
     },
     {
-      constant: false,
-      inputs: [
+      constant: true,
+      inputs: [],
+      name: "token",
+      outputs: [
         {
-          name: "_id",
-          type: "uint256",
+          name: "",
+          type: "address",
         },
       ],
-      name: "removeNft",
-      outputs: [],
       payable: false,
-      stateMutability: "nonpayable",
+      stateMutability: "view",
       type: "function",
     },
     {
@@ -132,6 +149,24 @@ module.exports = {
       type: "event",
     },
     {
+      constant: false,
+      inputs: [
+        {
+          name: "_tokenId",
+          type: "uint256",
+        },
+        {
+          name: "_price",
+          type: "uint256",
+        },
+      ],
+      name: "addNftToMarket",
+      outputs: [],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
       constant: true,
       inputs: [],
       name: "getNfts",
@@ -168,66 +203,31 @@ module.exports = {
       type: "function",
     },
     {
-      constant: true,
-      inputs: [],
-      name: "nft",
-      outputs: [
-        {
-          name: "",
-          type: "address",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: true,
+      constant: false,
       inputs: [
         {
-          name: "",
+          name: "_id",
           type: "uint256",
         },
       ],
-      name: "onSales",
-      outputs: [
-        {
-          name: "id",
-          type: "uint256",
-        },
-        {
-          name: "seller",
-          type: "address",
-        },
-        {
-          name: "tokenId",
-          type: "uint256",
-        },
-        {
-          name: "price",
-          type: "uint256",
-        },
-        {
-          name: "sold",
-          type: "bool",
-        },
-      ],
+      name: "buyNft",
+      outputs: [],
       payable: false,
-      stateMutability: "view",
+      stateMutability: "nonpayable",
       type: "function",
     },
     {
-      constant: true,
-      inputs: [],
-      name: "token",
-      outputs: [
+      constant: false,
+      inputs: [
         {
-          name: "",
-          type: "address",
+          name: "_id",
+          type: "uint256",
         },
       ],
+      name: "removeNft",
+      outputs: [],
       payable: false,
-      stateMutability: "view",
+      stateMutability: "nonpayable",
       type: "function",
     },
   ],
