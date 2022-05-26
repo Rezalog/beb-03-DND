@@ -20,6 +20,8 @@ import v2SwapModalSlice from "./features/modal/v2SwapModalSlice";
 import v2SwapSlice from "./features/V2Swap/v2SwapSlice";
 import v2DexModalSlice from "./features/modal/v2DexModalSlice";
 import V2DexSlice from "./features/v2dex/V2DexSlice";
+import bettingModalSlice from "./features/modal/bettingModalSlice";
+import bettingSlice from "./features/betting/bettingSlice";
 
 export const store = configureStore({
   reducer: {
@@ -44,5 +46,7 @@ export const store = configureStore({
     v2Swap: v2SwapSlice,
     v2DexModal: v2DexModalSlice,
     v2Dex: V2DexSlice,
+    bettingModal: bettingModalSlice,
+    betting: bettingSlice,
   },
 });

@@ -1,7 +1,7 @@
 module.exports = {
   tokenAddress: "0x481253AC3b7F9738461c70f8282435287915895d",
   marketAddress: "0x82312aD04a587eAFb39a3860d399069a484e111f",
-  nftAddress: "0x222519Bc9A2e7B6a93E3651e9f009DD870bB988C",
+  nftAddress: "0x8C74C5269ebE531345b93EC828e71C03bF18A613",
   marketABI: [
     {
       constant: false,
@@ -304,13 +304,8 @@ module.exports = {
     },
     {
       constant: true,
-      inputs: [
-        {
-          name: "_weaponId",
-          type: "uint256",
-        },
-      ],
-      name: "getWeaponLevel",
+      inputs: [],
+      name: "totalSupply",
       outputs: [
         {
           name: "",
@@ -323,8 +318,13 @@ module.exports = {
     },
     {
       constant: true,
-      inputs: [],
-      name: "totalSupply",
+      inputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      name: "tokenToFixDurability",
       outputs: [
         {
           name: "",
@@ -358,20 +358,6 @@ module.exports = {
       type: "function",
     },
     {
-      constant: false,
-      inputs: [
-        {
-          name: "_weaponId",
-          type: "uint256",
-        },
-      ],
-      name: "fixWeaponEnchant",
-      outputs: [],
-      payable: false,
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
       constant: true,
       inputs: [
         {
@@ -392,61 +378,6 @@ module.exports = {
       ],
       payable: false,
       stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          name: "_weaponId",
-          type: "uint256",
-        },
-      ],
-      name: "fixWeaponDurability",
-      outputs: [],
-      payable: false,
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          name: "recipient",
-          type: "address",
-        },
-        {
-          name: "_weaponLevel",
-          type: "uint256",
-        },
-      ],
-      name: "mint",
-      outputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          name: "_weapon1Id",
-          type: "uint256",
-        },
-        {
-          name: "_weapon2Id",
-          type: "uint256",
-        },
-      ],
-      name: "compoundWeapon",
-      outputs: [],
-      payable: false,
-      stateMutability: "nonpayable",
       type: "function",
     },
     {
@@ -541,20 +472,6 @@ module.exports = {
       type: "function",
     },
     {
-      constant: false,
-      inputs: [
-        {
-          name: "_weaponLevel",
-          type: "uint256",
-        },
-      ],
-      name: "createRandomWeapon",
-      outputs: [],
-      payable: false,
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
       constant: true,
       inputs: [
         {
@@ -574,20 +491,6 @@ module.exports = {
       type: "function",
     },
     {
-      constant: false,
-      inputs: [
-        {
-          name: "_weaponId",
-          type: "uint256",
-        },
-      ],
-      name: "stakingWeapon",
-      outputs: [],
-      payable: false,
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
       constant: true,
       inputs: [
         {
@@ -604,15 +507,6 @@ module.exports = {
       ],
       payable: false,
       stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: false,
-      inputs: [],
-      name: "buyBasicWeapon",
-      outputs: [],
-      payable: false,
-      stateMutability: "nonpayable",
       type: "function",
     },
     {
@@ -648,6 +542,48 @@ module.exports = {
       type: "function",
     },
     {
+      constant: true,
+      inputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      name: "compoundResult",
+      outputs: [
+        {
+          name: "",
+          type: "bool",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      name: "tokenToFixEnchant",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
       constant: false,
       inputs: [
         {
@@ -671,20 +607,6 @@ module.exports = {
       outputs: [],
       payable: false,
       stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: "createRandomNum",
-      outputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
       type: "function",
     },
     {
@@ -865,6 +787,178 @@ module.exports = {
       ],
       name: "ApprovalForAll",
       type: "event",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "recipient",
+          type: "address",
+        },
+        {
+          name: "_weaponLevel",
+          type: "uint256",
+        },
+      ],
+      name: "mint",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [],
+      name: "buyBasicWeapon",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "_weaponLevel",
+          type: "uint256",
+        },
+      ],
+      name: "createRandomWeapon",
+      outputs: [],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [],
+      name: "createRandomNum",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "_weapon1Id",
+          type: "uint256",
+        },
+        {
+          name: "_weapon2Id",
+          type: "uint256",
+        },
+      ],
+      name: "compoundWeapon",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [
+        {
+          name: "_weapon1Id",
+          type: "uint256",
+        },
+        {
+          name: "_weapon2Id",
+          type: "uint256",
+        },
+      ],
+      name: "getCompoundResult",
+      outputs: [
+        {
+          name: "",
+          type: "bool",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [
+        {
+          name: "_weaponId",
+          type: "uint256",
+        },
+      ],
+      name: "getWeaponLevel",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "_weaponId",
+          type: "uint256",
+        },
+      ],
+      name: "stakingWeapon",
+      outputs: [],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "_weaponId",
+          type: "uint256",
+        },
+      ],
+      name: "fixWeaponDurability",
+      outputs: [],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "_weaponId",
+          type: "uint256",
+        },
+      ],
+      name: "fixWeaponEnchant",
+      outputs: [],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
     },
   ],
 };

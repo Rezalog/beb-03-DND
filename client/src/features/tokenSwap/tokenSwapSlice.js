@@ -27,7 +27,7 @@ const tokenSwapSlice = createSlice({
       //state = initialState가 동작하지 않는다.
       //그래서 Object.assign 을 사용해서 초기화 진행함
       state.token0 = 0;
-      state.token1 = 1;
+      state.token1 = 0;
     },
     addNewToken: (state, action) => {
       state.tokens.push({
