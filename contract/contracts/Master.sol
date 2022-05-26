@@ -68,11 +68,12 @@ contract Master {
         totalStakeAmount = totalStakeAmount.add(_amount);
         pool.stakeAmount = pool.stakeAmount.add(_amount);
         user.amount = user.amount.add(_amount);
-        KIP7(pool.lpToken).transferFrom(msg.sender, address(this), _amount);
-        emit Deposit(msg.sender, _pid, _amount);
 
         // 누군가 예치했으니 모든 풀에 대해서 분배 비율을 새롭게 조정해야함
         updatePool();
+
+        KIP7(pool.lpToken).transferFrom(msg.sender, address(this), _amount);
+        emit Deposit(msg.sender, _pid, _amount);
 
         // 새로 예치하는 유저
         if (user.amount == _amount) {
@@ -86,19 +87,21 @@ contract Master {
         userinfo storage user = userInfo[_pid][msg.sender];
         require(user.amount >= _amount, "can't withdraw over your deposit");
 
+        // 정보 저장
+        totalStakeAmount = totalStakeAmount.sub(_amount);
+        pool.stakeAmount = pool.stakeAmount.sub(_amount);
+        user.amount = user.amount.sub(_amount);
+
+        // 누군가 인출했으니 모든 풀에 대해서 분배 비율을 새롭게 조정해야함
+        updatePool();
+
         // 전액 인출시 이자도 자동 인출
         if (user.amount == _amount) {
             harvest(_pid);
         }
 
-        totalStakeAmount = totalStakeAmount.sub(_amount);
-        pool.stakeAmount = pool.stakeAmount.sub(_amount);
-        user.amount = user.amount.sub(_amount);
         KIP7(pool.lpToken).transfer(msg.sender, _amount);
         emit Withdraw(msg.sender, _pid, _amount);
-
-        // 누군가 인출했으니 모든 풀에 대해서 분배 비율을 새롭게 조정해야함
-        updatePool();
     }
 
     // 이자 받기
