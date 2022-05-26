@@ -24,15 +24,19 @@ export const BetItem = styled.li`
   margin: 10px auto;
   width: 90%;
   height: 150px;
-  background-color: black;
   display: flex;
   flex-direction: column;
+  background-color: #ead4aa;
+  color: black;
+  box-shadow: 0px 0px 0px 5px #e4a672;
+  margin-bottom: 20px;
 `;
 
 export const BetTitle = styled.p`
   font-size: 1.5rem;
   display: flex;
   justify-self: flex-start;
+  align-items: flex-end;
   margin: 10px 5px;
 `;
 
