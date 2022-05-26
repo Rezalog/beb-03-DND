@@ -7,6 +7,7 @@ const NFT = artifacts.require("./NFT.sol");
 const NFT_Factory = artifacts.require("./NFT_Factory.sol");
 const NFT_Farming = artifacts.require("./NFT_Farming.sol");
 const Betting = artifacts.require("./Betting.sol");
+const Master = artifacts.require("./Master.sol");
 require("dotenv").config();
 const value = "10000000000000000000000";
 
@@ -21,9 +22,6 @@ module.exports = function (deployer) {
   // deployer.deploy(NFT_Factory);
   // deployer.deploy(NFT_Farming, process.env.NFT_CONTRACT, process.env.TOKEN_CONTRACT, 5, 15);
 
-  deployer.deploy(
-    Betting,
-    process.env.NFT_CONTRACT,
-    process.env.TOKEN_CONTRACT
-  );
+  // deployer.deploy(Betting,process.env.NFT_CONTRACT,process.env.TOKEN_CONTRACT);
+  deployer.deploy(Master, process.env.TOKEN_CONTRACT, 25);
 };
