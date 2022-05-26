@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Caver from "caver-js";
+import axios from "axios";
 import { factoryABI, exchangeABI, factoryAddress } from "../contractInfo";
 import { useDispatch, useSelector } from "react-redux";
 import { addExchange } from "../dexSlice";
@@ -14,6 +15,14 @@ import {
   InfoContainer,
 } from "../../../styles/TokenSwap.styled";
 import { Button } from "../../../styles/Modal.styled";
+import {
+  pendingNoti,
+  successNoti,
+  failNoti,
+  clearState,
+} from "../../notification/notifiactionSlice";
+import { uruABI, uruAddress } from "../../userinfo/TokenContract";
+import { updateBalance } from "../../userinfo/userInfoSlice";
 
 const AddPool = ({ account }) => {
   const [klayBalance, setKlayBalance] = useState(0);
@@ -31,35 +40,33 @@ const AddPool = ({ account }) => {
   const dispatch = useDispatch();
 
   const addPool = async () => {
+    dispatch(pendingNoti());
     const caver = new Caver(window.klaytn);
     const factory = new caver.klay.Contract(factoryABI, factoryAddress);
 
-    await factory.methods
-      .createExchange(selectedToken)
-      .send({ from: account, gas: 5000000 });
+    try {
+      await factory.methods
+        .createExchange(selectedToken, tokens[1].address, 604800)
+        .send({ from: account, gas: 5000000 });
 
-    const exchangeAddress = await factory.methods
-      .getExchange(selectedToken)
-      .call();
-    const exchange = new caver.klay.Contract(exchangeABI, exchangeAddress);
+      const exchangeAddress = await factory.methods
+        .getExchange(selectedToken)
+        .call();
+      const exchange = new caver.klay.Contract(exchangeABI, exchangeAddress);
 
-    const klayAmountInPeb = caver.utils.toPeb(klayAmount.current.value);
-    const tokenAmountInPeb = caver.utils.toPeb(tokenAmount.current.value);
+      const klayAmountInPeb = caver.utils.toPeb(klayAmount.current.value);
+      const tokenAmountInPeb = caver.utils.toPeb(tokenAmount.current.value);
 
-    const kip7 = new caver.klay.KIP7(selectedToken);
-    const allowed = await kip7.allowance(account, exchangeAddress);
-    // 변경해야함
-    // if allowed <= caver.utils.toPeb(input2.current.value)
-    if (allowed.toString() === "0") {
-      try {
+      const kip7 = new caver.klay.KIP7(selectedToken);
+      const allowed = await kip7.allowance(account, exchangeAddress);
+      // 변경해야함
+      // if allowed <= caver.utils.toPeb(input2.current.value)
+      if (allowed.toString() === "0") {
         await kip7.approve(exchangeAddress, caver.utils.toPeb("100000000"), {
           from: account,
         });
-      } catch (err) {
-        console.log(err);
       }
-    }
-    try {
+
       await exchange.methods.addLiquidity(tokenAmountInPeb).send({
         from: account,
         value: klayAmountInPeb,
@@ -77,13 +84,51 @@ const AddPool = ({ account }) => {
           tokenAddress: selectedToken,
         })
       );
+      const newToken = {
+        symbol: currentTokenSymbol,
+        name: currentTokenName,
+        address: newTokenAddress.current.value,
+      };
+      dispatch(addNewToken(newToken));
 
+      const token = new caver.klay.Contract(uruABI, uruAddress);
+      const balance = await token.methods.balanceOf(account).call();
+      const locked = await token.methods.getLockedTokenAmount(account).call();
       dispatch(
-        addNewToken({
-          symbol: currentTokenSymbol,
-          name: currentTokenName,
-          address: newTokenAddress.current.value,
+        updateBalance({
+          uru: parseFloat(Number(caver.utils.fromPeb(balance)).toFixed(2)),
+          locked: parseFloat(Number(caver.utils.fromPeb(locked)).toFixed(2)),
         })
+      );
+
+      await axios.post(
+        "http://localhost:8080/Contracts/token",
+        [
+          {
+            token_symbol: currentTokenSymbol,
+            token_name: currentTokenName,
+            token_address: newTokenAddress.current.value,
+          },
+        ],
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      await axios.post(
+        "http://localhost:8080/Contract/pair",
+        {
+          pair_address: exchangeAddress,
+          pair_name: `${currentTokenSymbol}/KLAY`,
+          token_address: selectedToken,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
       window.klaytn.sendAsync(
         {
@@ -107,30 +152,32 @@ const AddPool = ({ account }) => {
           }
         }
       );
-    } catch (err) {
-      console.log(err);
+      dispatch(
+        successNoti({ msg: `${currentTokenSymbol}/KLAY 풀이 추가되었습니다!` })
+      );
+    } catch (error) {
+      console.log(error);
+      dispatch(failNoti());
     }
+    setTimeout(() => {
+      dispatch(clearState());
+    }, 5000);
   };
 
   const addToken = async () => {
-    if (account) {
-      const caver = new Caver(window.klaytn);
-      try {
-        const kip7 = new caver.klay.KIP7(newTokenAddress.current.value);
-        const name = await kip7.name();
-        const symbol = await kip7.symbol();
-        const balance = await kip7.balanceOf(account);
-
-        const kbalance = await caver.klay.getBalance(account);
-        setKlayBalance(caver.utils.fromPeb(kbalance));
-        setCurrentTokenSymbol(symbol);
-        setCurrentTokenName(name);
-        setTokenBalance(caver.utils.fromPeb(balance));
-        setSelectedToken(newTokenAddress.current.value);
-        setIsValidAddress(true);
-      } catch (err) {
-        setIsValidAddress(false);
-      }
+    const caver = new Caver(window.klaytn);
+    try {
+      const kip7 = new caver.klay.KIP7(newTokenAddress.current.value);
+      const name = await kip7.name();
+      const symbol = await kip7.symbol();
+      const balance = await kip7.balanceOf(account);
+      setCurrentTokenSymbol(symbol);
+      setCurrentTokenName(name);
+      setTokenBalance(caver.utils.fromPeb(balance));
+      setSelectedToken(newTokenAddress.current.value);
+      setIsValidAddress(true);
+    } catch (err) {
+      setIsValidAddress(false);
     }
   };
 
@@ -144,6 +191,14 @@ const AddPool = ({ account }) => {
       setPrice("");
     }
   };
+  useEffect(() => {
+    const getBalance = async () => {
+      const caver = new Caver(window.klaytn);
+      const kbalance = await caver.klay.getBalance(account);
+      setKlayBalance(caver.utils.fromPeb(kbalance));
+    };
+    getBalance();
+  }, []);
 
   return (
     <>

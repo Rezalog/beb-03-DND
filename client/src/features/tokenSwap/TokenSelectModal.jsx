@@ -24,7 +24,7 @@ const TokenSelectModal = ({ selectedToken, getExchangeContract }) => {
             const selected =
               index === token0 || index === token1 ? true : false;
             return (
-              <TokenContainer>
+              <TokenContainer key={index}>
                 {selected ? (
                   <li key={index} style={{ opacity: "0.7" }}>
                     <h5>{token.symbol}</h5>

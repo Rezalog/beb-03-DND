@@ -1,38 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  exchanges: [
-    {
-      address: "0xf24d35830f3e1969dAf3Fc598B19921B67297e0B",
-      name: "URU/KLAY",
-      tokenAddress: "0x481253AC3b7F9738461c70f8282435287915895d",
-    },
-    {
-      address: "0xf24d35830f3e1969dAf3Fc598B19921B67297e0B",
-      name: "URU/KLAY",
-      tokenAddress: "0x481253AC3b7F9738461c70f8282435287915895d",
-    },
-    {
-      address: "0xf24d35830f3e1969dAf3Fc598B19921B67297e0B",
-      name: "URU/KLAY",
-      tokenAddress: "0x481253AC3b7F9738461c70f8282435287915895d",
-    },
-    {
-      address: "0xf24d35830f3e1969dAf3Fc598B19921B67297e0B",
-      name: "URU/KLAY",
-      tokenAddress: "0x481253AC3b7F9738461c70f8282435287915895d",
-    },
-    {
-      address: "0xf24d35830f3e1969dAf3Fc598B19921B67297e0B",
-      name: "URU/KLAY",
-      tokenAddress: "0xA935449F20f0e6867FF23dbFC627e4300bf011b3",
-    },
-    {
-      address: "0xf24d35830f3e1969dAf3Fc598B19921B67297e0B",
-      name: "URU/KLAY",
-      tokenAddress: "0xA935449F20f0e6867FF23dbFC627e4300bf011b3",
-    },
-  ],
+  exchanges: [],
 };
 
 const dexSlice = createSlice({
@@ -46,9 +15,12 @@ const dexSlice = createSlice({
         tokenAddress: action.payload.tokenAddress,
       });
     },
+    initExchange: (state, action) => {
+      state.exchanges = action.payload.list;
+    },
   },
 });
 
-export const { addExchange } = dexSlice.actions;
+export const { addExchange, initExchange } = dexSlice.actions;
 
 export default dexSlice.reducer;

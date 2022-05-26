@@ -2,10 +2,12 @@ const pairs = require("../../models/pairs");
 
 module.exports = {
   post: async (req, res) => {
-    const { pair_address } = req.body;
+    const { pair_address, pair_name, token_address } = req.body;
     try {
       let pairData = new pairs({
-        pair_address: pair_address,
+        pair_address,
+        pair_name,
+        token_address,
       });
       pairData.save((err) => {
         if (err) {
@@ -23,9 +25,16 @@ module.exports = {
   get: async (req, res) => {
     let arr = [];
     try {
-      let result = await pairs.find({}, { _id: false, pair_address: true });
+      let result = await pairs.find(
+        {},
+        { _id: false, pair_address: true, pair_name: true, token_address: true }
+      );
       for (let i = 0; i < result.length; i++) {
-        arr.push(result[i].pair_address);
+        arr.push({
+          pair_address: result[i].pair_address,
+          pair_name: result[i].pair_name,
+          token_address: result[i].token_address,
+        });
       }
       res.status(200).send(arr);
     } catch (err) {

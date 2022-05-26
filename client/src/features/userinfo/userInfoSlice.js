@@ -4,6 +4,8 @@ const initialState = {
   nickname: "",
   characterIndex: "",
   address: "",
+  uru: 0,
+  lockedUru: 0,
 };
 
 const userInfoSlice = createSlice({
@@ -19,10 +21,17 @@ const userInfoSlice = createSlice({
     addAddress: (state, action) => {
       state.address = action.payload.address; // or state.address = action.payload
     },
+    updateBalance: (state, action) => {
+      return {
+        ...state,
+        uru: action.payload.uru,
+        lockedUru: action.payload.locked,
+      };
+    },
   },
 });
 
-export const { addNickname, addCharacterIndex, addAddress } =
+export const { addNickname, addCharacterIndex, addAddress, updateBalance } =
   userInfoSlice.actions;
 
 export default userInfoSlice.reducer;

@@ -6,10 +6,12 @@ export default class Main extends Phaser.Scene {
     super("main");
     this.kingOverlapped = false;
     this.princessOverlapped = false;
+    this.princess2Overlapped = false;
     this.merchantOverlapped = false;
     this.shoekeeperOverlapped = false;
     this.dungeonOverlapped = false;
     this.blacksmithOverlapped = false;
+    this.queenOverlapped = false;
   }
 
   init(data) {
@@ -46,7 +48,19 @@ export default class Main extends Phaser.Scene {
       repeat: -1,
     });
     this.anims.create({
+      key: "queen_idle",
+      frames: this.anims.generateFrameNumbers("queen"),
+      frameRate: 5,
+      repeat: -1,
+    });
+    this.anims.create({
       key: "princess_idle",
+      frames: this.anims.generateFrameNumbers("princess"),
+      frameRate: 5,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: "princess2_idle",
       frames: this.anims.generateFrameNumbers("princess"),
       frameRate: 5,
       repeat: -1,
@@ -112,6 +126,18 @@ export default class Main extends Phaser.Scene {
     this.kingText.x = this.nameTag.x - this.kingText.width / 2;
     this.kingText.y = this.nameTag.y - this.kingText.height / 2;
 
+    // 여왕 NPC 생성
+    this.queen = this.physics.add.sprite(500, game.config.height / 3, "queen");
+    this.queen.setScale(2);
+
+    this.nameTag = this.add.sprite(this.queen.x, this.queen.y - 16, "nametag");
+    this.queenText = this.add.text(0, 0, "여왕", {
+      color: "black",
+      fontSize: "10px",
+    });
+    this.queenText.x = this.nameTag.x - this.queenText.width / 2;
+    this.queenText.y = this.nameTag.y - this.queenText.height / 2;
+
     // 공주 NPC 생성
     this.princess = this.physics.add.sprite(
       200,
@@ -131,6 +157,26 @@ export default class Main extends Phaser.Scene {
     });
     this.princessText.x = this.nameTag.x - this.princessText.width / 2;
     this.princessText.y = this.nameTag.y - this.princessText.height / 2;
+
+    // 공주2 NPC 생성
+    this.princess2 = this.physics.add.sprite(
+      300,
+      game.config.height / 6,
+      "princess"
+    );
+    this.princess2.setScale(2);
+
+    this.nameTag = this.add.sprite(
+      this.princess2.x,
+      this.princess2.y - 16,
+      "nametag"
+    );
+    this.princess2Text = this.add.text(0, 0, "공주2", {
+      color: "black",
+      fontSize: "10px",
+    });
+    this.princess2Text.x = this.nameTag.x - this.princess2Text.width / 2;
+    this.princess2Text.y = this.nameTag.y - this.princess2Text.height / 2;
 
     // 상인 NPC 생성
     this.merchant = this.physics.add.sprite(
@@ -219,6 +265,9 @@ export default class Main extends Phaser.Scene {
     this.physics.add.overlap(this.player, this.princess, () => {
       this.princessOverlapped = true;
     });
+    this.physics.add.overlap(this.player, this.princess2, () => {
+      this.princess2Overlapped = true;
+    });
     this.physics.add.overlap(this.player, this.merchant, () => {
       this.merchantOverlapped = true;
     });
@@ -231,12 +280,15 @@ export default class Main extends Phaser.Scene {
     this.physics.add.overlap(this.player, this.dungeon, () => {
       this.dungeonOverlapped = true;
     });
+    this.physics.add.overlap(this.player, this.queen, () => {
+      this.queenOverlapped = true;
+    });
 
     // 캐릭터와 벽 Collider
     this.physics.add.collider(this.player, this.wallslayer);
 
     // 카메라 세팅
-    this.cameras.main.setBounds(0, 0, window.innerWidth, window.innerHeight);
+    this.cameras.main.setBounds(0, 0, 1350, 1200);
     this.cameras.main.startFollow(this.player, true);
 
     // 캐릭터 애니메이션 생성
@@ -246,9 +298,11 @@ export default class Main extends Phaser.Scene {
     this.player.play("player_idle");
     this.king.play("king_idle");
     this.princess.play("princess_idle");
+    this.princess2.play("princess_idle");
     this.merchant.play("merchant_idle");
     this.shoekeeper.play("shoekeeper_idle");
     this.blacksmith.play("blacksmith_idle");
+    this.queen.play("queen_idle");
 
     this.spacebar = this.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.SPACE
@@ -278,6 +332,8 @@ export default class Main extends Phaser.Scene {
       if (this.shoekeeperOverlapped) game.events.emit("enter", "4");
       if (this.dungeonOverlapped) game.events.emit("enter", "5");
       if (this.blacksmithOverlapped) game.events.emit("enter", "6");
+      if (this.princess2Overlapped) game.events.emit("enter", "7");
+      if (this.queenOverlapped) game.events.emit("enter", "8");
     }
 
     if (
@@ -300,9 +356,11 @@ export default class Main extends Phaser.Scene {
 
     this.kingOverlapped = false;
     this.princessOverlapped = false;
+    this.princess2Overlapped = false;
     this.merchantOverlapped = false;
     this.shoekeeperOverlapped = false;
     this.dungeonOverlapped = false;
     this.blacksmithOverlapped = false;
+    this.queenOverlapped = false;
   }
 }

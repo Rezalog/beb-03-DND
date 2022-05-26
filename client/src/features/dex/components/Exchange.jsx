@@ -15,6 +15,7 @@ import { Button } from "../../../styles/Modal.styled";
 const Exchange = ({
   address,
   name,
+  lp,
   tokenAddress,
   account,
   setIsWithdrawal,
@@ -24,7 +25,6 @@ const Exchange = ({
   const [reservedToken, setReservedToken] = useState(0);
   const [tokenName, setTokenName] = useState("");
   const [tokenSymbol, setTokenSymbol] = useState("");
-  const [lp, setLp] = useState(0);
   const [share, setShare] = useState("");
   const input1 = useRef(null);
   const input2 = useRef(null);
@@ -43,17 +43,13 @@ const Exchange = ({
       setReservedKlay(caver.utils.fromPeb(klayInExchange));
       setReservedToken(caver.utils.fromPeb(tokenInExchange));
 
-      const kip7 = new caver.klay.KIP7(address);
-      const balance = await kip7.balanceOf(account);
-      setLp(caver.utils.fromPeb(balance));
-
       const token = new caver.klay.KIP7(tokenAddress);
       const name = await token.name();
       const symbol = await token.symbol();
 
       setTokenName(name);
       setTokenSymbol(symbol);
-      getShareOfLP(caver.utils.fromPeb(balance));
+      getShareOfLP(lp);
     };
 
     getReserved();

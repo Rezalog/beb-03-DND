@@ -9,33 +9,60 @@ import { updateList, updateOnSaleList } from "../marketplaceSlice";
 import { BuySellButton } from "../../../styles/Inventory.styled";
 
 import {
+  pendingNoti,
+  successNoti,
+  failNoti,
+  clearState,
+} from "../../notification/notifiactionSlice";
+
+import {
   tokenAddress,
   marketAddress,
   nftAddress,
   marketABI,
   nftABI,
 } from "../nftContractInfo";
+import { uruABI, uruAddress } from "../../userinfo/TokenContract";
+import { updateBalance } from "../../userinfo/userInfoSlice";
 const caver = new Caver(window.klaytn);
 
 const TradingList = ({ getMarketplaceList }) => {
+  const dispatch = useDispatch();
   const { address } = useSelector((state) => state.userInfo);
   const { list } = useSelector((state) => state.marketplace);
 
   const buyNewNFT = async () => {
+    dispatch(pendingNoti());
     const nft = new caver.klay.Contract(nftABI, nftAddress);
 
     try {
-      await nft.methods.mint(address, 1).send({
+      //buyBasicWeapon으로 하면 노티가 안꺼짐
+      await nft.methods.mint().send({
         from: address,
         gas: 2000000,
       });
       getMarketplaceList();
+      dispatch(successNoti({ msg: `NFT 구매 성공!` }));
+
+      const token = new caver.klay.Contract(uruABI, uruAddress);
+      const balance = await token.methods.balanceOf(address).call();
+      const locked = await token.methods.getLockedTokenAmount(address).call();
+      dispatch(
+        updateBalance({
+          uru: parseFloat(Number(caver.utils.fromPeb(balance)).toFixed(2)),
+          locked: parseFloat(Number(caver.utils.fromPeb(locked)).toFixed(2)),
+        })
+      );
     } catch (err) {
-      console.log(err);
+      dispatch(failNoti());
     }
+    setTimeout(() => {
+      dispatch(clearState());
+    }, 5000);
   };
 
   const buyWeapon = async (id) => {
+    dispatch(pendingNoti());
     const market = new caver.klay.Contract(marketABI, marketAddress);
 
     const kip7 = new caver.klay.KIP7(tokenAddress);
@@ -47,18 +74,32 @@ const TradingList = ({ getMarketplaceList }) => {
           from: address,
         });
       } catch (err) {
-        console.log(err);
+        dispatch(failNoti());
       }
     }
-
-    await market.methods.buyNft(id).send({ from: address, gas: 5000000 });
-
-    getMarketplaceList();
+    try {
+      await market.methods.buyNft(id).send({ from: address, gas: 5000000 });
+      getMarketplaceList();
+      dispatch(successNoti({ msg: `NFT 구매 성공!` }));
+      const token = new caver.klay.Contract(uruABI, uruAddress);
+      const balance = await token.methods.balanceOf(address).call();
+      const locked = await token.methods.getLockedTokenAmount(address).call();
+      dispatch(
+        updateBalance({
+          uru: parseFloat(Number(caver.utils.fromPeb(balance)).toFixed(2)),
+          locked: parseFloat(Number(caver.utils.fromPeb(locked)).toFixed(2)),
+        })
+      );
+    } catch (error) {
+      dispatch(failNoti());
+    }
+    setTimeout(() => {
+      dispatch(clearState());
+    }, 5000);
   };
-
   useEffect(() => {
     console.log(list);
-  });
+  }, []);
 
   return (
     <InventoryContainer style={{ height: "70%" }}>

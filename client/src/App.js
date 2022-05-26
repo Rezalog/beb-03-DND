@@ -12,7 +12,7 @@ import { openSignUpModal } from "./features/modal/signUpModalSlice";
 import { openLpFarmModal } from "./features/modal/lpFarmingModalSlice";
 import LPFarmModal from "./features/lpFarming/LPFarmModal";
 import axios from "axios";
-import Loading from "./features/loading/Loading";
+import Notification from "./features/notification/Notification";
 import { startLoading } from "./features/loading/loadingSlice";
 import {
   addAddress,
@@ -26,6 +26,13 @@ import Marketplace from "./features/marketplace/Marketplace";
 import WeaponCompoundModal from "./features/weaponCompound/WeaponCompoundModal";
 import { openWeaponCompoundModal } from "./features/modal/weaponCompoundModalSlice";
 import MonsterFarm from "./features/monsterFarm/MonsterFarm";
+import V2SwapModal from "./features/V2Swap/V2SwapModal";
+import { openV2SwapModal } from "./features/modal/v2SwapModalSlice";
+import { openV2DexModal } from "./features/modal/v2DexModalSlice";
+import V2DexModal from "./features/v2dex/V2DexModal";
+import UserInfo from "./features/userinfo/UserInfo";
+import { updateBalance } from "./features/userinfo/userInfoSlice";
+import { uruABI, uruAddress } from "./features/userinfo/TokenContract";
 
 function App() {
   const { isOpen: isDexOpen } = useSelector((state) => state.dexModal);
@@ -40,6 +47,8 @@ function App() {
   const { isOpen: isMonsterFarmOpen } = useSelector(
     (state) => state.monsterFarmModal
   );
+  const { isOpen: isV2Open } = useSelector((state) => state.v2SwapModal);
+  const { isOpen: isV2DexOpen } = useSelector((state) => state.v2DexModal);
   // const { isOpen: isInventoryOpen } = useSelector(
   //   (state) => state.inventoryModal
   // );
@@ -52,6 +61,7 @@ function App() {
 
   const nickname = useSelector((state) => state.userInfo.nickname);
   const characterIndex = useSelector((state) => state.userInfo.characterIndex);
+  const { address: account } = useSelector((state) => state.userInfo);
   // const [isRegisterd, setIsRegistered] = useState(false);
 
   const connectToWallet = async () => {
@@ -151,6 +161,14 @@ function App() {
           dispatch(openWeaponCompoundModal());
           break;
         }
+        case "7": {
+          dispatch(openV2SwapModal());
+          break;
+        }
+        case "8": {
+          dispatch(openV2DexModal());
+          break;
+        }
 
         default: {
           break;
@@ -166,6 +184,20 @@ function App() {
     }
   };
 
+  const getUruBalance = async () => {
+    const caver = new Caver(window.klaytn);
+    const token = new caver.klay.Contract(uruABI, uruAddress);
+    console.log(account);
+    const balance = await token.methods.balanceOf(account).call();
+    const locked = await token.methods.getLockedTokenAmount(account).call();
+    dispatch(
+      updateBalance({
+        uru: parseFloat(Number(caver.utils.fromPeb(balance)).toFixed(2)),
+        locked: parseFloat(Number(caver.utils.fromPeb(locked)).toFixed(2)),
+      })
+    );
+  };
+
   useEffect(() => {
     window.addEventListener("keydown", handleUserKeyPress);
 
@@ -173,13 +205,14 @@ function App() {
   }, []);
 
   useEffect(() => {
-    console.log(characterIndex);
-    console.log(nickname);
-  }, [characterIndex, nickname]);
+    if (account) getUruBalance();
+  }, [nickname]);
 
   return (
-    <div className="App">
-      {isSignIn ? null : (
+    <div className='App'>
+      {isSignIn ? (
+        <UserInfo />
+      ) : (
         <div>
           <h1>Dungeon & Defi</h1>
           <button onClick={connectToWallet}>지갑 연결</button>
@@ -194,6 +227,9 @@ function App() {
       {isMonsterFarmOpen && <MonsterFarm />}
       {isInventoryOpen && <Inventory />}
       {isWeaponCompoundOpen && <WeaponCompoundModal />}
+      {isV2Open && <V2SwapModal />}
+      {isV2DexOpen && <V2DexModal />}
+      <Notification />
     </div>
   );
 }

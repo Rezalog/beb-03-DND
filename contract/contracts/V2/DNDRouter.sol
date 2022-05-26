@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.5.6;
 
-import './interfaces/IDNDFactory.sol';
+import "./interfaces/IDNDFactory.sol";
 import "./interfaces/IDNDPair.sol";
 import "./libraries/DNDLibrary.sol";
 import "./libraries/SafeMath.sol";
@@ -129,6 +129,10 @@ contract DNDRouter {
         );
         _swap(amounts, path, to);
     }
+
+    function getOutput(uint256 _amountIn, address[] memory path) public view returns (uint256[] memory) {
+        return DNDLibrary.getAmountsOut(address(factory), _amountIn, path);
+    }
     
     //
     //
@@ -168,7 +172,7 @@ contract DNDRouter {
         uint256 amountBDesired,
         uint256 amountAMin,
         uint256 amountBMin
-    ) internal returns (uint256 amountA, uint256 amountB) {
+    ) internal view returns (uint256 amountA, uint256 amountB) {
         (uint256 reserveA, uint256 reserveB) = DNDLibrary.getReserves(
             address(factory),
             tokenA,

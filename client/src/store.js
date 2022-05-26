@@ -16,6 +16,12 @@ import marketplaceSlice from "./features/marketplace/marketplaceSlice";
 import compoundInfoSlice from "./features/weaponCompound/compoundInfoSlice";
 import monsterFarmModalSlice from "./features/modal/monsterFarmModalSlice";
 import monsterFarmSlice from "./features/monsterFarm/monsterFarmSlice";
+import notifiactionSlice from "./features/notification/notifiactionSlice";
+import v2SwapModalSlice from "./features/modal/v2SwapModalSlice";
+import v2SwapSlice from "./features/V2Swap/v2SwapSlice";
+import v2DexModalSlice from "./features/modal/v2DexModalSlice";
+import V2DexSlice from "./features/v2dex/V2DexSlice";
+
 export const store = configureStore({
   reducer: {
     dexModal: dexModalReducer,
@@ -35,5 +41,10 @@ export const store = configureStore({
     compoundInfo: compoundInfoSlice,
     monsterFarmModal: monsterFarmModalSlice,
     monsterFarm: monsterFarmSlice,
+    notification: notifiactionSlice,
+    v2SwapModal: v2SwapModalSlice,
+    v2Swap: v2SwapSlice,
+    v2DexModal: v2DexModalSlice,
+    v2Dex: V2DexSlice,
   },
 });

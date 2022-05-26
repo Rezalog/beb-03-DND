@@ -63,11 +63,14 @@ contract NFT_Farming {
     }   
 
     function withdrawYield () public {
+        (,,uint256 durability,) = nft.weapons(stakeInfo[msg.sender].tokenID - 1);
+        require(durability > 0);
         require(getStakingTime() > coolDownTime, "withdrawl can be after cooldowntime"); 
         require(stakeInfo[msg.sender].isStaking == true, "there is no staking nft");
 
         token.mint(msg.sender, level.mul(10**20));
         stakeInfo[msg.sender].yieldLockTime = block.timestamp;
+        nft.stakingWeapon(stakeInfo[msg.sender].tokenID);
         emit YieldWithdraw(msg.sender, level.mul(10**20));
     }
 

@@ -28,6 +28,7 @@ contract Factory {
         //--참고 : Solidity의 new 생성자는 다른 객체지향언어와 달리 해당 contract를 deploy 한다.
         Exchange exchange = new Exchange(_tokenAddress, uru, _epochDuration);
         tokenToExchange[_tokenAddress] = address(exchange);
+        uru.addMinter(address(exchange));
 
         // 여기서는 Exchange만 address 타입으로 casting 되었지만
         // 다른 컨트랙트들도 address 타입으로 convert 할 수 있다.

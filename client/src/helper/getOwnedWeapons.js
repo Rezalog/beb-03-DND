@@ -17,6 +17,7 @@ export const getOwnedWeapons = (address) => {
           tempList.push({
             dna: weapon.weaponType,
             lvl: weapon.weaponLevel,
+            durability: weapon.durability,
             id: i,
           });
         }

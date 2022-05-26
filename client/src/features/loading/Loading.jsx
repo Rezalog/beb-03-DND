@@ -2,8 +2,8 @@ import React from "react";
 
 import { LoadingBar } from "../../styles/Loading.styled";
 
-const Loading = () => {
-  return <LoadingBar></LoadingBar>;
+const Loading = ({ size }) => {
+  return <LoadingBar size={size}></LoadingBar>;
 };
 
 export default Loading;

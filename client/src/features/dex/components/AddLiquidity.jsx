@@ -1,12 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Caver from "caver-js";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  openSubModal,
-  clearState,
-  changeToken0,
-  changeToken1,
-} from "../../tokenSwap/tokenSwapSlice";
+import { openSubModal } from "../../tokenSwap/tokenSwapSlice";
 import {
   InputContainer,
   BalanceContainer,
@@ -16,6 +11,14 @@ import {
   SwapInfoContainer,
   InfoContainer,
 } from "../../../styles/TokenSwap.styled";
+import {
+  pendingNoti,
+  successNoti,
+  failNoti,
+  clearState,
+} from "../../notification/notifiactionSlice";
+import { uruABI, uruAddress } from "../../userinfo/TokenContract";
+import { updateBalance } from "../../userinfo/userInfoSlice";
 
 const AddLiquidity = ({
   account,
@@ -137,17 +140,15 @@ const AddLiquidity = ({
   };
 
   const addLiquidity = async () => {
+    dispatch(pendingNoti());
     const caver = new Caver(window.klaytn);
 
-    const kip7 = new caver.klay.KIP7(currentTokenAddress);
-    const allowed = await kip7.allowance(account, currentExchangeAddress);
-    // 변경해야함
-    // if allowed <= caver.utils.toPeb(input2.current.value)
-    console.log(account);
-    console.log(currentExchangeAddress);
-    console.log(allowed.toString());
-    if (allowed.toString() === "0") {
-      try {
+    try {
+      const kip7 = new caver.klay.KIP7(currentTokenAddress);
+      const allowed = await kip7.allowance(account, currentExchangeAddress);
+      // 변경해야함
+      // if allowed <= caver.utils.toPeb(input2.current.value)
+      if (allowed.toString() === "0") {
         await kip7.approve(
           currentExchangeAddress,
           caver.utils.toPeb("100000000"),
@@ -155,22 +156,42 @@ const AddLiquidity = ({
             from: account,
           }
         );
-      } catch (err) {
-        console.log(err);
       }
+
+      await exchange.methods.addLiquidity(caver.utils.toPeb(tokenAmount)).send({
+        from: account,
+        value: caver.utils.toPeb(klayAmount),
+        gas: 2000000,
+      });
+
+      const klayInExchange = await exchange.methods.getKlay().call();
+      const tokenInExchange = await exchange.methods.getReserve().call();
+
+      setReservedKlay(caver.utils.fromPeb(klayInExchange));
+      setReservedToken(caver.utils.fromPeb(tokenInExchange));
+      dispatch(
+        successNoti({
+          msg: `${Number(tokenAmount).toFixed(2)} ${
+            token0 === 0 ? tokens[token1].symbol : tokens[token0].symbol
+          } 와 ${Number(klayAmount).toFixed(2)} KLAY 가 추가되었습니다!`,
+        })
+      );
+
+      const token = new caver.klay.Contract(uruABI, uruAddress);
+      const balance = await token.methods.balanceOf(account).call();
+      const locked = await token.methods.getLockedTokenAmount(account).call();
+      dispatch(
+        updateBalance({
+          uru: parseFloat(Number(caver.utils.fromPeb(balance)).toFixed(2)),
+          locked: parseFloat(Number(caver.utils.fromPeb(locked)).toFixed(2)),
+        })
+      );
+    } catch (error) {
+      dispatch(failNoti());
     }
-
-    await exchange.methods.addLiquidity(caver.utils.toPeb(tokenAmount)).send({
-      from: account,
-      value: caver.utils.toPeb(klayAmount),
-      gas: 2000000,
-    });
-
-    const klayInExchange = await exchange.methods.getKlay().call();
-    const tokenInExchange = await exchange.methods.getReserve().call();
-
-    setReservedKlay(caver.utils.fromPeb(klayInExchange));
-    setReservedToken(caver.utils.fromPeb(tokenInExchange));
+    setTimeout(() => {
+      dispatch(clearState());
+    }, 5000);
   };
 
   const getPrice = () => {
