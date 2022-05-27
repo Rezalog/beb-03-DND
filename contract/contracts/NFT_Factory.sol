@@ -19,8 +19,13 @@ contract NFT_Factory {
     }
     Monster[] public monsters;
 
-    function createNFTFarm(NFT _NFTAddress, Token _tokenAddress, string memory _name, uint256 _level, uint256 _coolDownTime, uint256 _reward) public returns (address) {
-        
+    function createNFTFarm(
+        NFT _NFTAddress,
+        Token _tokenAddress,
+        string memory _name,
+        uint256 _level, 
+        uint256 _coolDownTime, 
+        uint256 _reward) public returns (address) {
         nft = _NFTAddress;
         uru = _tokenAddress;
         require(address(_NFTAddress) != address(0), "invalid NFT address");
