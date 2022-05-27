@@ -83,6 +83,7 @@ contract Master {
         }
     }
 
+    // lp-token을 인출
     function withdraw(uint256 _pid, uint256 _amount) public {
         poolinfo storage pool = poolInfo[_pid];
         userinfo storage user = userInfo[_pid][msg.sender];
