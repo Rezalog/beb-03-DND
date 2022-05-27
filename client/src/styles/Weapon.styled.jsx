@@ -11,7 +11,7 @@ export const WeaponContainer = styled.div`
 
   background-color: #8f5765;
   border: ${(props) => {
-    if (props.durability === "3") {
+    if (props.durability >= 8) {
       return "5px solid black";
     } else if (props.durability === "0") {
       return "5px solid red";

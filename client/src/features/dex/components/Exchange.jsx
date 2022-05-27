@@ -34,26 +34,27 @@ const Exchange = ({
 
   useEffect(() => {
     const getReserved = async () => {
-      const caver = new Caver(window.klaytn);
-      const exchange = new caver.klay.Contract(exchangeABI, address);
+      if (tokenAddress) {
+        const caver = new Caver(window.klaytn);
+        const exchange = new caver.klay.Contract(exchangeABI, address);
 
-      const klayInExchange = await exchange.methods.getKlay().call();
-      const tokenInExchange = await exchange.methods.getReserve().call();
+        const klayInExchange = await exchange.methods.getKlay().call();
+        const tokenInExchange = await exchange.methods.getReserve().call();
 
-      setReservedKlay(caver.utils.fromPeb(klayInExchange));
-      setReservedToken(caver.utils.fromPeb(tokenInExchange));
+        setReservedKlay(caver.utils.fromPeb(klayInExchange));
+        setReservedToken(caver.utils.fromPeb(tokenInExchange));
+        const token = new caver.klay.KIP7(tokenAddress);
+        const name = await token.name();
+        const symbol = await token.symbol();
 
-      const token = new caver.klay.KIP7(tokenAddress);
-      const name = await token.name();
-      const symbol = await token.symbol();
-
-      setTokenName(name);
-      setTokenSymbol(symbol);
-      getShareOfLP(lp);
+        setTokenName(name);
+        setTokenSymbol(symbol);
+        getShareOfLP(lp);
+      }
     };
 
     getReserved();
-  }, []);
+  }, [tokenAddress]);
 
   const getShareOfLP = async (balance) => {
     const caver = new Caver(window.klaytn);

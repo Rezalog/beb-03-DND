@@ -18,21 +18,30 @@ contract NFT_Farming {
     }
 
     mapping(address => Stake) public stakeInfo;
+    
 
     Token token;
     NFT nft;
     uint256 level;
     uint256 coolDownTime;
+    uint256 reward;
+
+    // lock 관련 선언
+    uint8 lockedPercentage = 95;
+    uint256 lockStartTime;
+    uint256 nextEpoch;
+    uint256 epochDuration;
 
     event NFTStaked(address owner, uint256 tokenId);
     event NFTUnstaked(address owner, uint256 tokenId);
     event YieldWithdraw(address to, uint256 amount);
 
-    constructor (NFT _NFTaddress, Token _tokenAddress, uint256 _level, uint256 _coolDownTime) public {
+    constructor (NFT _NFTaddress, Token _tokenAddress, uint256 _level, uint256 _coolDownTime, uint256 _reward) public {
         nft = _NFTaddress; // NFT 컨트랙트 주소
         token = _tokenAddress; // URU 토큰 컨트랙트 주소
         level = _level; // 보상수준을 결정하는 레벨
         coolDownTime = _coolDownTime; // 한 번 클레임 한 후 다음 클레임까지 쿨다운 타임
+        reward = _reward;
     }
 
     function stake (uint256 _tokenID) public {
@@ -68,10 +77,10 @@ contract NFT_Farming {
         require(getStakingTime() > coolDownTime, "withdrawl can be after cooldowntime"); 
         require(stakeInfo[msg.sender].isStaking == true, "there is no staking nft");
 
-        token.mint(msg.sender, level.mul(10**20));
+        token.mint(msg.sender, reward);
         stakeInfo[msg.sender].yieldLockTime = block.timestamp;
         nft.stakingWeapon(stakeInfo[msg.sender].tokenID);
-        emit YieldWithdraw(msg.sender, level.mul(10**20));
+        emit YieldWithdraw(msg.sender, reward);
     }
 
     // assist functions

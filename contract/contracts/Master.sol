@@ -25,6 +25,12 @@ contract Master {
     Token public uru;
     uint256 public URUperblock; // 25, 즉 klaytn 블록 하나 생성 시간(1초)당 지급할 URU
     uint256 public totalStakeAmount = 0;
+    
+    // lock 관련 선언
+    uint8 lockedPercentage = 95;
+    uint256 lockStartTime;
+    uint256 nextEpoch;
+    uint256 epochDuration;
 
     poolinfo[] public poolInfo;
     mapping(uint256 => address[]) public userList; 
@@ -35,10 +41,17 @@ contract Master {
 
     constructor (
         Token _uru,
-        uint256 _URUperblock // 25
+        uint256 _URUperblock, // 25
+        uint256 _epochDuration 
     ) public {
         uru = _uru;
         URUperblock = _URUperblock;
+
+        // lock 관련
+        lockStartTime = block.timestamp;
+        nextEpoch = block.timestamp.add(_epochDuration);
+        epochDuration = _epochDuration;
+
     }
 
     // 등록된 pool 개수 반환
@@ -46,8 +59,9 @@ contract Master {
         return poolInfo.length;
     }
 
+
     // 새로운 lp-token을 추가
-    function add(address _lpToken) public {
+    function add(address _lpToken) external {
         uint256 lastUpdatedTime = block.timestamp;
         poolInfo.push(
             poolinfo({
@@ -120,7 +134,15 @@ contract Master {
         uint256 nowReward = block.timestamp.sub(pool.lastUpdatedTime).mul(pool.URUPerShare).mul(userContribution).div(10000);
         uint256 toTransfer = (user.reward).add(nowReward);
 
-        uru.mint(msg.sender, toTransfer);
+        if (lockedPercentage != 0) {
+            _calculateLockedPercentage();
+            uint256 lockedTokenAmount = toTransfer.mul(uint256(lockedPercentage)).div(100);
+            uru.mint(msg.sender, toTransfer.sub(lockedTokenAmount));
+            uru.lock(msg.sender, lockedTokenAmount);
+        }
+        else {
+            uru.mint(msg.sender, toTransfer);
+        }
 
         pool.lastUpdatedTime = block.timestamp;
         user.reward = 0;
@@ -166,5 +188,21 @@ contract Master {
     function calculateReward(uint256 _pid, address _user) public view returns(uint256) {
         userinfo storage user = userInfo[_pid][_user];
         return user.reward;
+    }    
+
+    function countDown() public view returns (uint256 count){
+        count = nextEpoch.sub(block.timestamp);
+    }
+
+    function currentLockedPercentage() public view returns (uint8) {
+        return lockedPercentage;
+    }
+
+    function _calculateLockedPercentage() internal {
+    // 현재 블록 시간이 nextEpoch보다 큰 경우 = lockedPercentage가 감소해야한다.
+        while (block.timestamp >= nextEpoch) {
+            lockedPercentage = lockedPercentage < 2 ? 0 : uint8(uint256(lockedPercentage).sub(2));
+            nextEpoch = nextEpoch.add(epochDuration);
+        }
     }
 }

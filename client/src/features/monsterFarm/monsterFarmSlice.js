@@ -1,15 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  monsters: [
-    {
-      address: "0xC5b97472D201E90fb56e1B54949c78b4D5eAFA2C",
-      name: "달팽이",
-      lvl: 1,
-      cooltime: 600,
-      reward: 100,
-    },
-  ],
+  monsters: [],
   staked: [],
   isSubModalOpen: false,
 };
@@ -30,6 +22,12 @@ const monsterFarmSlice = createSlice({
     removeStakedWeapon: (state, action) => {
       state.staked[action.payload.index] = {};
     },
+    initMonsters: (state, action) => {
+      return {
+        ...state,
+        monsters: action.payload.list,
+      };
+    },
   },
 });
 
@@ -38,6 +36,7 @@ export const {
   closeSubModal,
   updateStakedWeapon,
   removeStakedWeapon,
+  initMonsters,
 } = monsterFarmSlice.actions;
 
 export default monsterFarmSlice.reducer;

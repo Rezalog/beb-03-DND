@@ -102,7 +102,7 @@ const AddPool = ({ account }) => {
       );
 
       await axios.post(
-        "http://localhost:8080/Contracts/token",
+        "http://localhost:8080/contracts/token",
         [
           {
             token_symbol: currentTokenSymbol,
@@ -118,7 +118,7 @@ const AddPool = ({ account }) => {
       );
 
       await axios.post(
-        "http://localhost:8080/Contract/pair",
+        "http://localhost:8080/contracts/pair",
         {
           pair_address: exchangeAddress,
           pair_name: `${currentTokenSymbol}/KLAY`,

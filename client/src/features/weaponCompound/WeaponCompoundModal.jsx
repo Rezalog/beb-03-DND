@@ -17,7 +17,8 @@ import {
   setWeapons,
 } from "./compoundInfoSlice";
 
-import { nftAddress, nftABI } from "./nftContractInfo";
+import { nftAddress, nftABI } from "../marketplace/nftContractInfo";
+import { bettingABI, bettingAddress } from "../betting/bettingContractInfo";
 // 무기 합성 모달창을 열면 보유중인 무기(nft)리스트를 가져옴
 // 합성할 두 개의 무기를 선택
 // 합성시 선택된 두 개의 무기 id값을 무기컴파운드 함수 컨트랙트에 보냄
@@ -128,6 +129,36 @@ const WeaponCompoundModal = () => {
     dispatch(setSecondWeapon({ SecondWeapon: "" }));
   };
 
+  const openBet = async () => {
+    const weapon1Info = await nft.methods
+      .weapons([weapons[firstWeapon].id - 1])
+      .call();
+    const weapon2Info = await nft.methods
+      .weapons([weapons[secondWeapon].id - 1])
+      .call();
+
+    if (!firstWeapon || !secondWeapon) {
+      alert("Select Weapon Please");
+    } else if (weapons[firstWeapon].id === weapons[secondWeapon].id) {
+      alert("Select Two Other Weapon Please");
+    } else {
+      if (weapons[firstWeapon].lvl !== weapons[secondWeapon].lvl) {
+        alert("Select Same Level Weapons");
+      } else if (weapon1Info.enchant === "0" || weapon2Info.enchant === "0") {
+        alert("Fix Enchant please");
+      } else {
+        const bettingContract = new caver.klay.Contract(
+          bettingABI,
+          bettingAddress
+        );
+
+        await bettingContract.methods
+          .createBet(weapons[firstWeapon].id, weapons[secondWeapon].id)
+          .send({ from: address, gas: 2000000 });
+      }
+    }
+  };
+
   useEffect(() => {
     console.log(firstWeapon);
     console.log(secondWeapon);
@@ -175,6 +206,13 @@ const WeaponCompoundModal = () => {
           }}
         >
           check
+        </button>
+        <button
+          onClick={() => {
+            openBet();
+          }}
+        >
+          배팅열기
         </button>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Caver from "caver-js";
+import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { openSubModal } from "../../V2Swap/v2SwapSlice";
 import {
@@ -69,6 +70,7 @@ const AddV2Liquidity = ({
       .pairs(tokens[token0].address, tokens[token1].address)
       .call();
     setPairAddress(_pairAddress);
+    console.log(_pairAddress);
     if (_pairAddress !== "0x0000000000000000000000000000000000000000") {
       const pair = new caver.klay.Contract(pairABI, _pairAddress);
       const reserved = await pair.methods.getReserves().call();
@@ -97,13 +99,16 @@ const AddV2Liquidity = ({
   };
 
   const getInput1 = () => {
+    const input2Value = input2.current.value;
+    setTokenBAmount(input2Value);
     if (pairAddress !== "0x0000000000000000000000000000000000000000") {
       const caver = new Caver(window.klaytn);
-      const input2Value = input2.current.value;
       const tokenA = caver.utils.toPeb(reservedTokenA);
       const tokenB = caver.utils.toPeb(reservedTokenB);
+      console.log(tokenA);
+      console.log(tokenB);
 
-      if (input2Value != "") {
+      if (input2Value != "" && tokenA !== "0" && tokenB !== "0") {
         let result;
         if (tokenAAddress < tokenBAddress) {
           result = caver.utils.fromPeb(
@@ -122,7 +127,6 @@ const AddV2Liquidity = ({
         }
         input1.current.value = parseFloat(Number(result).toFixed(6));
         setTokenAAmount(result);
-        setTokenBAmount(input2Value);
         //getShareOfLP();
       } else {
         input1.current.value = "";
@@ -134,13 +138,14 @@ const AddV2Liquidity = ({
   };
 
   const getInput2 = () => {
+    const input1Value = input1.current.value;
+    setTokenAAmount(input1Value);
     if (pairAddress !== "0x0000000000000000000000000000000000000000") {
       const caver = new Caver(window.klaytn);
-      const input1Value = input1.current.value;
       const tokenA = caver.utils.toPeb(reservedTokenA);
       const tokenB = caver.utils.toPeb(reservedTokenB);
 
-      if (input1Value != "") {
+      if (input1Value != "" && tokenA !== "0" && tokenB !== "0") {
         let result;
         if (tokenAAddress < tokenBAddress) {
           result = caver.utils.fromPeb(
@@ -159,9 +164,6 @@ const AddV2Liquidity = ({
         }
         input2.current.value = parseFloat(Number(result).toFixed(6));
         setTokenBAmount(result);
-        setTokenAAmount(input1Value);
-        console.log(result);
-        console.log(input1Value);
         //getShareOfLP();
       } else {
         input2.current.value = "";
@@ -181,16 +183,20 @@ const AddV2Liquidity = ({
       let allowed = await kip7.allowance(account, routerAddress);
       // 변경해야함
       // if allowed <= caver.utils.toPeb(input2.current.value)
-      if (allowed.toString() === "0") {
+      console.log(allowed.toString());
+      console.log(tokenAAddress);
+      if (allowed.toString() < "100000000000000000000000000") {
         await kip7.approve(routerAddress, caver.utils.toPeb("100000000"), {
           from: account,
         });
       }
       kip7 = new caver.klay.KIP7(tokenBAddress);
       allowed = await kip7.allowance(account, routerAddress);
+      console.log(allowed.toString());
+      console.log(tokenBAddress);
       // 변경해야함
       // if allowed <= caver.utils.toPeb(input2.current.value)
-      if (allowed.toString() === "0") {
+      if (allowed.toString() < "100000000000000000000000000") {
         await kip7.approve(routerAddress, caver.utils.toPeb("100000000"), {
           from: account,
         });
@@ -211,16 +217,36 @@ const AddV2Liquidity = ({
         )
         .send({
           from: account,
-          gas: 2000000,
+          gas: 20000000,
         });
       let pair;
       if (pairAddress === "0x0000000000000000000000000000000000000000") {
         const factory = new caver.klay.Contract(factoryABI, factoryAddress);
-        const _pairAddress = await factory.methods.pairs(
-          tokenAAddress,
-          tokenBAddress
-        );
+        const _pairAddress = await factory.methods
+          .pairs(tokenAAddress, tokenBAddress)
+          .call();
         pair = new caver.klay.Contract(pairABI, _pairAddress);
+
+        console.log("pair", _pairAddress);
+        console.log("tokens", tokens[token0].symbol, tokens[token1].symbol);
+        console.log("tokenAAddress", tokenAAddress);
+        console.log("tokenBAddress", tokenBAddress);
+        const aSymbol = tokens[token0].symbol;
+        const bSymbol = tokens[token1].symbol;
+        await axios.post(
+          "http://localhost:8080/contracts/v2pair",
+          {
+            v2pair_address: _pairAddress,
+            v2pair_name: `${aSymbol}/${bSymbol}`,
+            v2tokenA_address: tokenAAddress,
+            v2tokenB_address: tokenBAddress,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
       } else {
         pair = new caver.klay.Contract(pairABI, pairAddress);
       }

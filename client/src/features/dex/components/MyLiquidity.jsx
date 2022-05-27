@@ -10,6 +10,7 @@ import { Container } from "../../../styles/Modal.styled";
 import { startLoading, stopLoading } from "../../loading/loadingSlice";
 import Loading from "../../loading/Loading";
 import { exchangeABI } from "../contractInfo";
+import { masterABI, masterAddrss } from "../../lpFarming/masterContractInfo";
 
 const MyLiquidity = ({ account }) => {
   const dispatch = useDispatch();
@@ -25,7 +26,6 @@ const MyLiquidity = ({ account }) => {
     const caver = new Caver(window.klaytn);
     let tempArr = [];
     let tempLp = [];
-    console.log(exchanges);
     for (let i = 0; i < exchanges.length; i++) {
       const kip7 = new caver.klay.KIP7(exchanges[i].address);
       const balance = await kip7.balanceOf(account);
@@ -33,9 +33,10 @@ const MyLiquidity = ({ account }) => {
         exchangeABI,
         exchanges[i].address
       );
-      const stakedBalance = await exchange.methods
-        .stakingBalance(account)
-        .call();
+
+      const master = new caver.klay.Contract(masterABI, masterAddrss);
+      const userinfo = await master.methods.userInfo(i, account).call();
+      const stakedBalance = userinfo.amount;
       if (balance.toString() !== "0" || stakedBalance.toString() !== "0") {
         tempArr.push(exchanges[i]);
         tempLp.push(
