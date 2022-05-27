@@ -89,16 +89,16 @@ contract Master {
         userinfo storage user = userInfo[_pid][msg.sender];
         require(user.amount >= _amount, "can't withdraw over your deposit");
 
+        // 전액 인출시 이자도 자동 인출
+        if (user.amount == _amount) {
+            harvest(_pid);
+        }
+
         totalStakeAmount = totalStakeAmount.sub(_amount);
         pool.stakeAmount = pool.stakeAmount.sub(_amount);
 
         updatePool();
         user.amount = user.amount.sub(_amount);
-
-        // 전액 인출시 이자도 자동 인출
-        if (user.amount == _amount) {
-            harvest(_pid);
-        }
 
         KIP7(pool.lpToken).transfer(msg.sender, _amount);
         emit Withdraw(msg.sender, _pid, _amount);
@@ -135,8 +135,13 @@ contract Master {
                 }
             }
             // 풀 정보 업데이트
-            poolInfo[i].URUPerShare = (poolInfo[i].stakeAmount).mul(100).div(totalStakeAmount).mul(URUperblock);
-            poolInfo[i].lastUpdatedTime = block.timestamp;
+            if (totalStakeAmount == 0) {
+                poolInfo[i].URUPerShare = 0;
+                poolInfo[i].lastUpdatedTime = block.timestamp;
+            } else {
+                poolInfo[i].URUPerShare = (poolInfo[i].stakeAmount).mul(100).div(totalStakeAmount).mul(URUperblock);
+                poolInfo[i].lastUpdatedTime = block.timestamp;
+            }
         }
     }
 
