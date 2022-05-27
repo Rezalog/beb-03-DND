@@ -74,7 +74,7 @@ contract Betting {
     }
 
     function distribution(uint256 _betNumber) public {
-        require(tokenInfo[_betNumber].timeStamp.add(120) < block.timestamp, "distribution is allowed after 10 minutes opened betting");
+        require(tokenInfo[_betNumber].timeStamp.add(600) < block.timestamp, "distribution is allowed after 10 minutes opened betting");
 
         bool betResult = nft.getCompoundResult(tokenInfo[_betNumber].token1Id, tokenInfo[_betNumber].token2Id);
 
