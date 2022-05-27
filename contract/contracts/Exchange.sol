@@ -332,7 +332,7 @@ contract Exchange is KIP7, KIP7Metadata {
     function calculateYieldTotal(address user) public view returns(uint256) {
         uint256 time = calculateYieldTime(user);
         uint256 contribution = calculateContribute(user);
-        uint256 rawYield = (time.mul(contribution).mul(25));
+        uint256 rawYield = (time.mul(contribution).mul(25 * 10**18));
         return rawYield;
     } 
 

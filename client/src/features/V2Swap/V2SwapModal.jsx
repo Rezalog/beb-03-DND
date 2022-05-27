@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Caver from "caver-js";
+import axios from "axios";
 import { closeV2SwapModal } from "../modal/v2SwapModalSlice";
 import TokenSelectModal from "./V2TokenSelectModal";
 import { openSubModal, changeToken0, changeToken1 } from "./v2SwapSlice";
@@ -37,6 +38,8 @@ import {
 } from "../notification/notifiactionSlice";
 import { uruABI, uruAddress } from "../userinfo/TokenContract";
 import { updateBalance } from "../userinfo/userInfoSlice";
+import { initTokenList } from "./v2SwapSlice";
+import { initV2Exchange } from "../v2dex/V2DexSlice";
 
 const V2SwapModal = () => {
   const dispatch = useDispatch();
@@ -260,6 +263,42 @@ const V2SwapModal = () => {
     dispatch(changeToken0({ index: currentToken1 }));
     dispatch(changeToken1({ index: currentToken0 }));
   };
+
+  const getTokenList = async () => {
+    const response = await axios.get(
+      "http://localhost:8080/contracts/v2token",
+      {}
+    );
+    const tokenList = response.data.map((token) => {
+      return {
+        symbol: token.token_symbol,
+        name: token.token_name,
+        address: token.token_address,
+      };
+    });
+    dispatch(initTokenList({ list: tokenList }));
+  };
+
+  const getExchangeList = async () => {
+    const response = await axios.get(
+      "http://localhost:8080/contracts/v2pair",
+      {}
+    );
+    const exchangeList = response.data.map((token) => {
+      return {
+        address: token.v2pair_address,
+        name: token.v2pair_name,
+        tokenAddress1: token.v2tokenA_address,
+        tokenAddress2: token.v2tokenB_address,
+      };
+    });
+    dispatch(initV2Exchange({ list: exchangeList }));
+  };
+
+  useEffect(() => {
+    getTokenList();
+    getExchangeList();
+  }, []);
 
   useEffect(() => {
     if (account) {

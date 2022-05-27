@@ -223,7 +223,7 @@ const Bet = ({ betting, currentTime, getBettings }) => {
         )
       );
     }
-    setEndTime(Number(startTime) + 5120);
+    setEndTime(Number(startTime) + 120);
     getCurrentWinningReward();
   }, []);
 

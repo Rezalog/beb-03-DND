@@ -77,7 +77,7 @@ const MonsterFarm = () => {
       );
 
       const stakeInfo = await monsterContract.methods.stakeInfo(address).call();
-
+      console.log("stake", stakeInfo);
       let tempObj = {};
       if (stakeInfo.isStaking) {
         const nft = new caver.klay.Contract(nftABI, nftAddress);
@@ -100,8 +100,11 @@ const MonsterFarm = () => {
 
   useEffect(() => {
     getMonsters();
-    updateWeapons();
   }, []);
+
+  useEffect(() => {
+    updateWeapons();
+  }, [monsters]);
 
   useEffect(() => {
     const intervalID = setInterval(() => {

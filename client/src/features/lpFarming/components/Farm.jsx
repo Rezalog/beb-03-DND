@@ -24,8 +24,9 @@ import {
 } from "../../notification/notifiactionSlice";
 import { updateBalance } from "../../userinfo/userInfoSlice";
 import { uruAddress, uruABI } from "../../userinfo/TokenContract";
+import { masterABI, masterAddrss } from "../masterContractInfo";
 
-const Farm = ({ address, name, tokenAddress }) => {
+const Farm = ({ address, name, pid, tokenAddress, master }) => {
   const dispatch = useDispatch();
   const { address: account } = useSelector((state) => state.userInfo);
   const [showMore, setShowMore] = useState(false);
@@ -34,25 +35,31 @@ const Farm = ({ address, name, tokenAddress }) => {
   const [locked, setLocked] = useState(0);
   const [exchange, setExchange] = useState(null);
   const [percentage, setPercentage] = useState(95);
+  const [totalStaked, setTotalStaked] = useState(0);
 
   const stakeLPToken = async (e) => {
     e.preventDefault();
     dispatch(pendingNoti());
     const caver = new Caver(window.klaytn);
     try {
-      const kip7 = new caver.klay.KIP7(address);
-      const allowed = await kip7.allowance(account, address);
+      const exchange = new caver.klay.Contract(exchangeABI, address);
+      const allowed = await exchange.methods
+        .allowance(account, masterAddrss)
+        .call();
       // 변경해야함
       // if allowed <= caver.utils.toPeb(input2.current.value)
       if (allowed.toString() === "0") {
-        await kip7.approve(address, caver.utils.toPeb("100000000"), {
-          from: account,
-        });
+        await exchange.methods
+          .approve(masterAddrss, caver.utils.toPeb("100000000"))
+          .send({
+            from: account,
+            gas: 200000,
+          });
       }
       const balance = await exchange.methods.balanceOf(account).call();
-      await exchange.methods.stake(balance).send({
+      await master.methods.deposit(pid, balance).send({
         from: account,
-        gas: 200000,
+        gas: 2000000,
       });
 
       dispatch(
@@ -63,6 +70,7 @@ const Farm = ({ address, name, tokenAddress }) => {
         })
       );
     } catch (error) {
+      console.log(error);
       dispatch(failNoti());
     }
     setTimeout(() => {
@@ -75,9 +83,8 @@ const Farm = ({ address, name, tokenAddress }) => {
     dispatch(pendingNoti());
     const caver = new Caver(window.klaytn);
     try {
-      const balance = await exchange.methods.stakingBalance(account).call();
-
-      await exchange.methods.unstake(balance).send({
+      console.log(caver.utils.toPeb(totalStaked));
+      await master.methods.withdraw(pid, caver.utils.toPeb(totalStaked)).send({
         from: account,
         gas: 200000,
       });
@@ -100,7 +107,7 @@ const Farm = ({ address, name, tokenAddress }) => {
     dispatch(pendingNoti());
     const caver = new Caver(window.klaytn);
     try {
-      await exchange.methods.withdrawYield().send({
+      await master.methods.harvest(pid).send({
         from: account,
         gas: 200000,
       });
@@ -130,34 +137,55 @@ const Farm = ({ address, name, tokenAddress }) => {
 
   const getYieldReward = async () => {
     const caver = new Caver(window.klaytn);
-    let _exchange = exchange;
-    if (!exchange) {
-      _exchange = new caver.klay.Contract(exchangeABI, address);
-      setExchange(_exchange);
-    }
-    const lpBalanceOfExchange = await _exchange.methods
-      .balanceOf(address)
-      .call();
-    if (lpBalanceOfExchange !== "0") {
-      const reward = await _exchange.methods
-        .calculateYieldTotal(account)
+    // let _exchange = exchange;
+    // if (!exchange) {
+    //   _exchange = new caver.klay.Contract(masterABI, masterAddrss);
+    //   setMaster(master);
+    // }
+    if (master) {
+      const currentReward = await master.methods
+        .calculateCurrentReward(pid, account)
         .call();
-      const _percentage = await _exchange.methods
-        .currentLockedPercentage()
-        .call();
+      const reward = await master.methods.calculateReward(pid, account).call();
+      const totalReward =
+        Number(caver.utils.fromPeb(currentReward)) +
+        Number(caver.utils.fromPeb(reward));
+      console.log(totalReward);
+      const _percentage = await master.methods.currentLockedPercentage().call();
       setPercentage(_percentage);
-      setTokenAmount(Number(reward).toString());
+      setTokenAmount(totalReward);
+    }
+    // if (lpBalanceOfExchange !== "0") {
+    //   const reward = await _exchange.methods
+    //     .calculateYieldTotal(account)
+    //     .call();
+    //   const _percentage = await _exchange.methods
+    //     .currentLockedPercentage()
+    //     .call();
+    //   setPercentage(_percentage);
+    //   setTokenAmount(Number(reward).toString());
+    // }
+  };
+
+  const getTotalStaked = async () => {
+    const caver = new Caver(window.klaytn);
+    if (master) {
+      const userinfo = await master.methods.userInfo(pid, account).call();
+      const staked = userinfo.amount;
+      console.log(caver.utils.fromPeb(staked));
+      setTotalStaked(caver.utils.fromPeb(staked));
     }
   };
 
   useEffect(() => {
+    getTotalStaked();
     getYieldReward();
-  }, []);
+  }, [master]);
 
   useEffect(() => {
     const intervalID = setInterval(async () => {
       getYieldReward();
-    }, 20000);
+    }, 1000);
 
     return () => clearInterval(intervalID);
   }, [exchange]);
@@ -177,7 +205,8 @@ const Farm = ({ address, name, tokenAddress }) => {
       <Content>
         <LPHeader scale={showMore ? -1 : 1}>
           <div>
-            <h2>{name}</h2>
+            <h2>{name}</h2> 예치된 LP:{" "}
+            {parseFloat(Number(totalStaked).toFixed(2))}
           </div>
           <Button
             style={{
@@ -193,18 +222,18 @@ const Farm = ({ address, name, tokenAddress }) => {
           </Button>
           <img src='assets/arrowDown.png'></img>
         </LPHeader>
-        <SwapInfoContainer style={{ width: "50%", marginTop: "0px" }}>
+        <SwapInfoContainer style={{ width: "70%", marginTop: "0px" }}>
           <InfoContainer>
             <h2>보상</h2>
-            <h2>{tokenAmount}</h2>
+            <h2>{tokenAmount} URU</h2>
           </InfoContainer>
           <InfoContainer>
             <span>Unlocked</span>
-            <span>{unlocked}</span>
+            <span>{unlocked} URU</span>
           </InfoContainer>
           <InfoContainer>
             <span>Locked</span>
-            <span>{locked}</span>
+            <span>{locked} URU</span>
           </InfoContainer>
         </SwapInfoContainer>
         <Button
