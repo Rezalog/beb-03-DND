@@ -12,6 +12,7 @@ import {
   MonsterList,
   MonsterHeader,
   MonsterContainer,
+  MonsterImage,
 } from "../../../styles/Monster.styled";
 
 import { farmingABI } from "../nftStakingContractInfo";
@@ -147,9 +148,15 @@ const Monster = ({
         <p>
           {reward} URU / {endTime === 0 ? cooltime : remainingTime}초
         </p>
-        {remainingTime === 0 && <button onClick={getReward}>보상획득</button>}
+        {remainingTime === 0 && (
+          <button style={{ fontSize: "1.5rem" }} onClick={getReward}>
+            보상획득
+          </button>
+        )}
       </MonsterHeader>
-      <MonsterContainer>
+      <MonsterContainer
+        bg={lvl <= 1 ? "easyLevel" : lvl <= 2 ? "midLevel" : "highLevel"}
+      >
         <div>
           <WeaponRenderer {...staked} />
           {staked && Object.keys(staked).length ? (
@@ -174,6 +181,7 @@ const Monster = ({
             </BuySellButton>
           )}
         </div>
+        <MonsterImage src={`assets/monster_${lvl}.gif`}></MonsterImage>
       </MonsterContainer>
     </MonsterList>
   );

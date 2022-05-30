@@ -22,6 +22,8 @@ const V2Exchange = ({
   account,
   setIsWithdrawal,
   setSelectedExchange,
+  setSelectedTokenA,
+  setSelectedTokenB,
 }) => {
   const [reservedKlay, setReservedKlay] = useState(0);
   const [reservedToken, setReservedToken] = useState(0);
@@ -61,7 +63,9 @@ const V2Exchange = ({
       setTokenBName(name);
       setTokenBSymbol(symbol);
 
-      //getShareOfLP(lp);
+      // lp = await pair.methods.balanceOf(account).call();
+
+      getShareOfLP(lp);
     };
     console.log(lp);
     getReserved();
@@ -105,12 +109,18 @@ const V2Exchange = ({
             <span>Pooled {tokenBSymbol}</span>
             <span>{parseFloat(Number(reservedTokenB).toFixed(6))}</span>
           </InfoContainer>
+          <InfoContainer>
+            <span>Share of Pool</span>
+            <span>{share < 0.01 ? `<0.01` : share}%</span>
+          </InfoContainer>
         </SwapInfoContainer>
         <Button
           style={{ bottom: "-100px" }}
           onClick={() => {
             setIsWithdrawal(true);
             setSelectedExchange(address);
+            setSelectedTokenA(tokenAddress1);
+            setSelectedTokenB(tokenAddress2);
           }}
         >
           출금

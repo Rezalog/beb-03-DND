@@ -1,5 +1,5 @@
 module.exports = {
-  masterAddrss: "0x02aDeb3029DBc77d3f08d152339aC2C7cF91E45e",
+  masterAddrss: "0xdbF88626B39Bd58927EDe1B487E35FC9D47e831f",
   masterABI: [
     {
       constant: true,
@@ -39,20 +39,6 @@ module.exports = {
         },
         {
           name: "URUPerShare",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: "startTime",
-      outputs: [
-        {
-          name: "",
           type: "uint256",
         },
       ],
@@ -128,6 +114,25 @@ module.exports = {
       constant: true,
       inputs: [],
       name: "URUperblock",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [
+        {
+          name: "",
+          type: "address",
+        },
+      ],
+      name: "poolId",
       outputs: [
         {
           name: "",

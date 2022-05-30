@@ -221,7 +221,7 @@ export default class Main extends Phaser.Scene {
     // 대장장이 NPC 생성
     this.blacksmith = this.physics.add.sprite(
       300,
-      game.config.height / 4,
+      game.config.height / 3,
       "blacksmith"
     );
     this.blacksmith.setScale(2);

@@ -27,12 +27,14 @@ import {
 } from "../../V2Swap/v2Contract";
 import { uruABI, uruAddress } from "../../userinfo/TokenContract";
 import { updateBalance } from "../../userinfo/userInfoSlice";
+import { masterABI, masterAddrss } from "../../lpFarming/masterContractInfo";
 
 const AddV2Liquidity = ({
   setSelectedToken,
   getExchangeContract,
   exchange,
   currentExchangeAddress,
+  setCurrentNav,
 }) => {
   const dispatch = useDispatch();
   const { isSubModalOpen, tokens, token0, token1 } = useSelector(
@@ -66,11 +68,11 @@ const AddV2Liquidity = ({
   const getReserved = async () => {
     const caver = new Caver(window.klaytn);
     const factory = new caver.klay.Contract(factoryABI, factoryAddress);
+    console.log(factory);
     const _pairAddress = await factory.methods
       .pairs(tokens[token0].address, tokens[token1].address)
       .call();
     setPairAddress(_pairAddress);
-    console.log(_pairAddress);
     if (_pairAddress !== "0x0000000000000000000000000000000000000000") {
       const pair = new caver.klay.Contract(pairABI, _pairAddress);
       const reserved = await pair.methods.getReserves().call();
@@ -140,6 +142,7 @@ const AddV2Liquidity = ({
   const getInput2 = () => {
     const input1Value = input1.current.value;
     setTokenAAmount(input1Value);
+    console.log(pairAddress);
     if (pairAddress !== "0x0000000000000000000000000000000000000000") {
       const caver = new Caver(window.klaytn);
       const tokenA = caver.utils.toPeb(reservedTokenA);
@@ -183,8 +186,6 @@ const AddV2Liquidity = ({
       let allowed = await kip7.allowance(account, routerAddress);
       // 변경해야함
       // if allowed <= caver.utils.toPeb(input2.current.value)
-      console.log(allowed.toString());
-      console.log(tokenAAddress);
       if (allowed.toString() < "100000000000000000000000000") {
         await kip7.approve(routerAddress, caver.utils.toPeb("100000000"), {
           from: account,
@@ -225,12 +226,14 @@ const AddV2Liquidity = ({
         const _pairAddress = await factory.methods
           .pairs(tokenAAddress, tokenBAddress)
           .call();
+
+        const master = new caver.klay.Contract(masterABI, masterAddrss);
+        await master.methods.add(_pairAddress).send({
+          from: account,
+          gas: 2000000,
+        });
         pair = new caver.klay.Contract(pairABI, _pairAddress);
 
-        console.log("pair", _pairAddress);
-        console.log("tokens", tokens[token0].symbol, tokens[token1].symbol);
-        console.log("tokenAAddress", tokenAAddress);
-        console.log("tokenBAddress", tokenBAddress);
         const aSymbol = tokens[token0].symbol;
         const bSymbol = tokens[token1].symbol;
         await axios.post(
@@ -271,6 +274,7 @@ const AddV2Liquidity = ({
           locked: parseFloat(Number(caver.utils.fromPeb(locked)).toFixed(2)),
         })
       );
+      setCurrentNav(0);
     } catch (error) {
       console.log(error);
       dispatch(failNoti());
@@ -318,7 +322,7 @@ const AddV2Liquidity = ({
         <input placeholder='0.0' ref={input1} onChange={getInput2} />
         <BalanceContainer>
           <span>
-            잔액: {Number(balance).toFixed(2)} {tokens[token0].symbol}
+            잔액: {Number(balance).toFixed(2)} {tokens[token0]?.symbol}
           </span>
         </BalanceContainer>
       </InputContainer>
@@ -340,7 +344,7 @@ const AddV2Liquidity = ({
             잔액:{" "}
             {token1 < 0
               ? "0.0"
-              : `${Number(balance1).toFixed(2)} ${tokens[token1].symbol}`}
+              : `${Number(balance1).toFixed(2)} ${tokens[token1]?.symbol}`}
           </span>
         </BalanceContainer>
       </InputContainer>
@@ -349,7 +353,7 @@ const AddV2Liquidity = ({
           <InfoContainer>
             <span>{reversePrice}</span>
             <span>
-              {tokens[token0].symbol} per {tokens[token1].symbol}
+              {tokens[token0]?.symbol} per {tokens[token1]?.symbol}
             </span>
           </InfoContainer>
         )}
@@ -357,7 +361,7 @@ const AddV2Liquidity = ({
           <InfoContainer>
             <span>{price}</span>
             <span>
-              {tokens[token1].symbol} per {tokens[token0].symbol}
+              {tokens[token1]?.symbol} per {tokens[token0]?.symbol}
             </span>
           </InfoContainer>
         )}

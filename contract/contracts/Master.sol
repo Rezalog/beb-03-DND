@@ -33,6 +33,7 @@ contract Master {
     uint256 epochDuration;
 
     poolinfo[] public poolInfo;
+    mapping(address => uint256) public poolId;
     mapping(uint256 => address[]) public userList; 
     mapping(uint256 => mapping(address => userinfo)) public userInfo;
 
@@ -63,14 +64,15 @@ contract Master {
     // 새로운 lp-token을 추가
     function add(address _lpToken) external {
         uint256 lastUpdatedTime = block.timestamp;
-        poolInfo.push(
+        uint256 id = poolInfo.push(
             poolinfo({
                 lpToken: _lpToken,
                 stakeAmount: 0,
                 lastUpdatedTime: lastUpdatedTime,
                 URUPerShare: 0
             })
-        );
+        ).sub(1);
+        poolId[_lpToken] = id;
     }
 
     // _pid : poolInfo의 index (pool의 주소)
@@ -172,6 +174,9 @@ contract Master {
         poolinfo storage pool = poolInfo[_pid];
         userinfo storage user = userInfo[_pid][_user];
 
+        if(KIP7(pool.lpToken).balanceOf(address(this)) == 0){
+            return 0;
+        }
         uint256 contribution = (user.amount.mul(100)).div((KIP7(pool.lpToken)).balanceOf(address(this)));
         return contribution;
     }

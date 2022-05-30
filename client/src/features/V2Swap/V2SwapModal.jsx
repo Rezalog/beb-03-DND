@@ -301,7 +301,7 @@ const V2SwapModal = () => {
   }, []);
 
   useEffect(() => {
-    if (account) {
+    if (tokens.length) {
       getToken0();
       getToken1();
     }
@@ -328,7 +328,7 @@ const V2SwapModal = () => {
                   setSelectedToken(0);
                 }}
               >
-                {tokens[token0].symbol}
+                {tokens[token0]?.symbol}
                 <img src='assets/arrowDown.png' />
               </button>
               <input
@@ -340,7 +340,7 @@ const V2SwapModal = () => {
                 <div onClick={inputMaxToken}>Max</div>
                 <span>
                   잔액: {parseFloat(Number(balance).toFixed(2))}{" "}
-                  {tokens[token0].symbol}
+                  {tokens[token0]?.symbol}
                 </span>
               </BalanceContainer>
             </InputContainer>
@@ -352,7 +352,7 @@ const V2SwapModal = () => {
                   setSelectedToken(1);
                 }}
               >
-                {tokens[token1].symbol}
+                {tokens[token1]?.symbol}
                 <img src='assets/arrowDown.png' />
               </button>
               <input placeholder='0.0' disabled ref={token1InputRef} />
@@ -363,7 +363,7 @@ const V2SwapModal = () => {
                   {token1 < 0
                     ? "0.0"
                     : `${parseFloat(Number(balance1).toFixed(2))} ${
-                        tokens[token1].symbol
+                        tokens[token1]?.symbol
                       }`}
                 </span>
               </BalanceContainer>
@@ -373,7 +373,8 @@ const V2SwapModal = () => {
                 <InfoContainer>
                   <span>가격</span>
                   <span>
-                    {price} {tokens[token1].symbol} per {tokens[token0].symbol}{" "}
+                    {price} {tokens[token1]?.symbol} per{" "}
+                    {tokens[token0]?.symbol}{" "}
                   </span>
                 </InfoContainer>
               )}

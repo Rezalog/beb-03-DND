@@ -205,14 +205,14 @@ contract NFT is KIP17Full{
         require(msg.sender == ownerOf(_weaponId));
         
         // 내구도가 3미만일 경우에만 수리
-        require(weapons[_weaponId -1].durability < 3, "Your weapon doesn't need to fix");
+        require(weapons[_weaponId -1].durability < 103, "Your weapon doesn't need to fix");
 
         // 충분한 수리비용을 가졌는 지 확인
         uint256 spendToken = tokenToFix[weapons[_weaponId - 1].weaponLevel - 1];
         require(spendToken <= token.balanceOf(msg.sender), "You must have enough URU token to fix durability");
         
         
-        weapons[_weaponId - 1].durability = 3;
+        weapons[_weaponId - 1].durability = 10;
 
         token.burn(msg.sender, spendToken * 10**18);
     }
@@ -224,7 +224,7 @@ contract NFT is KIP17Full{
         require(msg.sender == ownerOf(_weaponId));
 
         // 내구도가 3미만일 경우에만 수리
-        require(weapons[_weaponId -1].enchant < 3, "Your weapon doesn't need to fix");
+        require(weapons[_weaponId -1].enchant < 10, "Your weapon doesn't need to fix");
         
         // 충분한 수리비용을 가졌는 지 확인
         uint256 spendToken = tokenToFix[weapons[_weaponId - 1].weaponLevel - 1];
