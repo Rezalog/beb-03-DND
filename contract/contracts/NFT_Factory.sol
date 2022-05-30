@@ -44,4 +44,3 @@ contract NFT_Factory {
         return monsters;
     }
 }
-

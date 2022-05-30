@@ -4,9 +4,10 @@ pragma solidity ^0.5.6;
 import "@klaytn/contracts/token/KIP7/KIP7.sol";
 import "@klaytn/contracts/token/KIP7/IKIP7.sol";
 import "@klaytn/contracts/math/SafeMath.sol";
+import "@klaytn/contracts/access/roles/MinterRole.sol";
 import "./Token.sol";
 
-contract Master {
+contract Master is MinterRole {
 
     using SafeMath for uint256;
 
@@ -62,7 +63,7 @@ contract Master {
 
 
     // 새로운 lp-token을 추가
-    function add(address _lpToken) external {
+    function add(address _lpToken) external onlyMinter {
         uint256 lastUpdatedTime = block.timestamp;
         uint256 id = poolInfo.push(
             poolinfo({
