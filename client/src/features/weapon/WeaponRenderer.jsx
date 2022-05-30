@@ -31,7 +31,7 @@ const WeaponRenderer = ({ dna, lvl, durability, id }) => {
   const repairWeapon = async (e) => {
     e.preventDefault();
     dispatch(pendingNoti());
-    if (durability < 3) {
+    if (durability < 10) {
       const caver = new Caver(window.klaytn);
 
       const kip7 = new caver.klay.KIP7(tokenAddress);

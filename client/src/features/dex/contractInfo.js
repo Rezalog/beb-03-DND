@@ -1,25 +1,6 @@
 module.exports = {
-  factoryAddress: "0xd8b934580fcE35a11B58C6D73aDeE468a2833fa8",
+  factoryAddress: "0xe027606A90CF714ab8Abf224bE6c60474F9C719A",
   factoryABI: [
-    {
-      constant: true,
-      inputs: [
-        {
-          name: "_tokenAddress",
-          type: "address",
-        },
-      ],
-      name: "getExchange",
-      outputs: [
-        {
-          name: "",
-          type: "address",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
     {
       constant: true,
       inputs: [],
@@ -33,6 +14,50 @@ module.exports = {
       payable: false,
       stateMutability: "view",
       type: "function",
+    },
+    {
+      constant: true,
+      inputs: [
+        {
+          name: "",
+          type: "address",
+        },
+      ],
+      name: "tokenToExchange",
+      outputs: [
+        {
+          name: "",
+          type: "address",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [],
+      name: "master",
+      outputs: [
+        {
+          name: "",
+          type: "address",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [
+        {
+          name: "_master",
+          type: "address",
+        },
+      ],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "constructor",
     },
     {
       constant: false,
@@ -65,11 +90,11 @@ module.exports = {
       constant: true,
       inputs: [
         {
-          name: "",
+          name: "_tokenAddress",
           type: "address",
         },
       ],
-      name: "tokenToExchange",
+      name: "getExchange",
       outputs: [
         {
           name: "",

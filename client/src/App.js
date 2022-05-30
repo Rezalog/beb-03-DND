@@ -33,6 +33,9 @@ import V2DexModal from "./features/v2dex/V2DexModal";
 import UserInfo from "./features/userinfo/UserInfo";
 import { updateBalance } from "./features/userinfo/userInfoSlice";
 import { uruABI, uruAddress } from "./features/userinfo/TokenContract";
+import { BettingIcon } from "./styles/Betting.styled";
+import { openBettingModal } from "./features/modal/bettingModalSlice";
+import Betting from "./features/betting/Betting";
 
 function App() {
   const { isOpen: isDexOpen } = useSelector((state) => state.dexModal);
@@ -49,6 +52,7 @@ function App() {
   );
   const { isOpen: isV2Open } = useSelector((state) => state.v2SwapModal);
   const { isOpen: isV2DexOpen } = useSelector((state) => state.v2DexModal);
+  const { isOpen: isBettingOpen } = useSelector((state) => state.bettingModal);
   // const { isOpen: isInventoryOpen } = useSelector(
   //   (state) => state.inventoryModal
   // );
@@ -211,7 +215,10 @@ function App() {
   return (
     <div className="App">
       {isSignIn ? (
-        <UserInfo />
+        <>
+          <UserInfo />
+          <BettingIcon onClick={() => dispatch(openBettingModal())} />
+        </>
       ) : (
         <div>
           <h1>Dungeon & Defi</h1>
@@ -229,6 +236,7 @@ function App() {
       {isWeaponCompoundOpen && <WeaponCompoundModal />}
       {isV2Open && <V2SwapModal />}
       {isV2DexOpen && <V2DexModal />}
+      {isBettingOpen && <Betting />}
       <Notification />
     </div>
   );

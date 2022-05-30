@@ -23,6 +23,7 @@ import {
   CloseWeaponCompoundButton,
   WeaponCompoundButton,
 } from "../../styles/WeaponCompound.styled";
+import { bettingABI, bettingAddress } from "../betting/bettingContractInfo";
 
 // 처음에 무기 가져올 때 로딩 컴포넌트 필요
 // 무기합성 결과 보여주기전에도 로딩컴포넌트 필요
@@ -110,6 +111,36 @@ const WeaponCompoundModal = () => {
     dispatch(setSecondWeapon({ SecondWeapon: "" }));
   };
 
+  const openBet = async () => {
+    const weapon1Info = await nft.methods
+      .weapons([weapons[firstWeapon].id - 1])
+      .call();
+    const weapon2Info = await nft.methods
+      .weapons([weapons[secondWeapon].id - 1])
+      .call();
+
+    if (!firstWeapon || !secondWeapon) {
+      alert("Select Weapon Please");
+    } else if (weapons[firstWeapon].id === weapons[secondWeapon].id) {
+      alert("Select Two Other Weapon Please");
+    } else {
+      if (weapons[firstWeapon].lvl !== weapons[secondWeapon].lvl) {
+        alert("Select Same Level Weapons");
+      } else if (weapon1Info.enchant === "0" || weapon2Info.enchant === "0") {
+        alert("Fix Enchant please");
+      } else {
+        const bettingContract = new caver.klay.Contract(
+          bettingABI,
+          bettingAddress
+        );
+
+        await bettingContract.methods
+          .createBet(weapons[firstWeapon].id, weapons[secondWeapon].id)
+          .send({ from: address, gas: 2000000 });
+      }
+    }
+  };
+
   useEffect(() => {
     console.log(firstWeapon);
     console.log(secondWeapon);
@@ -143,6 +174,13 @@ const WeaponCompoundModal = () => {
           console.log("close");
         }}
       ></CloseWeaponCompoundButton>
+      <button
+        onClick={() => {
+          openBet();
+        }}
+      >
+        배팅열기
+      </button>
     </WeaponCompoundModalBox>
   );
 };

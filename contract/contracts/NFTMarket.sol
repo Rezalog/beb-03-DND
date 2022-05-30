@@ -86,7 +86,7 @@ contract NFTMarket{
   // // 구매
   function buyNft(uint256 _id) buyCheck(_id, msg.sender) external {
     uint256 price = onSales[_id].price;
-    uint256 feePrice = price.mul(fee).div(100);
+    uint256 feePrice = price.mul(fee).div(1000);
     require(token.balanceOf(msg.sender) >= price.add(feePrice), "Not enough URU Token!!");
 
     token.transferFrom(msg.sender, onSales[_id].seller, price);

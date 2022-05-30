@@ -82,8 +82,7 @@ contract DNDPair is KIP7, KIP7Metadata, Math {
         if (totalSupply() == 0) {
 
             // 생성되는 liquidity(LP 토큰의 양) : (amount0, amount1의 기하평균 값 - MINIMUM_LIQUIDITY)
-            liquidity = MINIMUM_LIQUIDITY;
-
+            liquidity = Math.sqrt(amount0.mul(amount1)).sub(MINIMUM_LIQUIDITY);
             // MINIMUM_LIQUIDITY 만큼 mint 후 0 주소로 보냄(영원히 묶임, 사실상 burn)
             //_mint(address(0), MINIMUM_LIQUIDITY); // permanently lock the first MINIMUM_LIQUIDITY tokens
 

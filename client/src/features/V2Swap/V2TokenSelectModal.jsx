@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import Caver from "caver-js";
+import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { closeSubModal, changeToken0, changeToken1 } from "./v2SwapSlice";
 
@@ -22,6 +23,21 @@ const V2TokenSelectModal = ({ selectedToken }) => {
       dispatch(
         addNewToken({ name, symbol, address: newTokenAddress.current.value })
       );
+      await axios.post(
+        "http://localhost:8080/contracts/v2token",
+        [
+          {
+            token_symbol: symbol,
+            token_name: name,
+            token_address: newTokenAddress.current.value,
+          },
+        ],
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
     } catch (err) {}
   };
   return (
@@ -40,9 +56,9 @@ const V2TokenSelectModal = ({ selectedToken }) => {
             const selected =
               index === token0 || index === token1 ? true : false;
             return (
-              <TokenContainer>
+              <TokenContainer key={index}>
                 {selected ? (
-                  <li key={index} style={{ opacity: "0.7" }}>
+                  <li style={{ opacity: "0.7" }}>
                     <h5>{token.symbol}</h5>
                     <p>{token.name}</p>
                   </li>

@@ -4,12 +4,21 @@ pragma solidity ^0.5.6;
 import "./Exchange.sol";
 import "./Token.sol";
 
+interface IMaster {
+    function add(address _lpToken) external;
+}
+
 contract Factory {
 
     // data structure : store exchange
     mapping(address => address) public tokenToExchange;
 
     Token public uru;
+    IMaster public master;
+
+    constructor (address _master) public {
+        master = IMaster(_master);
+    }
 
     // 거래소 생성
     function createExchange(address _tokenAddress, Token _uru, uint256 _epochDuration) public returns (address) {
@@ -28,7 +37,8 @@ contract Factory {
         //--참고 : Solidity의 new 생성자는 다른 객체지향언어와 달리 해당 contract를 deploy 한다.
         Exchange exchange = new Exchange(_tokenAddress, uru, _epochDuration);
         tokenToExchange[_tokenAddress] = address(exchange);
-        uru.addMinter(address(exchange));
+        master.add(address(exchange));
+        //uru.addMinter(address(exchange));
 
         // 여기서는 Exchange만 address 타입으로 casting 되었지만
         // 다른 컨트랙트들도 address 타입으로 convert 할 수 있다.
