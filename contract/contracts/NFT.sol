@@ -57,20 +57,21 @@ contract NFT is KIP17Full{
         tokenToCompound[8] = 5000;
 
         // 내구도, 합성내구도 수리시 토큰 소모량 의논 후 수정
-        tokenToFix[0] = 50;
-        tokenToFix[1] = 100;
-        tokenToFix[2] = 150;
-        tokenToFix[3] = 200;
-        tokenToFix[4] = 250;
-        tokenToFix[5] = 300;
-        tokenToFix[6] = 350;
-        tokenToFix[7] = 400;
-        tokenToFix[8] = 450;
+        tokenToFix[0] = 10;
+        tokenToFix[1] = 20;
+        tokenToFix[2] = 30;
+        tokenToFix[3] = 50;
+        tokenToFix[4] = 80;
+        tokenToFix[5] = 110;
+        tokenToFix[6] = 190;
+        tokenToFix[7] = 300;
+        tokenToFix[8] = 490;
         // tokenToFixEnchant[0~8] = ??;
 
         token = Token(_token);
         
     }
+
 
     function mint (address recipient, uint256 _weaponLevel) public returns (uint256) {
     _Ids.increment();
@@ -84,24 +85,33 @@ contract NFT is KIP17Full{
      }
     
     // 기본 무기 구매
-    function buyBasicWeapon () public {
+    function buyBasicWeapon () public returns (uint256){
         // 구매자가 50 토큰 이상 보유중인지 확인
-        require(50 <= token.balanceOf(msg.sender), "Not enough token to buy basic weapon");
+        require(50 * 10**18<= token.balanceOf(msg.sender), "Not enough token to buy basic weapon");
         
-        token.burn(msg.sender, 50);
-        mint(msg.sender, 1);
+        token.burn(msg.sender, 50 * 10**18);
+        
+        _Ids.increment();
+
+        uint256 newItemId = _Ids.current();
+        _mint(msg.sender, newItemId);
+
+        createRandomWeapon(1);
+
+        return newItemId;
     }
 
     // 무기 합성 
-    function _createWeapon(uint256 _weaponType, uint256 _weaponLevel) internal {
+    function _createWeapon(uint256 _weaponType, uint256 _weaponLevel) internal returns(uint256) {
          _Ids.increment();
 
-        uint256 id = weapons.push(Weapon(_weaponType, _weaponLevel, 3, 3)) - 1;
+        uint256 id = weapons.push(Weapon(_weaponType, _weaponLevel, 10, 3)) - 1;
         uint256 newItemId = _Ids.current();
         
         _mint(msg.sender, newItemId);
-
+    
         emit NewWeapon(id, _weaponType, _weaponLevel);
+        return newItemId;
     }
 
     // 무기타입을 위한 랜덤 16자리 숫자 생성
@@ -128,7 +138,7 @@ contract NFT is KIP17Full{
         return randomNum % 100;
     }
 
-    function compoundWeapon(uint256 _weapon1Id, uint256 _weapon2Id) public { // targetType 없이 weaponId 2개
+    function compoundWeapon(uint256 _weapon1Id, uint256 _weapon2Id) public returns(uint256) { // targetType 없이 weaponId 2개
     // 소유한 2개의 무기만 합성 가능
     require(msg.sender == ownerOf(_weapon1Id));
     require(msg.sender == ownerOf(_weapon2Id));
@@ -159,21 +169,20 @@ contract NFT is KIP17Full{
     myWeapon2.enchant = myWeapon2.enchant - 1;
 
     // 합성시 msg.sender 토큰 소모(burn)
-    token.burn(msg.sender, spendToken);
+    token.burn(msg.sender, spendToken * 10**18);
     
-
+    uint256 _tokenId;
     // 합성확률보다 랜덤숫자가 크면 실패, 작거나 같으면 성공
     if(createRandomNum() <= compoundPercentage) {
-        _createWeapon(newType, myWeapon1.weaponLevel + 1);
+        _tokenId = _createWeapon(newType, myWeapon1.weaponLevel + 1);
         compoundResult[_weapon1Id][_weapon2Id] = true;
     } else {
-        _createWeapon(newType, myWeapon1.weaponLevel);
+        _tokenId = _createWeapon(newType, myWeapon1.weaponLevel);
         compoundResult[_weapon1Id][_weapon2Id] = false;
     }
+    return _tokenId;
     
     }
-
-    // 무기 합성 결과를 알려주는 함수 
     function getCompoundResult (uint256 _weapon1Id, uint256 _weapon2Id) public view returns (bool) {
         return compoundResult[_weapon1Id][_weapon2Id];
     }
@@ -196,16 +205,16 @@ contract NFT is KIP17Full{
         require(msg.sender == ownerOf(_weaponId));
         
         // 내구도가 3미만일 경우에만 수리
-        require(weapons[_weaponId -1].durability < 3, "Your weapon doesn't need to fix");
+        require(weapons[_weaponId -1].durability < 103, "Your weapon doesn't need to fix");
 
         // 충분한 수리비용을 가졌는 지 확인
         uint256 spendToken = tokenToFix[weapons[_weaponId - 1].weaponLevel - 1];
         require(spendToken <= token.balanceOf(msg.sender), "You must have enough URU token to fix durability");
         
         
-        weapons[_weaponId - 1].durability = 3;
+        weapons[_weaponId - 1].durability = 10;
 
-        token.burn(msg.sender, spendToken);
+        token.burn(msg.sender, spendToken * 10**18);
     }
 
 
@@ -215,7 +224,7 @@ contract NFT is KIP17Full{
         require(msg.sender == ownerOf(_weaponId));
 
         // 내구도가 3미만일 경우에만 수리
-        require(weapons[_weaponId -1].enchant < 3, "Your weapon doesn't need to fix");
+        require(weapons[_weaponId -1].enchant < 10, "Your weapon doesn't need to fix");
         
         // 충분한 수리비용을 가졌는 지 확인
         uint256 spendToken = tokenToFix[weapons[_weaponId - 1].weaponLevel - 1];
@@ -224,7 +233,7 @@ contract NFT is KIP17Full{
         
         weapons[_weaponId - 1].enchant = 3;
 
-        token.burn(msg.sender, spendToken);
+        token.burn(msg.sender, spendToken * 10**18);
     }
 
     // 현재 msg.sender가 보유중인 무기를 배열로 리턴해주는 함수 (getter)

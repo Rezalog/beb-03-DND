@@ -101,8 +101,8 @@ const ManageList = ({ getMarketplaceList }) => {
       })}
       {remainingList.map((item, idx) => {
         return (
-          <div>
-            <WeaponRenderer key={idx} {...item}></WeaponRenderer>
+          <div key={idx}>
+            <WeaponRenderer {...item}></WeaponRenderer>
             <BuySellButton
               onClick={() => {
                 setIsSell(!isSell);

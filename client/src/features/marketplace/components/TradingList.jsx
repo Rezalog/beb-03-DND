@@ -37,23 +37,45 @@ const TradingList = ({ getMarketplaceList }) => {
 
     try {
       //buyBasicWeapon으로 하면 노티가 안꺼짐
-      await nft.methods.mint().send({
-        from: address,
-        gas: 2000000,
-      });
-      getMarketplaceList();
-      dispatch(successNoti({ msg: `NFT 구매 성공!` }));
-
-      const token = new caver.klay.Contract(uruABI, uruAddress);
-      const balance = await token.methods.balanceOf(address).call();
-      const locked = await token.methods.getLockedTokenAmount(address).call();
-      dispatch(
-        updateBalance({
-          uru: parseFloat(Number(caver.utils.fromPeb(balance)).toFixed(2)),
-          locked: parseFloat(Number(caver.utils.fromPeb(locked)).toFixed(2)),
+      await nft.methods
+        .buyBasicWeapon()
+        .send({
+          from: address,
+          gas: 2000000,
         })
-      );
+        .on("transactionHash", async (resolve) => {
+          console.log("tx", resolve);
+          dispatch(successNoti({ msg: `NFT 구매 성공!` }));
+
+          const token = new caver.klay.Contract(uruABI, uruAddress);
+          const balance = await token.methods.balanceOf(address).call();
+          const locked = await token.methods
+            .getLockedTokenAmount(address)
+            .call();
+          dispatch(
+            updateBalance({
+              uru: parseFloat(Number(caver.utils.fromPeb(balance)).toFixed(2)),
+              locked: parseFloat(
+                Number(caver.utils.fromPeb(locked)).toFixed(2)
+              ),
+            })
+          );
+          getMarketplaceList();
+          setTimeout(() => {
+            dispatch(clearState());
+          }, 5000);
+        })
+        .on("confirmation", (confirmationNumber) => {
+          console.log("confirmed", confirmationNumber);
+        })
+        .on("receipt", (receipt) => {
+          console.log("receipt", receipt);
+        })
+        .on("error", (error) => {
+          console.log("error", error);
+        });
     } catch (err) {
+      console.log(err);
       dispatch(failNoti());
     }
     setTimeout(() => {

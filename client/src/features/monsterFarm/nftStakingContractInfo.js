@@ -1,4 +1,145 @@
 module.exports = {
+  nftFactoryAddress: "0x37698Df7FE3C639222276EBbe347413c502D6cB6",
+  nftFactoryABI: [
+    {
+      constant: true,
+      inputs: [],
+      name: "uru",
+      outputs: [
+        {
+          name: "",
+          type: "address",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [],
+      name: "nft",
+      outputs: [
+        {
+          name: "",
+          type: "address",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      name: "monsters",
+      outputs: [
+        {
+          name: "NFTAddress",
+          type: "address",
+        },
+        {
+          name: "name",
+          type: "string",
+        },
+        {
+          name: "level",
+          type: "uint256",
+        },
+        {
+          name: "coolDownTime",
+          type: "uint256",
+        },
+        {
+          name: "reward",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "_NFTAddress",
+          type: "address",
+        },
+        {
+          name: "_tokenAddress",
+          type: "address",
+        },
+        {
+          name: "_name",
+          type: "string",
+        },
+        {
+          name: "_level",
+          type: "uint256",
+        },
+        {
+          name: "_coolDownTime",
+          type: "uint256",
+        },
+        {
+          name: "_reward",
+          type: "uint256",
+        },
+      ],
+      name: "createNFTFarm",
+      outputs: [
+        {
+          name: "",
+          type: "address",
+        },
+      ],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [],
+      name: "getMonsters",
+      outputs: [
+        {
+          components: [
+            {
+              name: "NFTAddress",
+              type: "address",
+            },
+            {
+              name: "name",
+              type: "string",
+            },
+            {
+              name: "level",
+              type: "uint256",
+            },
+            {
+              name: "coolDownTime",
+              type: "uint256",
+            },
+            {
+              name: "reward",
+              type: "uint256",
+            },
+          ],
+          name: "",
+          type: "tuple[]",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+  ],
   farmingABI: [
     {
       constant: true,
@@ -28,57 +169,6 @@ module.exports = {
       type: "function",
     },
     {
-      constant: false,
-      inputs: [
-        {
-          name: "_tokenID",
-          type: "uint256",
-        },
-      ],
-      name: "unstake",
-      outputs: [],
-      payable: false,
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          name: "_tokenID",
-          type: "uint256",
-        },
-      ],
-      name: "stake",
-      outputs: [],
-      payable: false,
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      constant: false,
-      inputs: [],
-      name: "withdrawYield",
-      outputs: [],
-      payable: false,
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: "getStakingTime",
-      outputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
       inputs: [
         {
           name: "_NFTaddress",
@@ -94,6 +184,10 @@ module.exports = {
         },
         {
           name: "_coolDownTime",
+          type: "uint256",
+        },
+        {
+          name: "_reward",
           type: "uint256",
         },
       ],
@@ -151,6 +245,57 @@ module.exports = {
       ],
       name: "YieldWithdraw",
       type: "event",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "_tokenID",
+          type: "uint256",
+        },
+      ],
+      name: "stake",
+      outputs: [],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "_tokenID",
+          type: "uint256",
+        },
+      ],
+      name: "unstake",
+      outputs: [],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [],
+      name: "withdrawYield",
+      outputs: [],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [],
+      name: "getStakingTime",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
     },
   ],
 };

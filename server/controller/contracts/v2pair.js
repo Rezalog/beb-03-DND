@@ -2,13 +2,14 @@ const v2pairs = require("../../models/v2pairs");
 
 module.exports = {
   post: async (req, res) => {
-    const { v2pair_address, v2pair_name, v2tokenA_address, v2tokenB_address } = req.body;
+    const { v2pair_address, v2pair_name, v2tokenA_address, v2tokenB_address } =
+      req.body;
     try {
       let v2pairData = new v2pairs({
         v2pair_address,
         v2pair_name,
         v2tokenA_address,
-        v2TokenB_address
+        v2tokenB_address,
       });
       v2pairData.save((err) => {
         if (err) {
@@ -28,7 +29,13 @@ module.exports = {
     try {
       let result = await v2pairs.find(
         {},
-        { _id: false, v2pair_address: true, v2pair_name: true, v2tokenA_address: true, v2tokenB_address }
+        {
+          _id: false,
+          v2pair_address: true,
+          v2pair_name: true,
+          v2tokenA_address: true,
+          v2tokenB_address: true,
+        }
       );
       for (let i = 0; i < result.length; i++) {
         arr.push({

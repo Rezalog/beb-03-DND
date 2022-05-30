@@ -18,12 +18,19 @@ contract NFT_Farming {
     }
 
     mapping(address => Stake) public stakeInfo;
+    
 
     Token token;
     NFT nft;
     uint256 level;
     uint256 coolDownTime;
     uint256 reward;
+
+    // lock 관련 선언
+    uint8 lockedPercentage = 95;
+    uint256 lockStartTime;
+    uint256 nextEpoch;
+    uint256 epochDuration;
 
     event NFTStaked(address owner, uint256 tokenId);
     event NFTUnstaked(address owner, uint256 tokenId);

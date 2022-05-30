@@ -1,46 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  farms: [
-    {
-      address: "0xf4Ff858D64a45b84237a74f413F6A67805e9A76C",
-      name: "URU/KLAY",
-      tokenAddress: "0xA935449F20f0e6867FF23dbFC627e4300bf011b3",
-    },
-    {
-      address: "0xf4Ff858D64a45b84237a74f413F6A67805e9A76C",
-      name: "URU/KLAY",
-      tokenAddress: "0xA935449F20f0e6867FF23dbFC627e4300bf011b3",
-    },
-    {
-      address: "0xf4Ff858D64a45b84237a74f413F6A67805e9A76C",
-      name: "URU/KLAY",
-      tokenAddress: "0xA935449F20f0e6867FF23dbFC627e4300bf011b3",
-    },
-    {
-      address: "0xf4Ff858D64a45b84237a74f413F6A67805e9A76C",
-      name: "URU/KLAY",
-      tokenAddress: "0xA935449F20f0e6867FF23dbFC627e4300bf011b3",
-    },
-    {
-      address: "0xf4Ff858D64a45b84237a74f413F6A67805e9A76C",
-      name: "URU/KLAY",
-      tokenAddress: "0xA935449F20f0e6867FF23dbFC627e4300bf011b3",
-    },
-    {
-      address: "0xf4Ff858D64a45b84237a74f413F6A67805e9A76C",
-      name: "URU/KLAY",
-      tokenAddress: "0xA935449F20f0e6867FF23dbFC627e4300bf011b3",
-    },
-  ],
+  farms: [],
+  master: null,
 };
 
 const lpFarmSlice = createSlice({
   name: "lpFarm",
   initialState,
-  reducers: {},
+  reducers: {
+    initFarm: (state, action) => {
+      state.farms = action.payload.list;
+    },
+  },
 });
 
-export const {} = lpFarmSlice.actions;
+export const { initFarm } = lpFarmSlice.actions;
 
 export default lpFarmSlice.reducer;

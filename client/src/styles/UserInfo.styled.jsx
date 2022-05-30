@@ -25,3 +25,5 @@ export const LockedUruBalance = styled.div`
   right: 20px;
   bottom: 25px;
 `;
+
+export const ProfileImage = styled.img``;

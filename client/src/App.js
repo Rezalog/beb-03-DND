@@ -33,6 +33,10 @@ import V2DexModal from "./features/v2dex/V2DexModal";
 import UserInfo from "./features/userinfo/UserInfo";
 import { updateBalance } from "./features/userinfo/userInfoSlice";
 import { uruABI, uruAddress } from "./features/userinfo/TokenContract";
+import { BettingIcon } from "./styles/Betting.styled";
+import { openBettingModal } from "./features/modal/bettingModalSlice";
+import Betting from "./features/betting/Betting";
+import { TitleContainer, StartImage } from "./styles/Title.styled";
 
 function App() {
   const { isOpen: isDexOpen } = useSelector((state) => state.dexModal);
@@ -49,6 +53,7 @@ function App() {
   );
   const { isOpen: isV2Open } = useSelector((state) => state.v2SwapModal);
   const { isOpen: isV2DexOpen } = useSelector((state) => state.v2DexModal);
+  const { isOpen: isBettingOpen } = useSelector((state) => state.bettingModal);
   // const { isOpen: isInventoryOpen } = useSelector(
   //   (state) => state.inventoryModal
   // );
@@ -116,6 +121,7 @@ function App() {
                   // emit 이벤트
                   // 두번째 인자값에 캐릭터 이미지 파일 이름이 들어가면된다.
                   game.events.emit("start", res.data.profile.character_index);
+                  setIsSignIn(true);
                 });
             }
           });
@@ -124,7 +130,6 @@ function App() {
         // 저장된 지갑주소가 없어서 HTTP 상태코드 400을 받으면 사인업 모달창을 연다.
         if (err.response.status === 400) {
           console.log("You have to sign up! ");
-          setIsSignIn(true);
           dispatch(openSignUpModal());
         } else {
           console.log(err);
@@ -209,26 +214,47 @@ function App() {
   }, [nickname]);
 
   return (
-    <div className='App'>
+    <div className="App">
       {isSignIn ? (
-        <UserInfo />
+        <>
+          <UserInfo />
+          <BettingIcon
+            onClick={() => dispatch(openBettingModal())}
+          ></BettingIcon>
+          <p
+            style={{
+              position: "fixed",
+              top: "30px",
+              left: "425px",
+              fontSize: "2.5rem",
+              fontWeight: "bold",
+            }}
+          >
+            배팅
+          </p>
+        </>
+      ) : !isSignUpOpen ? (
+        <TitleContainer>
+          <img src='assets/title.png'></img>
+          <StartImage
+            src='assets/startButton.png'
+            onClick={connectToWallet}
+          ></StartImage>
+        </TitleContainer>
       ) : (
-        <div>
-          <h1>Dungeon & Defi</h1>
-          <button onClick={connectToWallet}>지갑 연결</button>
-        </div>
+        <SignUpModal setIsSignIn={setIsSignIn} />
       )}
 
       {isDexOpen && <DexModal />}
       {isTokenSwapOpen && <TokenSwapModal />}
       {isLpFarmOpen && <LPFarmModal />}
-      {isSignUpOpen && <SignUpModal />}
       {isMarketplaceOpen && <Marketplace />}
       {isMonsterFarmOpen && <MonsterFarm />}
       {isInventoryOpen && <Inventory />}
       {isWeaponCompoundOpen && <WeaponCompoundModal />}
       {isV2Open && <V2SwapModal />}
       {isV2DexOpen && <V2DexModal />}
+      {isBettingOpen && <Betting />}
       <Notification />
     </div>
   );

@@ -11,6 +11,7 @@ import { startLoading, stopLoading } from "../../loading/loadingSlice";
 import Loading from "../../loading/Loading";
 import { exchangeABI } from "../../dex/contractInfo";
 import { pairABI } from "../../V2Swap/v2Contract";
+import { masterABI, masterAddrss } from "../../lpFarming/masterContractInfo";
 
 const MyV2Liquidity = ({ account }) => {
   const dispatch = useDispatch();
@@ -20,6 +21,8 @@ const MyV2Liquidity = ({ account }) => {
   const [lp, setLp] = useState([]);
   const [isWithdrawal, setIsWithdrawal] = useState(false);
   const [selectedExchange, setSelectedExchange] = useState("");
+  const [selectedTokenA, setSelectedTokenA] = useState("");
+  const [selectedTokenB, setSelectedTokenB] = useState("");
 
   const getOwnedLPAsync = async () => {
     dispatch(startLoading());
@@ -29,9 +32,20 @@ const MyV2Liquidity = ({ account }) => {
     for (let i = 0; i < exchanges.length; i++) {
       const kip7 = new caver.klay.KIP7(exchanges[i].address);
       const balance = await kip7.balanceOf(account);
-      if (balance.toString() !== "0") {
+
+      const master = new caver.klay.Contract(masterABI, masterAddrss);
+      const userinfo = await master.methods.userInfo(i, account).call();
+      const stakedBalance = userinfo.amount;
+      if (balance.toString() !== "0" || stakedBalance.toString() !== "0") {
         tempArr.push(exchanges[i]);
-        tempLp.push(caver.utils.toBN(balance.toString()));
+        tempLp.push(
+          caver.utils.fromPeb(
+            caver.utils
+              .toBN(balance.toString())
+              .add(caver.utils.toBN(stakedBalance))
+              .toString()
+          )
+        );
       }
     }
     setOwnedLP([...tempArr]);
@@ -41,7 +55,7 @@ const MyV2Liquidity = ({ account }) => {
 
   useEffect(() => {
     getOwnedLPAsync();
-  }, [exchanges]);
+  }, []);
 
   if (isWithdrawal) {
     return (
@@ -49,6 +63,8 @@ const MyV2Liquidity = ({ account }) => {
         account={account}
         selectedExchange={selectedExchange}
         setIsWithdrawal={setIsWithdrawal}
+        selectedTokenA={selectedTokenA}
+        selectedTokenB={selectedTokenB}
       />
     );
   } else {
@@ -66,6 +82,8 @@ const MyV2Liquidity = ({ account }) => {
                 account={account}
                 setIsWithdrawal={setIsWithdrawal}
                 setSelectedExchange={setSelectedExchange}
+                setSelectedTokenA={setSelectedTokenA}
+                setSelectedTokenB={setSelectedTokenB}
               />
             );
           })

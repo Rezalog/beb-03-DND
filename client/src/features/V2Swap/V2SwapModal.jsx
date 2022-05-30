@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Caver from "caver-js";
+import axios from "axios";
 import { closeV2SwapModal } from "../modal/v2SwapModalSlice";
 import TokenSelectModal from "./V2TokenSelectModal";
 import { openSubModal, changeToken0, changeToken1 } from "./v2SwapSlice";
@@ -37,6 +38,8 @@ import {
 } from "../notification/notifiactionSlice";
 import { uruABI, uruAddress } from "../userinfo/TokenContract";
 import { updateBalance } from "../userinfo/userInfoSlice";
+import { initTokenList } from "./v2SwapSlice";
+import { initV2Exchange } from "../v2dex/V2DexSlice";
 
 const V2SwapModal = () => {
   const dispatch = useDispatch();
@@ -261,8 +264,44 @@ const V2SwapModal = () => {
     dispatch(changeToken1({ index: currentToken0 }));
   };
 
+  const getTokenList = async () => {
+    const response = await axios.get(
+      "http://localhost:8080/contracts/v2token",
+      {}
+    );
+    const tokenList = response.data.map((token) => {
+      return {
+        symbol: token.token_symbol,
+        name: token.token_name,
+        address: token.token_address,
+      };
+    });
+    dispatch(initTokenList({ list: tokenList }));
+  };
+
+  const getExchangeList = async () => {
+    const response = await axios.get(
+      "http://localhost:8080/contracts/v2pair",
+      {}
+    );
+    const exchangeList = response.data.map((token) => {
+      return {
+        address: token.v2pair_address,
+        name: token.v2pair_name,
+        tokenAddress1: token.v2tokenA_address,
+        tokenAddress2: token.v2tokenB_address,
+      };
+    });
+    dispatch(initV2Exchange({ list: exchangeList }));
+  };
+
   useEffect(() => {
-    if (account) {
+    getTokenList();
+    getExchangeList();
+  }, []);
+
+  useEffect(() => {
+    if (tokens.length) {
       getToken0();
       getToken1();
     }
@@ -289,7 +328,7 @@ const V2SwapModal = () => {
                   setSelectedToken(0);
                 }}
               >
-                {tokens[token0].symbol}
+                {tokens[token0]?.symbol}
                 <img src='assets/arrowDown.png' />
               </button>
               <input
@@ -301,7 +340,7 @@ const V2SwapModal = () => {
                 <div onClick={inputMaxToken}>Max</div>
                 <span>
                   잔액: {parseFloat(Number(balance).toFixed(2))}{" "}
-                  {tokens[token0].symbol}
+                  {tokens[token0]?.symbol}
                 </span>
               </BalanceContainer>
             </InputContainer>
@@ -313,7 +352,7 @@ const V2SwapModal = () => {
                   setSelectedToken(1);
                 }}
               >
-                {tokens[token1].symbol}
+                {tokens[token1]?.symbol}
                 <img src='assets/arrowDown.png' />
               </button>
               <input placeholder='0.0' disabled ref={token1InputRef} />
@@ -324,7 +363,7 @@ const V2SwapModal = () => {
                   {token1 < 0
                     ? "0.0"
                     : `${parseFloat(Number(balance1).toFixed(2))} ${
-                        tokens[token1].symbol
+                        tokens[token1]?.symbol
                       }`}
                 </span>
               </BalanceContainer>
@@ -334,7 +373,8 @@ const V2SwapModal = () => {
                 <InfoContainer>
                   <span>가격</span>
                   <span>
-                    {price} {tokens[token1].symbol} per {tokens[token0].symbol}{" "}
+                    {price} {tokens[token1]?.symbol} per{" "}
+                    {tokens[token0]?.symbol}{" "}
                   </span>
                 </InfoContainer>
               )}

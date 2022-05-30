@@ -68,7 +68,7 @@ library DNDLibrary {
                             hex"ff",
                             factoryAddress,
                             keccak256(abi.encodePacked(token0, token1)),
-                            hex"8fc089c77dba5f7172b01e4eac15cdf8cebbc7ac893164e00a15968ab031467d"
+                            hex"73991fa85d8ca6706a8129ed7872a45e27f6c7df8230dfe58b706f08e8b739a0"
                         )
                     )
                 )

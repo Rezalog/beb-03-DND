@@ -248,10 +248,14 @@ const TokenSwapModal = () => {
   };
 
   const getExchangeContract = (address) => {
-    const caver = new Caver(window.klaytn);
-    for (let i = 0; i < exchanges.length; i++) {
-      if (exchanges[i].tokenAddress.toLowerCase() === address.toLowerCase()) {
-        setExchange(new caver.klay.Contract(exchangeABI, exchanges[i].address));
+    if (address) {
+      const caver = new Caver(window.klaytn);
+      for (let i = 0; i < exchanges.length; i++) {
+        if (exchanges[i].tokenAddress.toLowerCase() === address.toLowerCase()) {
+          setExchange(
+            new caver.klay.Contract(exchangeABI, exchanges[i].address)
+          );
+        }
       }
     }
   };
@@ -308,8 +312,10 @@ const TokenSwapModal = () => {
   };
 
   useEffect(() => {
-    getToken0();
-    getToken1();
+    if (tokens.length) {
+      getToken0();
+      getToken1();
+    }
   }, [token0, token1]);
 
   useEffect(() => {

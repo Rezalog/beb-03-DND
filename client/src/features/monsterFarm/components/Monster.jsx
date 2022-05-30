@@ -12,6 +12,7 @@ import {
   MonsterList,
   MonsterHeader,
   MonsterContainer,
+  MonsterImage,
 } from "../../../styles/Monster.styled";
 
 import { farmingABI } from "../nftStakingContractInfo";
@@ -123,7 +124,8 @@ const Monster = ({
   };
 
   useEffect(() => {
-    if (staked.durability > 0) getRemainingTime();
+    console.log("staked", staked);
+    if (staked?.durability > 0) getRemainingTime();
   }, [staked]);
 
   // 이런식으로 하면 몇초뒤부터 카운트 시작함
@@ -146,9 +148,15 @@ const Monster = ({
         <p>
           {reward} URU / {endTime === 0 ? cooltime : remainingTime}초
         </p>
-        {remainingTime === 0 && <button onClick={getReward}>보상획득</button>}
+        {remainingTime === 0 && (
+          <button style={{ fontSize: "1.5rem" }} onClick={getReward}>
+            보상획득
+          </button>
+        )}
       </MonsterHeader>
-      <MonsterContainer>
+      <MonsterContainer
+        bg={lvl <= 1 ? "easyLevel" : lvl <= 2 ? "midLevel" : "highLevel"}
+      >
         <div>
           <WeaponRenderer {...staked} />
           {staked && Object.keys(staked).length ? (
@@ -173,6 +181,7 @@ const Monster = ({
             </BuySellButton>
           )}
         </div>
+        <MonsterImage src={`assets/monster_${lvl}.gif`}></MonsterImage>
       </MonsterContainer>
     </MonsterList>
   );

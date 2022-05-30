@@ -97,12 +97,12 @@ export default class Main extends Phaser.Scene {
 
     this.wallslayer.setCollisionByProperty({ collides: true });
 
-    const debugGraphics = this.add.graphics().setAlpha(0.7);
-    this.wallslayer.renderDebug(debugGraphics, {
-      tileColor: null,
-      collidingTileColor: new Phaser.Display.Color(243, 234, 48, 255),
-      faceColor: new Phaser.Display.Color(40, 39, 37, 255),
-    });
+    // const debugGraphics = this.add.graphics().setAlpha(0.7);
+    // this.wallslayer.renderDebug(debugGraphics, {
+    //   tileColor: null,
+    //   collidingTileColor: new Phaser.Display.Color(243, 234, 48, 255),
+    //   faceColor: new Phaser.Display.Color(40, 39, 37, 255),
+    // });
     // 캐릭터 생성
     this.player = this.physics.add.sprite(
       100,
@@ -119,7 +119,7 @@ export default class Main extends Phaser.Scene {
     this.king.setScale(2);
 
     this.nameTag = this.add.sprite(this.king.x, this.king.y - 16, "nametag");
-    this.kingText = this.add.text(0, 0, "왕", {
+    this.kingText = this.add.text(0, 0, "클레이 풀", {
       color: "black",
       fontSize: "10px",
     });
@@ -131,7 +131,7 @@ export default class Main extends Phaser.Scene {
     this.queen.setScale(2);
 
     this.nameTag = this.add.sprite(this.queen.x, this.queen.y - 16, "nametag");
-    this.queenText = this.add.text(0, 0, "여왕", {
+    this.queenText = this.add.text(0, 0, "토큰 풀", {
       color: "black",
       fontSize: "10px",
     });
@@ -151,7 +151,7 @@ export default class Main extends Phaser.Scene {
       this.princess.y - 16,
       "nametag"
     );
-    this.princessText = this.add.text(0, 0, "공주", {
+    this.princessText = this.add.text(0, 0, "클레이스왑", {
       color: "black",
       fontSize: "10px",
     });
@@ -171,7 +171,7 @@ export default class Main extends Phaser.Scene {
       this.princess2.y - 16,
       "nametag"
     );
-    this.princess2Text = this.add.text(0, 0, "공주2", {
+    this.princess2Text = this.add.text(0, 0, "토큰스왑", {
       color: "black",
       fontSize: "10px",
     });
@@ -191,7 +191,7 @@ export default class Main extends Phaser.Scene {
       this.merchant.y - 16,
       "nametag"
     );
-    this.merchantText = this.add.text(0, 0, "상인", {
+    this.merchantText = this.add.text(0, 0, "LP 파밍", {
       color: "black",
       fontSize: "10px",
     });
@@ -221,7 +221,7 @@ export default class Main extends Phaser.Scene {
     // 대장장이 NPC 생성
     this.blacksmith = this.physics.add.sprite(
       300,
-      game.config.height / 4,
+      game.config.height / 3,
       "blacksmith"
     );
     this.blacksmith.setScale(2);
@@ -248,7 +248,7 @@ export default class Main extends Phaser.Scene {
 
     this.nameTag = this.add.sprite(
       this.dungeon.x,
-      this.dungeon.y - 16,
+      this.dungeon.y - 32,
       "nametag"
     );
     this.dungeonText = this.add.text(0, 0, "던전", {
@@ -287,9 +287,9 @@ export default class Main extends Phaser.Scene {
     // 캐릭터와 벽 Collider
     this.physics.add.collider(this.player, this.wallslayer);
 
-    // 카메라 세팅
-    this.cameras.main.setBounds(0, 0, 1350, 1200);
-    this.cameras.main.startFollow(this.player, true);
+    // // 카메라 세팅
+    // this.cameras.main.setBounds(0, 0, 1350, 1200);
+    // this.cameras.main.startFollow(this.player, true);
 
     // 캐릭터 애니메이션 생성
     this.createAnims();

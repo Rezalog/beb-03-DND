@@ -4,7 +4,11 @@ import Caver from "caver-js";
 import { useDispatch, useSelector } from "react-redux";
 
 import { closeMonsterFarmModal } from "../modal/monsterFarmModalSlice";
-import { closeSubModal, updateStakedWeapon } from "./monsterFarmSlice";
+import {
+  closeSubModal,
+  updateStakedWeapon,
+  initMonsters,
+} from "./monsterFarmSlice";
 
 import Monster from "./components/Monster";
 import WeaponList from "./components/WeaponList";
@@ -15,7 +19,11 @@ import { Modal, Container, Header } from "../../styles/Modal.styled";
 import { ListContainer } from "../../styles/LPContainer.styled";
 
 import { nftABI, nftAddress } from "../marketplace/nftContractInfo";
-import { farmingABI } from "./nftStakingContractInfo";
+import {
+  farmingABI,
+  nftFactoryABI,
+  nftFactoryAddress,
+} from "./nftStakingContractInfo";
 import { getOwnedWeapons } from "../../helper/getOwnedWeapons";
 import { startLoading, stopLoading } from "../loading/loadingSlice";
 
@@ -32,8 +40,28 @@ const MonsterFarm = () => {
   const [stakedWeapons, setStakedWeapons] = useState([]);
   const [currentTime, setCurrentTime] = useState("");
 
-  const updateWeapons = async () => {
+  const getMonsters = async () => {
     dispatch(startLoading());
+    const caver = new Caver(window.klaytn);
+
+    const factory = new caver.klay.Contract(nftFactoryABI, nftFactoryAddress);
+    const list = await factory.methods.getMonsters().call();
+    dispatch(
+      initMonsters({
+        list: list.map((monster) => {
+          const { NFTAddress, name, level, coolDownTime, reward } = monster;
+          return {
+            address: NFTAddress,
+            name,
+            lvl: level,
+            cooltime: coolDownTime,
+            reward: caver.utils.fromPeb(reward),
+          };
+        }),
+      })
+    );
+  };
+  const updateWeapons = async () => {
     const temp = [];
     if (!weapons.length) {
       const list = await getOwnedWeapons(address);
@@ -42,13 +70,14 @@ const MonsterFarm = () => {
 
     const caver = new Caver(window.klaytn);
     for (let i = 0; i < monsters.length; i++) {
+      console.log(monsters[i].address);
       const monsterContract = new caver.klay.Contract(
         farmingABI,
         monsters[i].address
       );
 
       const stakeInfo = await monsterContract.methods.stakeInfo(address).call();
-
+      console.log("stake", stakeInfo);
       let tempObj = {};
       if (stakeInfo.isStaking) {
         const nft = new caver.klay.Contract(nftABI, nftAddress);
@@ -66,13 +95,16 @@ const MonsterFarm = () => {
     }
     dispatch(updateStakedWeapon({ staked: temp }));
     //setStakedWeapons([...temp]);
-    console.log(temp);
     dispatch(stopLoading());
   };
-  // useEffect dependency list 잘 활용하기
+
+  useEffect(() => {
+    getMonsters();
+  }, []);
+
   useEffect(() => {
     updateWeapons();
-  }, []);
+  }, [monsters]);
 
   useEffect(() => {
     const intervalID = setInterval(() => {

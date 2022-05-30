@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Caver from "caver-js";
+import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { openSubModal } from "../../V2Swap/v2SwapSlice";
 import {
@@ -26,12 +27,14 @@ import {
 } from "../../V2Swap/v2Contract";
 import { uruABI, uruAddress } from "../../userinfo/TokenContract";
 import { updateBalance } from "../../userinfo/userInfoSlice";
+import { masterABI, masterAddrss } from "../../lpFarming/masterContractInfo";
 
 const AddV2Liquidity = ({
   setSelectedToken,
   getExchangeContract,
   exchange,
   currentExchangeAddress,
+  setCurrentNav,
 }) => {
   const dispatch = useDispatch();
   const { isSubModalOpen, tokens, token0, token1 } = useSelector(
@@ -65,6 +68,7 @@ const AddV2Liquidity = ({
   const getReserved = async () => {
     const caver = new Caver(window.klaytn);
     const factory = new caver.klay.Contract(factoryABI, factoryAddress);
+    console.log(factory);
     const _pairAddress = await factory.methods
       .pairs(tokens[token0].address, tokens[token1].address)
       .call();
@@ -97,13 +101,16 @@ const AddV2Liquidity = ({
   };
 
   const getInput1 = () => {
+    const input2Value = input2.current.value;
+    setTokenBAmount(input2Value);
     if (pairAddress !== "0x0000000000000000000000000000000000000000") {
       const caver = new Caver(window.klaytn);
-      const input2Value = input2.current.value;
       const tokenA = caver.utils.toPeb(reservedTokenA);
       const tokenB = caver.utils.toPeb(reservedTokenB);
+      console.log(tokenA);
+      console.log(tokenB);
 
-      if (input2Value != "") {
+      if (input2Value != "" && tokenA !== "0" && tokenB !== "0") {
         let result;
         if (tokenAAddress < tokenBAddress) {
           result = caver.utils.fromPeb(
@@ -122,7 +129,6 @@ const AddV2Liquidity = ({
         }
         input1.current.value = parseFloat(Number(result).toFixed(6));
         setTokenAAmount(result);
-        setTokenBAmount(input2Value);
         //getShareOfLP();
       } else {
         input1.current.value = "";
@@ -134,13 +140,15 @@ const AddV2Liquidity = ({
   };
 
   const getInput2 = () => {
+    const input1Value = input1.current.value;
+    setTokenAAmount(input1Value);
+    console.log(pairAddress);
     if (pairAddress !== "0x0000000000000000000000000000000000000000") {
       const caver = new Caver(window.klaytn);
-      const input1Value = input1.current.value;
       const tokenA = caver.utils.toPeb(reservedTokenA);
       const tokenB = caver.utils.toPeb(reservedTokenB);
 
-      if (input1Value != "") {
+      if (input1Value != "" && tokenA !== "0" && tokenB !== "0") {
         let result;
         if (tokenAAddress < tokenBAddress) {
           result = caver.utils.fromPeb(
@@ -159,9 +167,6 @@ const AddV2Liquidity = ({
         }
         input2.current.value = parseFloat(Number(result).toFixed(6));
         setTokenBAmount(result);
-        setTokenAAmount(input1Value);
-        console.log(result);
-        console.log(input1Value);
         //getShareOfLP();
       } else {
         input2.current.value = "";
@@ -181,16 +186,18 @@ const AddV2Liquidity = ({
       let allowed = await kip7.allowance(account, routerAddress);
       // 변경해야함
       // if allowed <= caver.utils.toPeb(input2.current.value)
-      if (allowed.toString() === "0") {
+      if (allowed.toString() < "100000000000000000000000000") {
         await kip7.approve(routerAddress, caver.utils.toPeb("100000000"), {
           from: account,
         });
       }
       kip7 = new caver.klay.KIP7(tokenBAddress);
       allowed = await kip7.allowance(account, routerAddress);
+      console.log(allowed.toString());
+      console.log(tokenBAddress);
       // 변경해야함
       // if allowed <= caver.utils.toPeb(input2.current.value)
-      if (allowed.toString() === "0") {
+      if (allowed.toString() < "100000000000000000000000000") {
         await kip7.approve(routerAddress, caver.utils.toPeb("100000000"), {
           from: account,
         });
@@ -211,16 +218,38 @@ const AddV2Liquidity = ({
         )
         .send({
           from: account,
-          gas: 2000000,
+          gas: 20000000,
         });
       let pair;
       if (pairAddress === "0x0000000000000000000000000000000000000000") {
         const factory = new caver.klay.Contract(factoryABI, factoryAddress);
-        const _pairAddress = await factory.methods.pairs(
-          tokenAAddress,
-          tokenBAddress
-        );
+        const _pairAddress = await factory.methods
+          .pairs(tokenAAddress, tokenBAddress)
+          .call();
+
+        const master = new caver.klay.Contract(masterABI, masterAddrss);
+        await master.methods.add(_pairAddress).send({
+          from: account,
+          gas: 2000000,
+        });
         pair = new caver.klay.Contract(pairABI, _pairAddress);
+
+        const aSymbol = tokens[token0].symbol;
+        const bSymbol = tokens[token1].symbol;
+        await axios.post(
+          "http://localhost:8080/contracts/v2pair",
+          {
+            v2pair_address: _pairAddress,
+            v2pair_name: `${aSymbol}/${bSymbol}`,
+            v2tokenA_address: tokenAAddress,
+            v2tokenB_address: tokenBAddress,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
       } else {
         pair = new caver.klay.Contract(pairABI, pairAddress);
       }
@@ -245,6 +274,7 @@ const AddV2Liquidity = ({
           locked: parseFloat(Number(caver.utils.fromPeb(locked)).toFixed(2)),
         })
       );
+      setCurrentNav(0);
     } catch (error) {
       console.log(error);
       dispatch(failNoti());
@@ -292,7 +322,7 @@ const AddV2Liquidity = ({
         <input placeholder='0.0' ref={input1} onChange={getInput2} />
         <BalanceContainer>
           <span>
-            잔액: {Number(balance).toFixed(2)} {tokens[token0].symbol}
+            잔액: {Number(balance).toFixed(2)} {tokens[token0]?.symbol}
           </span>
         </BalanceContainer>
       </InputContainer>
@@ -314,7 +344,7 @@ const AddV2Liquidity = ({
             잔액:{" "}
             {token1 < 0
               ? "0.0"
-              : `${Number(balance1).toFixed(2)} ${tokens[token1].symbol}`}
+              : `${Number(balance1).toFixed(2)} ${tokens[token1]?.symbol}`}
           </span>
         </BalanceContainer>
       </InputContainer>
@@ -323,7 +353,7 @@ const AddV2Liquidity = ({
           <InfoContainer>
             <span>{reversePrice}</span>
             <span>
-              {tokens[token0].symbol} per {tokens[token1].symbol}
+              {tokens[token0]?.symbol} per {tokens[token1]?.symbol}
             </span>
           </InfoContainer>
         )}
@@ -331,7 +361,7 @@ const AddV2Liquidity = ({
           <InfoContainer>
             <span>{price}</span>
             <span>
-              {tokens[token1].symbol} per {tokens[token0].symbol}
+              {tokens[token1]?.symbol} per {tokens[token0]?.symbol}
             </span>
           </InfoContainer>
         )}

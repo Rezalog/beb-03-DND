@@ -5,10 +5,11 @@ import {
   UserInfoConatiner,
   UruBalance,
   LockedUruBalance,
+  ProfileImage,
 } from "../../styles/UserInfo.styled";
 
 const UserInfo = () => {
-  const { uru, lockedUru } = useSelector(
+  const { uru, lockedUru, characterIndex } = useSelector(
     (state) => state.userInfo,
     shallowEqual
   );
