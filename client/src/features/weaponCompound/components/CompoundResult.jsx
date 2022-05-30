@@ -4,6 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { getOwnedWeapons } from "../../../helper/getOwnedWeapons";
 import WeaponRenderer from "../../weapon/WeaponRenderer";
 import { setWeapons } from "../compoundInfoSlice";
+import { startLoading, stopLoading } from "../../loading/loadingSlice";
+import Loading from "../../loading/Loading";
+import {
+  CompoundInfoHeader,
+  CompoundResultContainer,
+} from "../../../styles/WeaponCompound.styled";
 
 const CompoundResult = () => {
   const dispatch = useDispatch();
@@ -12,11 +18,14 @@ const CompoundResult = () => {
   const { firstWeapon, secondWeapon, compoundResult, weapons } = useSelector(
     (state) => state.compoundInfo
   );
+  const { isLoading } = useSelector((state) => state.loading);
+
   useEffect(() => {
     const getWeapons = async () => {
       const list = await getOwnedWeapons(address);
 
       dispatch(setWeapons({ weapons: list }));
+      dispatch(stopLoading());
     };
     getWeapons();
   }, []);
@@ -29,7 +38,7 @@ const CompoundResult = () => {
         justifyContent: "center",
       }}
     >
-      <div
+      <CompoundResultContainer
         style={{
           display: "flex",
           flexDirection: "column",
@@ -39,23 +48,30 @@ const CompoundResult = () => {
         }}
       >
         {compoundResult ? (
-          <div> 무기 합성을 성공했습니다 </div>
+          <CompoundInfoHeader> 무기 합성을 성공했습니다! </CompoundInfoHeader>
         ) : (
-          <div> 무기 합성을 실패했습니다 </div>
+          <CompoundInfoHeader> 무기 합성을 실패했습니다! </CompoundInfoHeader>
         )}
-        <div
-          style={{
-            backgroundColor: "red",
-            height: "15vh",
-          }}
-        >
-          <WeaponRenderer
-            dna={weapons[weapons.length - 1].dna}
-            lvl={weapons[weapons.length - 1].lvl}
-          />
-          합성결과 무기
-        </div>
-      </div>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <div
+            style={{
+              marginTop: "10px",
+              height: "15vh",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <WeaponRenderer
+              dna={weapons[weapons.length - 1].dna}
+              lvl={weapons[weapons.length - 1].lvl}
+              durability={weapons[weapons.length - 1].durability}
+              id={weapons[weapons.length - 1].id}
+            />
+          </div>
+        )}
+      </CompoundResultContainer>
     </div>
   );
 };
