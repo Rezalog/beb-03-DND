@@ -20,11 +20,9 @@ export const WeaponCompoundModalBox = styled.div`
 export const WeaponCompoundButton = styled.button`
   font-size: 30px;
   color: white;
-  margin-top: 20px;
+  margin: 20px;
   padding: 10px;
-  /* background-color: rgb(63, 40, 50); */
   background-color: rgb(116, 63, 57);
-  /* background-color: rgb(184, 111, 80); */
 `;
 
 export const CloseWeaponCompoundButton = styled.button`

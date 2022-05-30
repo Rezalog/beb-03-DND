@@ -174,13 +174,13 @@ const WeaponCompoundModal = () => {
           console.log("close");
         }}
       ></CloseWeaponCompoundButton>
-      <button
+      <WeaponCompoundButton
         onClick={() => {
           openBet();
         }}
       >
         배팅열기
-      </button>
+      </WeaponCompoundButton>
     </WeaponCompoundModalBox>
   );
 };
