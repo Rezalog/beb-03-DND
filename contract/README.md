@@ -2,8 +2,9 @@
 
 ## 환경변수 설정
 
-PRIVATE_KEY=배포할 kaikas 계정의 개인 키
-TOKEN_CONTRACT=배포한 kip-7 주소
+PRIVATE_KEY=배포할 kaikas 계정의 개인 키<br>
+TOKEN_CONTRACT=배포한 KIP-7 주소(Token.sol)<br>
+NFT_CONTRACT=배포한 KIP-17 주소(NFT.sol)
 
 ## 사용법
 패키지 설치
