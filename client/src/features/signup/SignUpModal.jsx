@@ -573,7 +573,6 @@ const SignUpModal = ({ setIsSignIn }) => {
           check
         </button>*/}
       </div>
-      {/* <button onClick={() => dispatch(closeSignUpModal())}>X</button> */}
     </div>
   );
 };

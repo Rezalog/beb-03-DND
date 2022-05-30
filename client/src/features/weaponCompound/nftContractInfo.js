@@ -1,6 +1,6 @@
 module.exports = {
-  tokenAddress: "0x006579e0348A18E9fCAF334c004Bb6606808f652",
-  nftAddress: "0x82A6f4074898d375a855a65999BeaA1d19fDDc65",
+  tokenAddress: "0x481253AC3b7F9738461c70f8282435287915895d",
+  nftAddress: "0x8C74C5269ebE531345b93EC828e71C03bF18A613",
 
   nftABI: [
     {
