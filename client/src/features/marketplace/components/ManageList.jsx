@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import Caver from "caver-js";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,9 +6,7 @@ import PriceModal from "./PriceModal";
 
 import { InventoryContainer } from "../../../styles/Inventory.styled";
 import WeaponRenderer from "../../weapon/WeaponRenderer";
-import { updateList } from "../marketplaceSlice";
-import { BuySellButton, PriceInput } from "../../../styles/Inventory.styled";
-import { update, updateOnSaleList } from "../marketplaceSlice";
+import { BuySellButton } from "../../../styles/Inventory.styled";
 
 import {
   pendingNoti,
@@ -17,12 +15,7 @@ import {
   clearState,
 } from "../../notification/notifiactionSlice";
 
-import {
-  marketAddress,
-  nftAddress,
-  marketABI,
-  nftABI,
-} from "../nftContractInfo";
+import { marketAddress, nftAddress, marketABI } from "../nftContractInfo";
 
 const ManageList = ({ getMarketplaceList }) => {
   const dispatch = useDispatch();
@@ -41,7 +34,6 @@ const ManageList = ({ getMarketplaceList }) => {
 
       const nft = new caver.klay.KIP17(nftAddress);
       const isApproved = await nft.isApprovedForAll(address, marketAddress);
-      console.log(isApproved);
       if (!isApproved) {
         await nft.setApprovalForAll(marketAddress, true, { from: address });
       }

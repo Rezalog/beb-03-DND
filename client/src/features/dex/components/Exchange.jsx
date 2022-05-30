@@ -17,7 +17,6 @@ const Exchange = ({
   name,
   lp,
   tokenAddress,
-  account,
   setIsWithdrawal,
   setSelectedExchange,
 }) => {
@@ -26,9 +25,6 @@ const Exchange = ({
   const [tokenName, setTokenName] = useState("");
   const [tokenSymbol, setTokenSymbol] = useState("");
   const [share, setShare] = useState("");
-  const input1 = useRef(null);
-  const input2 = useRef(null);
-  const removeLp = useRef(null);
 
   const [showMore, setShowMore] = useState(false);
 

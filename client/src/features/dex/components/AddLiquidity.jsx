@@ -28,18 +28,12 @@ const AddLiquidity = ({
   currentExchangeAddress,
 }) => {
   const dispatch = useDispatch();
-  const { isSubModalOpen, tokens, token0, token1 } = useSelector(
-    (state) => state.tokenSwap
-  );
+  const { tokens, token0, token1 } = useSelector((state) => state.tokenSwap);
   const [balance, setBalance] = useState(0);
   const [balance1, setBalance1] = useState(0);
   const [currentTokenAddress, setCurrentTokenAddress] = useState("");
-  const token0InputRef = useRef(null);
-  const token1InputRef = useRef(null);
-  const [minOutput, setMinOutput] = useState(0);
   const [reservedKlay, setReservedKlay] = useState(0);
   const [reservedToken, setReservedToken] = useState(0);
-  const [lp, setLp] = useState(0);
   const input1 = useRef(null);
   const input2 = useRef(null);
   const [price, setPrice] = useState("");

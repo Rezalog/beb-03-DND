@@ -2,14 +2,12 @@ import React, { useEffect, useState } from "react";
 import Caver from "caver-js";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { closeDexModal } from "../modal/dexModalSlice";
 import { closeV2DexModal } from "../modal/v2DexModalSlice";
 import AddV2Liquidity from "./components/AddV2Liquidity";
-import AddV2Pool from "./components/AddV2Pool";
 import MyV2Liquidity from "./components/MyV2Liquidity";
 import V2TokenSelectModal from "../V2Swap/V2TokenSelectModal";
 
-import { Modal, Container, Header, Button } from "../../styles/Modal.styled";
+import { Modal, Container, Header } from "../../styles/Modal.styled";
 import { ModalCenter } from "../../styles/ModalCenter.styled";
 import { DexNavbar } from "../../styles/DexNavbar.styled";
 import { exchangeABI } from "../dex/contractInfo";
@@ -97,11 +95,7 @@ const V2DexModal = () => {
               <MyV2Liquidity account={account} />
             ) : currentNav == 1 && account ? (
               <AddV2Liquidity
-                account={account}
                 setSelectedToken={setSelectedToken}
-                getExchangeContract={getExchangeContract}
-                exchange={exchange}
-                currentExchangeAddress={currentExchangeAddress}
                 setCurrentNav={setCurrentNav}
               />
             ) : null}

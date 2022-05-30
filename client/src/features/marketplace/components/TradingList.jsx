@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import Caver from "caver-js";
 import { useDispatch, useSelector } from "react-redux";
 
 import { InventoryContainer } from "../../../styles/Inventory.styled";
 import WeaponRenderer from "../../weapon/WeaponRenderer";
-import { updateList, updateOnSaleList } from "../marketplaceSlice";
 import { BuySellButton } from "../../../styles/Inventory.styled";
 
 import {
@@ -44,7 +43,6 @@ const TradingList = ({ getMarketplaceList }) => {
           gas: 2000000,
         })
         .on("transactionHash", async (resolve) => {
-          console.log("tx", resolve);
           dispatch(successNoti({ msg: `NFT 구매 성공!` }));
 
           const token = new caver.klay.Contract(uruABI, uruAddress);
@@ -64,15 +62,6 @@ const TradingList = ({ getMarketplaceList }) => {
           setTimeout(() => {
             dispatch(clearState());
           }, 5000);
-        })
-        .on("confirmation", (confirmationNumber) => {
-          console.log("confirmed", confirmationNumber);
-        })
-        .on("receipt", (receipt) => {
-          console.log("receipt", receipt);
-        })
-        .on("error", (error) => {
-          console.log("error", error);
         });
     } catch (err) {
       console.log(err);
@@ -119,9 +108,6 @@ const TradingList = ({ getMarketplaceList }) => {
       dispatch(clearState());
     }, 5000);
   };
-  useEffect(() => {
-    console.log(list);
-  }, []);
 
   return (
     <InventoryContainer style={{ height: "70%" }}>

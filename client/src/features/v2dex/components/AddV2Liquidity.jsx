@@ -29,36 +29,18 @@ import { uruABI, uruAddress } from "../../userinfo/TokenContract";
 import { updateBalance } from "../../userinfo/userInfoSlice";
 import { masterABI, masterAddrss } from "../../lpFarming/masterContractInfo";
 
-const AddV2Liquidity = ({
-  setSelectedToken,
-  getExchangeContract,
-  exchange,
-  currentExchangeAddress,
-  setCurrentNav,
-}) => {
+const AddV2Liquidity = ({ setSelectedToken, setCurrentNav }) => {
   const dispatch = useDispatch();
-  const { isSubModalOpen, tokens, token0, token1 } = useSelector(
-    (state) => state.v2Swap
-  );
+  const { tokens, token0, token1 } = useSelector((state) => state.v2Swap);
   const [balance, setBalance] = useState(0);
   const [balance1, setBalance1] = useState(0);
-  const [currentTokenAddress, setCurrentTokenAddress] = useState("");
-  const token0InputRef = useRef(null);
-  const token1InputRef = useRef(null);
-  const [minOutput, setMinOutput] = useState(0);
-  const [reservedKlay, setReservedKlay] = useState(0);
-  const [reservedToken, setReservedToken] = useState(0);
   const [reservedTokenA, setReservedTokenA] = useState(0);
   const [reservedTokenB, setReservedTokenB] = useState(0);
-  const [lp, setLp] = useState(0);
   const input1 = useRef(null);
   const input2 = useRef(null);
   const [price, setPrice] = useState("");
   const [reversePrice, setReversePrice] = useState("");
-  const [share, setShare] = useState("");
-  const [tokenAmount, setTokenAmount] = useState(0);
   const { address: account } = useSelector((state) => state.userInfo);
-  const [klayAmount, setKlayAmount] = useState(0);
   const [tokenAAddress, setTokenAAddress] = useState("");
   const [tokenBAddress, setTokenBAddress] = useState("");
   const [pairAddress, setPairAddress] = useState("");
@@ -68,7 +50,6 @@ const AddV2Liquidity = ({
   const getReserved = async () => {
     const caver = new Caver(window.klaytn);
     const factory = new caver.klay.Contract(factoryABI, factoryAddress);
-    console.log(factory);
     const _pairAddress = await factory.methods
       .pairs(tokens[token0].address, tokens[token1].address)
       .call();
@@ -76,7 +57,6 @@ const AddV2Liquidity = ({
     if (_pairAddress !== "0x0000000000000000000000000000000000000000") {
       const pair = new caver.klay.Contract(pairABI, _pairAddress);
       const reserved = await pair.methods.getReserves().call();
-      console.log(reserved);
       setReservedTokenA(caver.utils.fromPeb(reserved[0]));
       setReservedTokenB(caver.utils.fromPeb(reserved[1]));
     }
@@ -107,8 +87,6 @@ const AddV2Liquidity = ({
       const caver = new Caver(window.klaytn);
       const tokenA = caver.utils.toPeb(reservedTokenA);
       const tokenB = caver.utils.toPeb(reservedTokenB);
-      console.log(tokenA);
-      console.log(tokenB);
 
       if (input2Value != "" && tokenA !== "0" && tokenB !== "0") {
         let result;
@@ -142,7 +120,6 @@ const AddV2Liquidity = ({
   const getInput2 = () => {
     const input1Value = input1.current.value;
     setTokenAAmount(input1Value);
-    console.log(pairAddress);
     if (pairAddress !== "0x0000000000000000000000000000000000000000") {
       const caver = new Caver(window.klaytn);
       const tokenA = caver.utils.toPeb(reservedTokenA);
@@ -193,8 +170,6 @@ const AddV2Liquidity = ({
       }
       kip7 = new caver.klay.KIP7(tokenBAddress);
       allowed = await kip7.allowance(account, routerAddress);
-      console.log(allowed.toString());
-      console.log(tokenBAddress);
       // 변경해야함
       // if allowed <= caver.utils.toPeb(input2.current.value)
       if (allowed.toString() < "100000000000000000000000000") {

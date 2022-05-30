@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Caver from "caver-js";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import {
   InputContainer,
@@ -35,7 +35,6 @@ const RemoveV2Liquidity = ({
 
       const kip7 = new caver.klay.KIP7(selectedExchange);
       const balance = await kip7.balanceOf(account);
-      console.log("lp", caver.utils.fromPeb(balance));
       setLp(caver.utils.fromPeb(balance));
     };
 
@@ -43,7 +42,6 @@ const RemoveV2Liquidity = ({
       const caver = new Caver(window.klaytn);
       const pair = new caver.klay.Contract(pairABI, selectedExchange);
       const reserved = await pair.methods.getReserves().call();
-      console.log(reserved);
       setReservedTokenA(caver.utils.fromPeb(reserved[0]));
       setReservedTokenB(caver.utils.fromPeb(reserved[1]));
     };
@@ -53,14 +51,6 @@ const RemoveV2Liquidity = ({
   }, []);
 
   const removeLiquidity = async () => {
-    console.log("lp", lp);
-    console.log("A", reservedTokenA);
-    console.log("B", reservedTokenB);
-    console.log("remove", removeLp.current.value);
-
-    console.log("remove/lp", removeLp.current.value / lp);
-    console.log("expectedA", (reservedTokenA * removeLp.current.value) / lp);
-    console.log("expectedB", (reservedTokenB * removeLp.current.value) / lp);
     dispatch(pendingNoti());
     const caver = new Caver(window.klaytn);
     try {

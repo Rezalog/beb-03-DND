@@ -8,7 +8,7 @@ import AddPool from "./components/AddPool";
 import MyLiquidity from "./components/MyLiquidity";
 import TokenSelectModal from "../tokenSwap/TokenSelectModal";
 
-import { Modal, Container, Header, Button } from "../../styles/Modal.styled";
+import { Modal, Container, Header } from "../../styles/Modal.styled";
 import { ModalCenter } from "../../styles/ModalCenter.styled";
 import { DexNavbar } from "../../styles/DexNavbar.styled";
 import { exchangeABI } from "../dex/contractInfo";

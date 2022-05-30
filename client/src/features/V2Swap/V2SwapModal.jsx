@@ -5,7 +5,7 @@ import axios from "axios";
 import { closeV2SwapModal } from "../modal/v2SwapModalSlice";
 import TokenSelectModal from "./V2TokenSelectModal";
 import { openSubModal, changeToken0, changeToken1 } from "./v2SwapSlice";
-import { startLoading, stopLoading } from "../loading/loadingSlice";
+import { stopLoading } from "../loading/loadingSlice";
 import {
   Modal,
   Container,
@@ -47,13 +47,11 @@ const V2SwapModal = () => {
     (state) => state.v2Swap
   );
   const { address: account } = useSelector((state) => state.userInfo);
-  const { exchanges } = useSelector((state) => state.dex);
   const [balance, setBalance] = useState(0);
   const [balance1, setBalance1] = useState(0);
   const [selectedToken, setSelectedToken] = useState(0);
   const token0InputRef = useRef(null);
   const token1InputRef = useRef(null);
-  const [exchange, setExchange] = useState({});
   const [minOutput, setMinOutput] = useState(0);
   const [price, setPrice] = useState("");
   const [inputTokenAddress, setInputTokenAddress] = useState("");

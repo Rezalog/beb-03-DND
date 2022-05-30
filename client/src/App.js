@@ -78,7 +78,6 @@ function App() {
 
         const caver = new Caver(window.klaytn);
         const balance = await caver.klay.getBalance(account);
-        console.log(balance);
         dispatch(
           addAddress({
             address: account,
@@ -109,14 +108,6 @@ function App() {
                       characterIndex: res.data.profile.character_index,
                     })
                   );
-                  console.log(
-                    "Your nickname is",
-                    res.data.profile.user_nickname
-                  );
-                  console.log(
-                    "Your character index is",
-                    res.data.profile.character_index
-                  );
 
                   // emit 이벤트
                   // 두번째 인자값에 캐릭터 이미지 파일 이름이 들어가면된다.
@@ -126,10 +117,8 @@ function App() {
             }
           });
       } catch (err) {
-        console.log(err);
         // 저장된 지갑주소가 없어서 HTTP 상태코드 400을 받으면 사인업 모달창을 연다.
         if (err.response.status === 400) {
-          console.log("You have to sign up! ");
           dispatch(openSignUpModal());
         } else {
           console.log(err);
@@ -192,7 +181,6 @@ function App() {
   const getUruBalance = async () => {
     const caver = new Caver(window.klaytn);
     const token = new caver.klay.Contract(uruABI, uruAddress);
-    console.log(account);
     const balance = await token.methods.balanceOf(account).call();
     const locked = await token.methods.getLockedTokenAmount(account).call();
     dispatch(
@@ -214,7 +202,7 @@ function App() {
   }, [nickname]);
 
   return (
-    <div className="App">
+    <div className='App'>
       {isSignIn ? (
         <>
           <UserInfo />

@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { closeSubModal } from "../monsterFarmSlice";
 import {
   pendingNoti,
-  stopPendingNoti,
   successNoti,
   failNoti,
   clearState,

@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import WeaponRenderer from "../../weapon/WeaponRenderer";
 import { openSubModal, removeStakedWeapon } from "../monsterFarmSlice";
-import StakedWeapon from "./StakedWeapon";
 import { BuySellButton } from "../../../styles/Inventory.styled";
 
 import {
@@ -16,12 +15,8 @@ import {
 } from "../../../styles/Monster.styled";
 
 import { farmingABI } from "../nftStakingContractInfo";
-import { nftABI, nftAddress } from "../../marketplace/nftContractInfo";
-
-import { getOwnedWeapons } from "../../../helper/getOwnedWeapons";
 import {
   pendingNoti,
-  stopPendingNoti,
   successNoti,
   failNoti,
   clearState,
@@ -124,7 +119,6 @@ const Monster = ({
   };
 
   useEffect(() => {
-    console.log("staked", staked);
     if (staked?.durability > 0) getRemainingTime();
   }, [staked]);
 

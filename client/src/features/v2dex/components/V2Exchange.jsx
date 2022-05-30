@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import Caver from "caver-js";
-import { exchangeABI } from "../../dex/contractInfo";
 import { pairABI } from "../../V2Swap/v2Contract";
 import {
   LPContainer,
@@ -19,24 +18,16 @@ const V2Exchange = ({
   lp,
   tokenAddress1,
   tokenAddress2,
-  account,
   setIsWithdrawal,
   setSelectedExchange,
   setSelectedTokenA,
   setSelectedTokenB,
 }) => {
-  const [reservedKlay, setReservedKlay] = useState(0);
-  const [reservedToken, setReservedToken] = useState(0);
   const [reservedTokenA, setReservedTokenA] = useState(0);
   const [reservedTokenB, setReservedTokenB] = useState(0);
-  const [tokenAName, setTokenAName] = useState("");
   const [tokenASymbol, setTokenASymbol] = useState("");
-  const [tokenBName, setTokenBName] = useState("");
   const [tokenBSymbol, setTokenBSymbol] = useState("");
   const [share, setShare] = useState("");
-  const input1 = useRef(null);
-  const input2 = useRef(null);
-  const removeLp = useRef(null);
 
   const [showMore, setShowMore] = useState(false);
 
@@ -53,21 +44,18 @@ const V2Exchange = ({
       let name = await token.name();
       let symbol = await token.symbol();
 
-      setTokenAName(name);
       setTokenASymbol(symbol);
 
       token = new caver.klay.KIP7(tokenAddress2);
       name = await token.name();
       symbol = await token.symbol();
 
-      setTokenBName(name);
       setTokenBSymbol(symbol);
 
       // lp = await pair.methods.balanceOf(account).call();
 
       getShareOfLP(lp);
     };
-    console.log(lp);
     getReserved();
   }, []);
 

@@ -53,12 +53,10 @@ const WeaponRenderer = ({ dna, lvl, durability, id }) => {
 
       const nft = new caver.klay.Contract(nftABI, nftAddress);
       try {
-        console.log("here");
         nft.methods
           .fixWeaponDurability(id)
           .send({ from: address, gas: 300000 })
           .on("transactionHash", (resolve) => {
-            console.log(resolve);
             dispatch(successNoti({ msg: `NFT 수리 성공!` }));
             setOpenRepair(false);
             setTimeout(() => {

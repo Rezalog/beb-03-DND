@@ -156,7 +156,6 @@ const Bet = ({ betting, currentTime, getBettings }) => {
     const bettingContract = new caver.klay.Contract(bettingABI, bettingAddress);
 
     const userInfo = await bettingContract.methods.userInfo(id, account).call();
-    console.log(userInfo);
     const side = userInfo.side;
     setBetSide(side);
     setIsBet(userInfo.isBet);

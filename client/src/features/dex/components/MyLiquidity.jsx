@@ -6,10 +6,8 @@ import RemoveLiquidity from "./RemoveLiquidity";
 
 import { ListContainer } from "../../../styles/LPContainer.styled";
 
-import { Container } from "../../../styles/Modal.styled";
 import { startLoading, stopLoading } from "../../loading/loadingSlice";
 import Loading from "../../loading/Loading";
-import { exchangeABI } from "../contractInfo";
 import { masterABI, masterAddrss } from "../../lpFarming/masterContractInfo";
 
 const MyLiquidity = ({ account }) => {
@@ -29,10 +27,6 @@ const MyLiquidity = ({ account }) => {
     for (let i = 0; i < exchanges.length; i++) {
       const kip7 = new caver.klay.KIP7(exchanges[i].address);
       const balance = await kip7.balanceOf(account);
-      const exchange = new caver.klay.Contract(
-        exchangeABI,
-        exchanges[i].address
-      );
 
       const master = new caver.klay.Contract(masterABI, masterAddrss);
       const userinfo = await master.methods.userInfo(i, account).call();
@@ -73,13 +67,11 @@ const MyLiquidity = ({ account }) => {
           <Loading />
         ) : (
           ownedLP.map((exchange, idx) => {
-            console.log(lp);
             return (
               <Exchange
                 key={idx}
                 {...exchange}
                 lp={lp[idx]}
-                account={account}
                 setIsWithdrawal={setIsWithdrawal}
                 setSelectedExchange={setSelectedExchange}
               />

@@ -66,7 +66,6 @@ const V2TokenSelectModal = ({ selectedToken }) => {
                   <li
                     key={index}
                     onClick={() => {
-                      console.log(tokens[index].address);
                       if (index > 0) {
                       }
                       if (selectedToken === 0) {

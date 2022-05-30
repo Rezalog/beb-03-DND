@@ -37,7 +37,6 @@ const MonsterFarm = () => {
   );
   const { isLoading } = useSelector((state) => state.loading);
   const [selectedMonsterAddress, setSelectedMonsterAddress] = useState("");
-  const [stakedWeapons, setStakedWeapons] = useState([]);
   const [currentTime, setCurrentTime] = useState("");
 
   const getMonsters = async () => {
@@ -70,19 +69,16 @@ const MonsterFarm = () => {
 
     const caver = new Caver(window.klaytn);
     for (let i = 0; i < monsters.length; i++) {
-      console.log(monsters[i].address);
       const monsterContract = new caver.klay.Contract(
         farmingABI,
         monsters[i].address
       );
 
       const stakeInfo = await monsterContract.methods.stakeInfo(address).call();
-      console.log("stake", stakeInfo);
       let tempObj = {};
       if (stakeInfo.isStaking) {
         const nft = new caver.klay.Contract(nftABI, nftAddress);
         const weapon = await nft.methods.weapons(stakeInfo.tokenID - 1).call();
-        console.log(weapon);
         tempObj = {
           dna: weapon.weaponType,
           lvl: weapon.weaponLevel,
@@ -91,7 +87,6 @@ const MonsterFarm = () => {
         };
       }
       temp.push(tempObj);
-      console.log("temp", temp);
     }
     dispatch(updateStakedWeapon({ staked: temp }));
     //setStakedWeapons([...temp]);

@@ -5,12 +5,8 @@ import V2Exchange from "./V2Exchange";
 import RemoveV2Liquidity from "./RemoveV2Liquidity";
 
 import { ListContainer } from "../../../styles/LPContainer.styled";
-
-import { Container } from "../../../styles/Modal.styled";
 import { startLoading, stopLoading } from "../../loading/loadingSlice";
 import Loading from "../../loading/Loading";
-import { exchangeABI } from "../../dex/contractInfo";
-import { pairABI } from "../../V2Swap/v2Contract";
 import { masterABI, masterAddrss } from "../../lpFarming/masterContractInfo";
 
 const MyV2Liquidity = ({ account }) => {

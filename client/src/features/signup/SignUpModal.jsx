@@ -52,7 +52,6 @@ const SignUpModal = ({ setIsSignIn }) => {
           }
         )
         .then((res) => {
-          console.log(res);
           dispatch(closeSignUpModal());
           game.events.emit("start", characterIndex); // 맞는지 확인 필요
           setIsSignIn(true);

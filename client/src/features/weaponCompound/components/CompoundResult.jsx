@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getOwnedWeapons } from "../../../helper/getOwnedWeapons";
 import WeaponRenderer from "../../weapon/WeaponRenderer";
 import { setWeapons } from "../compoundInfoSlice";
-import { startLoading, stopLoading } from "../../loading/loadingSlice";
+import { stopLoading } from "../../loading/loadingSlice";
 import Loading from "../../loading/Loading";
 import {
   CompoundInfoHeader,
@@ -15,7 +15,7 @@ const CompoundResult = () => {
   const dispatch = useDispatch();
   //   const [weapons, setWeapons] = useState([]);
   const { address } = useSelector((state) => state.userInfo);
-  const { firstWeapon, secondWeapon, compoundResult, weapons } = useSelector(
+  const { compoundResult, weapons } = useSelector(
     (state) => state.compoundInfo
   );
   const { isLoading } = useSelector((state) => state.loading);

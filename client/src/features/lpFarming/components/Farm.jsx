@@ -12,7 +12,6 @@ import {
   SwapInfoContainer,
   InfoContainer,
 } from "../../../styles/TokenSwap.styled";
-import { RewardContainer } from "../../../styles/Reward.styled";
 import { Button } from "../../../styles/Modal.styled";
 
 import { exchangeABI } from "../../dex/contractInfo";
@@ -86,7 +85,6 @@ const Farm = ({ address, name, pid, tokenAddress }) => {
     const caver = new Caver(window.klaytn);
     const master = new caver.klay.Contract(masterABI, masterAddrss);
     try {
-      console.log(caver.utils.toPeb(totalStaked));
       await master.methods.withdraw(pid, caver.utils.toPeb(totalStaked)).send({
         from: account,
         gas: 400000,
@@ -161,7 +159,6 @@ const Farm = ({ address, name, pid, tokenAddress }) => {
     //   setMaster(master);
     // }
     const master = new caver.klay.Contract(masterABI, masterAddrss);
-    console.log(pid, account, master);
     const currentReward = await master.methods
       .calculateCurrentReward(pid, account)
       .call();
@@ -169,9 +166,7 @@ const Farm = ({ address, name, pid, tokenAddress }) => {
     const totalReward =
       Number(caver.utils.fromPeb(currentReward)) +
       Number(caver.utils.fromPeb(reward));
-    console.log(totalReward);
     const _percentage = await master.methods.currentLockedPercentage().call();
-    console.log(_percentage);
     setPercentage(_percentage);
     setTokenAmount(totalReward);
     // if (lpBalanceOfExchange !== "0") {

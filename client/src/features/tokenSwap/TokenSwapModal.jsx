@@ -11,7 +11,6 @@ import {
   changeToken1,
   initTokenList,
 } from "./tokenSwapSlice";
-import { startLoading, stopLoading } from "../loading/loadingSlice";
 import {
   Modal,
   Container,
@@ -28,7 +27,7 @@ import {
   SwapInfoContainer,
   InfoContainer,
 } from "../../styles/TokenSwap.styled";
-import { factoryABI, factoryAddress, exchangeABI } from "../dex/contractInfo";
+import { exchangeABI } from "../dex/contractInfo";
 import {
   pendingNoti,
   successNoti,
@@ -108,7 +107,6 @@ const TokenSwapModal = () => {
       const tokenAddress = tokens[token0].address;
       const kip7 = new caver.klay.KIP7(tokenAddress);
       let exchangeAddress;
-      console.log(exchange);
 
       for (let i = 0; i < exchanges.length; i++) {
         if (
@@ -182,7 +180,6 @@ const TokenSwapModal = () => {
       //카이카스에 URU 토큰을 등록해준다.
       if (tokens[token1].symbol === "URU") {
         const tokenAdded = localStorage.getItem("tokenAdded");
-        console.log(tokenAdded);
         if (!tokenAdded) {
           window.klaytn.sendAsync(
             {
