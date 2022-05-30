@@ -31,11 +31,10 @@ contract NFT_Factory {
         require(address(_NFTAddress) != address(0), "invalid NFT address");
         require(address(_tokenAddress) != address(0), "invalid token address");
 
-        NFT_Farming nft_farming = new NFT_Farming(nft, uru, _level, _coolDownTime);
+        NFT_Farming nft_farming = new NFT_Farming(nft, uru, _level, _coolDownTime, _reward);
 
         monsters.push(Monster(_NFTAddress, _name, _level, _coolDownTime, _reward));
 
         return address(nft_farming);
     }
 }
-
