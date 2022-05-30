@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.5.6;
+pragma solidity ^0.8.0;
 
 import "../interfaces/IDNDFactory.sol";
 import "../interfaces/IDNDPair.sol";
@@ -68,7 +68,7 @@ library DNDLibrary {
                             hex"ff",
                             factoryAddress,
                             keccak256(abi.encodePacked(token0, token1)),
-                            hex"73991fa85d8ca6706a8129ed7872a45e27f6c7df8230dfe58b706f08e8b739a0"
+                            hex"f4c25549c1856b74f7639949d35fe4e2e512844fc1c18104322c94260e0582db"
                         )
                     )
                 )

@@ -68,9 +68,11 @@ const V2DexModal = () => {
   };
 
   useEffect(() => {
-    getTokenList();
-    getExchangeList();
-  }, []);
+    if (currentNav === 0) {
+      getTokenList();
+      getExchangeList();
+    }
+  }, [currentNav]);
 
   return (
     <ModalCenter>
@@ -100,9 +102,8 @@ const V2DexModal = () => {
                 getExchangeContract={getExchangeContract}
                 exchange={exchange}
                 currentExchangeAddress={currentExchangeAddress}
+                setCurrentNav={setCurrentNav}
               />
-            ) : currentNav == 2 && account ? (
-              <AddV2Pool account={account} />
             ) : null}
           </Container>
         </Modal>

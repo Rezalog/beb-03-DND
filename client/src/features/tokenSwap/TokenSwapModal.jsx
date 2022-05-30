@@ -312,8 +312,10 @@ const TokenSwapModal = () => {
   };
 
   useEffect(() => {
-    getToken0();
-    getToken1();
+    if (tokens.length) {
+      getToken0();
+      getToken1();
+    }
   }, [token0, token1]);
 
   useEffect(() => {

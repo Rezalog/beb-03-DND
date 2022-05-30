@@ -1,15 +1,14 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.5.6;
+pragma solidity ^0.8.0;
 
 // import "@klaytn/contracts/token/KIP7/KIP7.sol";
 import "./libraries/Math.sol";
+import "./libraries/SafeMath.sol";
 import "./libraries/UQ112x112.sol";
-import "./DNDToken.sol";
-import "@klaytn/contracts/token/KIP7/KIP7.sol";
-import "@klaytn/contracts/token/KIP7/KIP7Metadata.sol";
+import "@klaytn/contracts/contracts/KIP/token/KIP7/KIP7.sol";
 import "./interfaces/IDNDCallee.sol";
 
-contract DNDPair is KIP7, KIP7Metadata, Math {
+contract DNDPair is KIP7, Math {
     using SafeMath  for uint;
     using UQ112x112 for uint224;
 
@@ -47,7 +46,7 @@ contract DNDPair is KIP7, KIP7Metadata, Math {
         isEntered = false;
     }
 
-    constructor() KIP7Metadata("V2 Pair", "V2", 18) public {}
+    constructor() KIP7("V2 Pair", "V2") public {}
 
     // called once by the factory at time of deployment
     function initialize(address token0_, address token1_) external {
@@ -227,7 +226,7 @@ contract DNDPair is KIP7, KIP7Metadata, Math {
            ex) 시간에 따라서 달라지는 가격을 price0CumulativeLast 변수를 통해 다른 컨트랙트에서도 가격 정보를 받을 수 있음
     */
     function _update(uint balance0, uint balance1, uint112 _reserve0, uint112 _reserve1) private {
-        require(balance0 <= uint112(-1) && balance1 <= uint112(-1), 'OVERFLOW');
+        require(balance0 <= type(uint).max && balance1 <= type(uint).max, 'OVERFLOW');
         uint32 blockTimestamp = uint32(block.timestamp % 2**32);
         uint32 timeElapsed = blockTimestamp - blockTimestampLast; // overflow is desired
         if (timeElapsed > 0 && _reserve0 != 0 && _reserve1 != 0) {

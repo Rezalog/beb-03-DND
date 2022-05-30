@@ -26,6 +26,9 @@ body {
     "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
 
 input,
@@ -34,7 +37,9 @@ button {
   font-family: "DungGeunMo", source-code-pro, Menlo, Monaco, Consolas,
     "Courier New", monospace;
 }
-
+input[type="radio"] {
+  display: none;
+}
 div:hover {
   cursor: default;
 }

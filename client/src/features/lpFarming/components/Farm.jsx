@@ -26,14 +26,13 @@ import { updateBalance } from "../../userinfo/userInfoSlice";
 import { uruAddress, uruABI } from "../../userinfo/TokenContract";
 import { masterABI, masterAddrss } from "../masterContractInfo";
 
-const Farm = ({ address, name, pid, tokenAddress, master }) => {
+const Farm = ({ address, name, pid, tokenAddress }) => {
   const dispatch = useDispatch();
   const { address: account } = useSelector((state) => state.userInfo);
   const [showMore, setShowMore] = useState(false);
   const [tokenAmount, setTokenAmount] = useState(0);
   const [unlocked, setUnlocked] = useState(0);
   const [locked, setLocked] = useState(0);
-  const [exchange, setExchange] = useState(null);
   const [percentage, setPercentage] = useState(95);
   const [totalStaked, setTotalStaked] = useState(0);
 
@@ -41,6 +40,7 @@ const Farm = ({ address, name, pid, tokenAddress, master }) => {
     e.preventDefault();
     dispatch(pendingNoti());
     const caver = new Caver(window.klaytn);
+    const master = new caver.klay.Contract(masterABI, masterAddrss);
     try {
       const exchange = new caver.klay.Contract(exchangeABI, address);
       const allowed = await exchange.methods
@@ -69,6 +69,8 @@ const Farm = ({ address, name, pid, tokenAddress, master }) => {
           )} LP 스테이킹 성공!`,
         })
       );
+      getTotalStaked();
+      getYieldReward();
     } catch (error) {
       console.log(error);
       dispatch(failNoti());
@@ -82,11 +84,12 @@ const Farm = ({ address, name, pid, tokenAddress, master }) => {
     e.preventDefault();
     dispatch(pendingNoti());
     const caver = new Caver(window.klaytn);
+    const master = new caver.klay.Contract(masterABI, masterAddrss);
     try {
       console.log(caver.utils.toPeb(totalStaked));
       await master.methods.withdraw(pid, caver.utils.toPeb(totalStaked)).send({
         from: account,
-        gas: 200000,
+        gas: 400000,
       });
 
       dispatch(
@@ -94,6 +97,18 @@ const Farm = ({ address, name, pid, tokenAddress, master }) => {
           msg: `LP 언스테이킹 성공!`,
         })
       );
+
+      const token = new caver.klay.Contract(uruABI, uruAddress);
+      const balance = await token.methods.balanceOf(address).call();
+      const locked = await token.methods.getLockedTokenAmount(address).call();
+      dispatch(
+        updateBalance({
+          uru: parseFloat(Number(caver.utils.fromPeb(balance)).toFixed(2)),
+          locked: parseFloat(Number(caver.utils.fromPeb(locked)).toFixed(2)),
+        })
+      );
+      getTotalStaked();
+      getYieldReward();
     } catch (error) {
       dispatch(failNoti());
     }
@@ -106,6 +121,7 @@ const Farm = ({ address, name, pid, tokenAddress, master }) => {
     e.preventDefault();
     dispatch(pendingNoti());
     const caver = new Caver(window.klaytn);
+    const master = new caver.klay.Contract(masterABI, masterAddrss);
     try {
       await master.methods.harvest(pid).send({
         from: account,
@@ -127,6 +143,8 @@ const Farm = ({ address, name, pid, tokenAddress, master }) => {
           locked: parseFloat(Number(caver.utils.fromPeb(locked)).toFixed(2)),
         })
       );
+      getTotalStaked();
+      getYieldReward();
     } catch (error) {
       dispatch(failNoti());
     }
@@ -142,19 +160,20 @@ const Farm = ({ address, name, pid, tokenAddress, master }) => {
     //   _exchange = new caver.klay.Contract(masterABI, masterAddrss);
     //   setMaster(master);
     // }
-    if (master) {
-      const currentReward = await master.methods
-        .calculateCurrentReward(pid, account)
-        .call();
-      const reward = await master.methods.calculateReward(pid, account).call();
-      const totalReward =
-        Number(caver.utils.fromPeb(currentReward)) +
-        Number(caver.utils.fromPeb(reward));
-      console.log(totalReward);
-      const _percentage = await master.methods.currentLockedPercentage().call();
-      setPercentage(_percentage);
-      setTokenAmount(totalReward);
-    }
+    const master = new caver.klay.Contract(masterABI, masterAddrss);
+    console.log(pid, account, master);
+    const currentReward = await master.methods
+      .calculateCurrentReward(pid, account)
+      .call();
+    const reward = await master.methods.calculateReward(pid, account).call();
+    const totalReward =
+      Number(caver.utils.fromPeb(currentReward)) +
+      Number(caver.utils.fromPeb(reward));
+    console.log(totalReward);
+    const _percentage = await master.methods.currentLockedPercentage().call();
+    console.log(_percentage);
+    setPercentage(_percentage);
+    setTokenAmount(totalReward);
     // if (lpBalanceOfExchange !== "0") {
     //   const reward = await _exchange.methods
     //     .calculateYieldTotal(account)
@@ -169,26 +188,24 @@ const Farm = ({ address, name, pid, tokenAddress, master }) => {
 
   const getTotalStaked = async () => {
     const caver = new Caver(window.klaytn);
-    if (master) {
-      const userinfo = await master.methods.userInfo(pid, account).call();
-      const staked = userinfo.amount;
-      console.log(caver.utils.fromPeb(staked));
-      setTotalStaked(caver.utils.fromPeb(staked));
-    }
+    const master = new caver.klay.Contract(masterABI, masterAddrss);
+    const userinfo = await master.methods.userInfo(pid, account).call();
+    const staked = userinfo.amount;
+    setTotalStaked(caver.utils.fromPeb(staked));
   };
 
   useEffect(() => {
     getTotalStaked();
     getYieldReward();
-  }, [master]);
+  }, []);
 
   useEffect(() => {
     const intervalID = setInterval(async () => {
+      getTotalStaked();
       getYieldReward();
-    }, 1000);
-
+    }, 20000);
     return () => clearInterval(intervalID);
-  }, [exchange]);
+  }, []);
 
   useEffect(() => {
     setUnlocked(
@@ -199,7 +216,7 @@ const Farm = ({ address, name, pid, tokenAddress, master }) => {
 
   return (
     <LPContainer
-      height={showMore ? 220 : 150}
+      height={showMore ? 240 : 150}
       onClick={() => setShowMore(!showMore)}
     >
       <Content>
