@@ -213,7 +213,7 @@ function App() {
   }, [nickname]);
 
   return (
-    <div className='App'>
+    <div className="App">
       {isSignIn ? (
         <>
           <UserInfo />

@@ -4,6 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { getOwnedWeapons } from "../../../helper/getOwnedWeapons";
 import WeaponRenderer from "../../weapon/WeaponRenderer";
 import { setWeapons } from "../compoundInfoSlice";
+import {
+  CompoundInfoContainer,
+  CompoundInfoHeader,
+  SelectedWeapon,
+} from "../../../styles/WeaponCompound.styled";
 
 const CompoundInfo = () => {
   const dispatch = useDispatch();
@@ -24,38 +29,34 @@ const CompoundInfo = () => {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            width: "50vw",
-            height: "20vh",
-            backgroundColor: "gray",
-          }}
-        >
+        <CompoundInfoContainer>
           {firstWeapon ? (
-            <div>
+            <SelectedWeapon>
               <WeaponRenderer
                 dna={weapons[firstWeapon].dna}
                 lvl={weapons[firstWeapon].lvl}
+                durability={weapons[firstWeapon].durability}
+                id={weapons[firstWeapon].id}
               />
               무기 1
-            </div>
+            </SelectedWeapon>
           ) : (
-            <div>첫번째 무기를 선택해주세요.</div>
+            <CompoundInfoHeader>첫번째 무기를 선택해주세요.</CompoundInfoHeader>
           )}
           {secondWeapon ? (
-            <div>
+            <SelectedWeapon>
               <WeaponRenderer
                 dna={weapons[secondWeapon].dna}
                 lvl={weapons[secondWeapon].lvl}
+                durability={weapons[secondWeapon].durability}
+                id={weapons[secondWeapon].id}
               />
               무기2
-            </div>
+            </SelectedWeapon>
           ) : (
-            <div>두번째 무기를 선택해주세요.</div>
+            <CompoundInfoHeader>두번째 무기를 선택해주세요.</CompoundInfoHeader>
           )}
-        </div>
+        </CompoundInfoContainer>
       </div>
     </div>
   );
