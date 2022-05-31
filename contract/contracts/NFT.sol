@@ -105,7 +105,7 @@ contract NFT is KIP17Full{
     function _createWeapon(uint256 _weaponType, uint256 _weaponLevel) internal returns(uint256) {
          _Ids.increment();
 
-        uint256 id = weapons.push(Weapon(_weaponType, _weaponLevel, 10, 3)) - 1;
+        uint256 id = weapons.push(Weapon(_weaponType, _weaponLevel, 10, 10)) - 1;
         uint256 newItemId = _Ids.current();
         
         _mint(msg.sender, newItemId);
@@ -125,7 +125,7 @@ contract NFT is KIP17Full{
     function createRandomWeapon(uint256 _weaponLevel) public {
         uint256 randomType = _generateRandomType();
         randomType = randomType - randomType % 100; // 생각하기
-        uint256 id = weapons.push(Weapon(randomType, _weaponLevel, 3, 3)) - 1;
+        uint256 id = weapons.push(Weapon(randomType, _weaponLevel, 10, 10)) - 1;
 
         emit NewWeapon(id, randomType, _weaponLevel);
     }
@@ -205,7 +205,7 @@ contract NFT is KIP17Full{
         require(msg.sender == ownerOf(_weaponId));
         
         // 내구도가 3미만일 경우에만 수리
-        require(weapons[_weaponId -1].durability < 103, "Your weapon doesn't need to fix");
+        require(weapons[_weaponId -1].durability < 10, "Your weapon doesn't need to fix");
 
         // 충분한 수리비용을 가졌는 지 확인
         uint256 spendToken = tokenToFix[weapons[_weaponId - 1].weaponLevel - 1];
@@ -231,7 +231,7 @@ contract NFT is KIP17Full{
         require(spendToken <= token.balanceOf(msg.sender), "You must have enough URU token to fix enchant");
         
         
-        weapons[_weaponId - 1].enchant = 3;
+        weapons[_weaponId - 1].enchant = 10;
 
         token.burn(msg.sender, spendToken * 10**18);
     }
