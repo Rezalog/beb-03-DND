@@ -97,8 +97,8 @@ const Farm = ({ address, name, pid, tokenAddress }) => {
       );
 
       const token = new caver.klay.Contract(uruABI, uruAddress);
-      const balance = await token.methods.balanceOf(address).call();
-      const locked = await token.methods.getLockedTokenAmount(address).call();
+      const balance = await token.methods.balanceOf(account).call();
+      const locked = await token.methods.getLockedTokenAmount(account).call();
       dispatch(
         updateBalance({
           uru: parseFloat(Number(caver.utils.fromPeb(balance)).toFixed(2)),
