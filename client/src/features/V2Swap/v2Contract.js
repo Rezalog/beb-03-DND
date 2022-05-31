@@ -1,6 +1,6 @@
 module.exports = {
-  routerAddress: "0x14F0e37C5ef301454a09902D2D174DFD245EeAb5",
-  factoryAddress: "0x1C39F0AFD8E0F0Bb10040bfF1a22F784d50217f5",
+  routerAddress: "0x4aB90D5DAe6BbF077c95D88aaaEBaE657C98644a",
+  factoryAddress: "0xdd82FE8442e12a71a1e49835Cd395BdE387D8475",
   factoryABI: [
     {
       anonymous: false,

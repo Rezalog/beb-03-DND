@@ -80,7 +80,7 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity ^0.5.0;\n\nimport \"../Roles.sol\";\n\ncontract MinterRole {\n    using Roles for Roles.Role;\n\n    event MinterAdded(address indexed account);\n    event MinterRemoved(address indexed account);\n\n    Roles.Role private _minters;\n\n    constructor () internal {\n        _addMinter(msg.sender);\n    }\n\n    modifier onlyMinter() {\n        require(isMinter(msg.sender), \"MinterRole: caller does not have the Minter role\");\n        _;\n    }\n\n    function isMinter(address account) public view returns (bool) {\n        return _minters.has(account);\n    }\n\n    function addMinter(address account) public onlyMinter {\n        _addMinter(account);\n    }\n\n    function renounceMinter() public {\n        _removeMinter(msg.sender);\n    }\n\n    function _addMinter(address account) internal {\n        _minters.add(account);\n        emit MinterAdded(account);\n    }\n\n    function _removeMinter(address account) internal {\n        _minters.remove(account);\n        emit MinterRemoved(account);\n    }\n}\n",
-  "sourcePath": "@klaytn/contracts/access/roles/MinterRole.sol",
+  "sourcePath": "@klaytn\\contracts\\access\\roles\\MinterRole.sol",
   "ast": {
     "absolutePath": "@klaytn/contracts/access/roles/MinterRole.sol",
     "exportedSymbols": {
@@ -287,7 +287,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 4519,
+                          "referencedDeclaration": 9773,
                           "src": "286:3:1",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -393,7 +393,7 @@
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 4519,
+                              "referencedDeclaration": 9773,
                               "src": "359:3:1",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
@@ -481,10 +481,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        4522,
-                        4523
+                        9776,
+                        9777
                       ],
-                      "referencedDeclaration": 4523,
+                      "referencedDeclaration": 9777,
                       "src": "342:7:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -841,7 +841,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 4519,
+                          "referencedDeclaration": 9773,
                           "src": "713:3:1",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -1604,7 +1604,7 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 4519,
+                                  "referencedDeclaration": 9773,
                                   "type": "msg",
                                   "value": "msg"
                                 },
@@ -1687,10 +1687,10 @@
                                 }
                               ],
                               "overloadedDeclarations": [
-                                4522,
-                                4523
+                                9776,
+                                9777
                               ],
-                              "referencedDeclaration": 4523,
+                              "referencedDeclaration": 9777,
                               "type": "function (bool,string memory) pure",
                               "value": "require"
                             },
@@ -1750,7 +1750,7 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 4519,
+                                      "referencedDeclaration": 9773,
                                       "type": "msg",
                                       "value": "msg"
                                     },
@@ -2233,7 +2233,7 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 4519,
+                                  "referencedDeclaration": 9773,
                                   "type": "msg",
                                   "value": "msg"
                                 },
@@ -2701,8 +2701,8 @@
     "version": "0.5.6+commit.b259423e.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.4.5",
-  "updatedAt": "2022-05-12T06:07:46.325Z",
+  "schemaVersion": "3.4.7",
+  "updatedAt": "2022-05-31T01:50:09.143Z",
   "devdoc": {
     "methods": {}
   },

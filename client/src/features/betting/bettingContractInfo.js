@@ -1,5 +1,5 @@
 module.exports = {
-  bettingAddress: "0x864dd1055B46760E20dE1dC0292435481f2555e5",
+  bettingAddress: "0x83865E39db8Eb853Cc57C96e47b9957fa548aE25",
   bettingABI: [
     {
       constant: true,

@@ -1,5 +1,5 @@
 module.exports = {
-  factoryAddress: "0xe027606A90CF714ab8Abf224bE6c60474F9C719A",
+  factoryAddress: "0xf9ea8C4C9E18D79309cf576c91F176B80d99813C",
   factoryABI: [
     {
       constant: true,
@@ -111,25 +111,6 @@ module.exports = {
       constant: true,
       inputs: [
         {
-          name: "user",
-          type: "address",
-        },
-      ],
-      name: "calculateContribute",
-      outputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [
-        {
           name: "interfaceId",
           type: "bytes4",
         },
@@ -139,25 +120,6 @@ module.exports = {
         {
           name: "",
           type: "bool",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [
-        {
-          name: "user",
-          type: "address",
-        },
-      ],
-      name: "calculateYieldTotal",
-      outputs: [
-        {
-          name: "",
-          type: "uint256",
         },
       ],
       payable: false,
@@ -204,20 +166,6 @@ module.exports = {
     {
       constant: true,
       inputs: [],
-      name: "currentLockedPercentage",
-      outputs: [
-        {
-          name: "",
-          type: "uint8",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [],
       name: "uru",
       outputs: [
         {
@@ -241,24 +189,6 @@ module.exports = {
       ],
       payable: false,
       stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          name: "_minTokens",
-          type: "uint256",
-        },
-        {
-          name: "_recipient",
-          type: "address",
-        },
-      ],
-      name: "klayToTokenTransfer",
-      outputs: [],
-      payable: true,
-      stateMutability: "payable",
       type: "function",
     },
     {
@@ -289,39 +219,6 @@ module.exports = {
       type: "function",
     },
     {
-      constant: false,
-      inputs: [
-        {
-          name: "amount",
-          type: "uint256",
-        },
-      ],
-      name: "unstake",
-      outputs: [],
-      payable: false,
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [
-        {
-          name: "",
-          type: "address",
-        },
-      ],
-      name: "URUBalance",
-      outputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
       constant: true,
       inputs: [],
       name: "decimals",
@@ -333,24 +230,6 @@ module.exports = {
       ],
       payable: false,
       stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          name: "_minTokens",
-          type: "uint256",
-        },
-        {
-          name: "recipient",
-          type: "address",
-        },
-      ],
-      name: "klayToToken",
-      outputs: [],
-      payable: true,
-      stateMutability: "payable",
       type: "function",
     },
     {
@@ -397,110 +276,6 @@ module.exports = {
       constant: true,
       inputs: [
         {
-          name: "",
-          type: "address",
-        },
-      ],
-      name: "stakingBalance",
-      outputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          name: "_tokenAmount",
-          type: "uint256",
-        },
-      ],
-      name: "addLiquidity",
-      outputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      payable: true,
-      stateMutability: "payable",
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: "getReserve",
-      outputs: [
-        {
-          name: "balance",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: "countDown",
-      outputs: [
-        {
-          name: "count",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [
-        {
-          name: "",
-          type: "address",
-        },
-      ],
-      name: "startTime",
-      outputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [
-        {
-          name: "",
-          type: "address",
-        },
-      ],
-      name: "isStaking",
-      outputs: [
-        {
-          name: "",
-          type: "bool",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [
-        {
           name: "account",
           type: "address",
         },
@@ -510,20 +285,6 @@ module.exports = {
         {
           name: "",
           type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: "getuserList",
-      outputs: [
-        {
-          name: "",
-          type: "address[]",
         },
       ],
       payable: false,
@@ -560,48 +321,6 @@ module.exports = {
     },
     {
       constant: true,
-      inputs: [
-        {
-          name: "user",
-          type: "address",
-        },
-      ],
-      name: "calculateYieldTime",
-      outputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          name: "_amount",
-          type: "uint256",
-        },
-      ],
-      name: "removeLiquidity",
-      outputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      constant: true,
       inputs: [],
       name: "tokenAddress",
       outputs: [
@@ -612,39 +331,6 @@ module.exports = {
       ],
       payable: false,
       stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      name: "userList",
-      outputs: [
-        {
-          name: "",
-          type: "address",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          name: "amount",
-          type: "uint256",
-        },
-      ],
-      name: "stake",
-      outputs: [],
-      payable: false,
-      stateMutability: "nonpayable",
       type: "function",
     },
     {
@@ -668,25 +354,6 @@ module.exports = {
       ],
       payable: false,
       stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [
-        {
-          name: "_tokenSold",
-          type: "uint256",
-        },
-      ],
-      name: "getKlayAmount",
-      outputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
       type: "function",
     },
     {
@@ -719,71 +386,6 @@ module.exports = {
       constant: true,
       inputs: [
         {
-          name: "_klaySold",
-          type: "uint256",
-        },
-      ],
-      name: "getTokenAmount",
-      outputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          name: "_minTokens",
-          type: "uint256",
-        },
-      ],
-      name: "klayToTokenSwap",
-      outputs: [],
-      payable: true,
-      stateMutability: "payable",
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: "getKlay",
-      outputs: [
-        {
-          name: "balance",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          name: "_tokensSold",
-          type: "uint256",
-        },
-        {
-          name: "_minklay",
-          type: "uint256",
-        },
-      ],
-      name: "tokenToKlaySwap",
-      outputs: [],
-      payable: false,
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [
-        {
           name: "owner",
           type: "address",
         },
@@ -801,15 +403,6 @@ module.exports = {
       ],
       payable: false,
       stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: false,
-      inputs: [],
-      name: "withdrawYield",
-      outputs: [],
-      payable: false,
-      stateMutability: "nonpayable",
       type: "function",
     },
     {
@@ -835,28 +428,6 @@ module.exports = {
       type: "function",
     },
     {
-      constant: false,
-      inputs: [
-        {
-          name: "_tokensSold",
-          type: "uint256",
-        },
-        {
-          name: "_minTokensBought",
-          type: "uint256",
-        },
-        {
-          name: "_tokenAddress",
-          type: "address",
-        },
-      ],
-      name: "tokenToTokenSwap",
-      outputs: [],
-      payable: false,
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
       inputs: [
         {
           name: "_token",
@@ -874,57 +445,6 @@ module.exports = {
       payable: false,
       stateMutability: "nonpayable",
       type: "constructor",
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          name: "from",
-          type: "address",
-        },
-        {
-          indexed: false,
-          name: "amount",
-          type: "uint256",
-        },
-      ],
-      name: "Stake",
-      type: "event",
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          name: "from",
-          type: "address",
-        },
-        {
-          indexed: false,
-          name: "amount",
-          type: "uint256",
-        },
-      ],
-      name: "Unstake",
-      type: "event",
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          name: "to",
-          type: "address",
-        },
-        {
-          indexed: false,
-          name: "amount",
-          type: "uint256",
-        },
-      ],
-      name: "YieldWithdraw",
-      type: "event",
     },
     {
       anonymous: false,
@@ -969,6 +489,204 @@ module.exports = {
       ],
       name: "Approval",
       type: "event",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "_tokenAmount",
+          type: "uint256",
+        },
+      ],
+      name: "addLiquidity",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      payable: true,
+      stateMutability: "payable",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "_amount",
+          type: "uint256",
+        },
+      ],
+      name: "removeLiquidity",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [],
+      name: "getKlay",
+      outputs: [
+        {
+          name: "balance",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [],
+      name: "getReserve",
+      outputs: [
+        {
+          name: "balance",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [
+        {
+          name: "_klaySold",
+          type: "uint256",
+        },
+      ],
+      name: "getTokenAmount",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [
+        {
+          name: "_tokenSold",
+          type: "uint256",
+        },
+      ],
+      name: "getKlayAmount",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "_minTokens",
+          type: "uint256",
+        },
+        {
+          name: "recipient",
+          type: "address",
+        },
+      ],
+      name: "klayToToken",
+      outputs: [],
+      payable: true,
+      stateMutability: "payable",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "_minTokens",
+          type: "uint256",
+        },
+      ],
+      name: "klayToTokenSwap",
+      outputs: [],
+      payable: true,
+      stateMutability: "payable",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "_minTokens",
+          type: "uint256",
+        },
+        {
+          name: "_recipient",
+          type: "address",
+        },
+      ],
+      name: "klayToTokenTransfer",
+      outputs: [],
+      payable: true,
+      stateMutability: "payable",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "_tokensSold",
+          type: "uint256",
+        },
+        {
+          name: "_minklay",
+          type: "uint256",
+        },
+      ],
+      name: "tokenToKlaySwap",
+      outputs: [],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "_tokensSold",
+          type: "uint256",
+        },
+        {
+          name: "_minTokensBought",
+          type: "uint256",
+        },
+        {
+          name: "_tokenAddress",
+          type: "address",
+        },
+      ],
+      name: "tokenToTokenSwap",
+      outputs: [],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
     },
   ],
 };

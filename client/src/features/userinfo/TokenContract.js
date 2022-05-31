@@ -1,5 +1,5 @@
 module.exports = {
-  uruAddress: "0x481253AC3b7F9738461c70f8282435287915895d",
+  uruAddress: "0x4b6AeB1f969B973C406B4221433c51381d2Da628",
   uruABI: [
     {
       constant: true,
@@ -99,24 +99,6 @@ module.exports = {
       type: "function",
     },
     {
-      constant: false,
-      inputs: [
-        {
-          name: "owner",
-          type: "address",
-        },
-        {
-          name: "_amount",
-          type: "uint256",
-        },
-      ],
-      name: "lock",
-      outputs: [],
-      payable: false,
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
       constant: true,
       inputs: [],
       name: "decimals",
@@ -128,24 +110,6 @@ module.exports = {
       ],
       payable: false,
       stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          name: "to",
-          type: "address",
-        },
-        {
-          name: "amount",
-          type: "uint256",
-        },
-      ],
-      name: "mint",
-      outputs: [],
-      payable: false,
-      stateMutability: "nonpayable",
       type: "function",
     },
     {
@@ -190,20 +154,6 @@ module.exports = {
     },
     {
       constant: true,
-      inputs: [],
-      name: "currentBlockTime",
-      outputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: true,
       inputs: [
         {
           name: "account",
@@ -211,20 +161,6 @@ module.exports = {
         },
       ],
       name: "balanceOf",
-      outputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: "getLockEndTime",
       outputs: [
         {
           name: "",
@@ -276,24 +212,6 @@ module.exports = {
       constant: false,
       inputs: [
         {
-          name: "owner",
-          type: "address",
-        },
-        {
-          name: "_amount",
-          type: "uint256",
-        },
-      ],
-      name: "burn",
-      outputs: [],
-      payable: false,
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      constant: false,
-      inputs: [
-        {
           name: "recipient",
           type: "address",
         },
@@ -333,20 +251,6 @@ module.exports = {
       type: "function",
     },
     {
-      constant: true,
-      inputs: [],
-      name: "getLockStartTime",
-      outputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
       constant: false,
       inputs: [
         {
@@ -379,25 +283,6 @@ module.exports = {
           name: "owner",
           type: "address",
         },
-      ],
-      name: "getLockedTokenAmount",
-      outputs: [
-        {
-          name: "",
-          type: "uint256",
-        },
-      ],
-      payable: false,
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [
-        {
-          name: "owner",
-          type: "address",
-        },
         {
           name: "spender",
           type: "address",
@@ -412,20 +297,6 @@ module.exports = {
       ],
       payable: false,
       stateMutability: "view",
-      type: "function",
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          name: "to",
-          type: "address",
-        },
-      ],
-      name: "releaseLockedToken",
-      outputs: [],
-      payable: false,
-      stateMutability: "nonpayable",
       type: "function",
     },
     {
@@ -544,6 +415,135 @@ module.exports = {
       ],
       name: "Approval",
       type: "event",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "to",
+          type: "address",
+        },
+        {
+          name: "amount",
+          type: "uint256",
+        },
+      ],
+      name: "mint",
+      outputs: [],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "owner",
+          type: "address",
+        },
+        {
+          name: "_amount",
+          type: "uint256",
+        },
+      ],
+      name: "lock",
+      outputs: [],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "owner",
+          type: "address",
+        },
+        {
+          name: "_amount",
+          type: "uint256",
+        },
+      ],
+      name: "burn",
+      outputs: [],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: false,
+      inputs: [
+        {
+          name: "to",
+          type: "address",
+        },
+      ],
+      name: "releaseLockedToken",
+      outputs: [],
+      payable: false,
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [
+        {
+          name: "owner",
+          type: "address",
+        },
+      ],
+      name: "getLockedTokenAmount",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [],
+      name: "getLockStartTime",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [],
+      name: "getLockEndTime",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      constant: true,
+      inputs: [],
+      name: "currentBlockTime",
+      outputs: [
+        {
+          name: "",
+          type: "uint256",
+        },
+      ],
+      payable: false,
+      stateMutability: "view",
+      type: "function",
     },
   ],
 };

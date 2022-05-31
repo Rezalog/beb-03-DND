@@ -1,7 +1,7 @@
 module.exports = {
-  tokenAddress: "0x481253AC3b7F9738461c70f8282435287915895d",
-  marketAddress: "0xEc17781fdaf32A9B2C29Ccf19270a3c20eeC6d67",
-  nftAddress: "0x8C74C5269ebE531345b93EC828e71C03bF18A613",
+  tokenAddress: "0x4b6AeB1f969B973C406B4221433c51381d2Da628",
+  marketAddress: "0x808DD56c890dD47dc5B9F931A2FB6b13EEA4564B",
+  nftAddress: "0xA43d22bbbcFeFC1E5D1837407ecb6A68BC5b40E9",
   marketABI: [
     {
       constant: true,

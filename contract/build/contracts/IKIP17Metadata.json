@@ -320,25 +320,25 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.6+commit.b259423e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[{\"name\":\"interfaceId\",\"type\":\"bytes4\"}],\"name\":\"supportsInterface\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"getApproved\",\"outputs\":[{\"name\":\"operator\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"to\",\"type\":\"address\"},{\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"from\",\"type\":\"address\"},{\"name\":\"to\",\"type\":\"address\"},{\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"from\",\"type\":\"address\"},{\"name\":\"to\",\"type\":\"address\"},{\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"safeTransferFrom\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"ownerOf\",\"outputs\":[{\"name\":\"owner\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"operator\",\"type\":\"address\"},{\"name\":\"_approved\",\"type\":\"bool\"}],\"name\":\"setApprovalForAll\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"from\",\"type\":\"address\"},{\"name\":\"to\",\"type\":\"address\"},{\"name\":\"tokenId\",\"type\":\"uint256\"},{\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"safeTransferFrom\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"tokenURI\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"owner\",\"type\":\"address\"},{\"name\":\"operator\",\"type\":\"address\"}],\"name\":\"isApprovedForAll\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"to\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"approved\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"approved\",\"type\":\"bool\"}],\"name\":\"ApprovalForAll\",\"type\":\"event\"}],\"devdoc\":{\"details\":\"See http://kips.klaytn.com/KIPs/kip-17-non_fungible_token\",\"methods\":{\"balanceOf(address)\":{\"details\":\"Returns the number of NFTs in `owner`'s account.\"},\"ownerOf(uint256)\":{\"details\":\"Returns the owner of the NFT specified by `tokenId`.\"},\"safeTransferFrom(address,address,uint256)\":{\"details\":\"Transfers a specific NFT (`tokenId`) from one account (`from`) to another (`to`).     * Requirements: - `from`, `to` cannot be zero. - `tokenId` must be owned by `from`. - If the caller is not `from`, it must be have been allowed to move this NFT by either `approve` or `setApproveForAll`.\"},\"supportsInterface(bytes4)\":{\"details\":\"Returns true if this contract implements the interface defined by `interfaceId`. See the corresponding [KIP-13 section](http://kips.klaytn.com/KIPs/kip-13-interface_query_standard#how-interface-identifiers-are-defined) to learn more about how these ids are created.     * This function call must use less than 30 000 gas.\"},\"transferFrom(address,address,uint256)\":{\"details\":\"Transfers a specific NFT (`tokenId`) from one account (`from`) to another (`to`).     * Requirements: - If the caller is not `from`, it must be approved to move this NFT by either `approve` or `setApproveForAll`.\"}},\"title\":\"KIP-17 Non-Fungible Token Standard, optional metadata extension\"},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"project:/node_modules/@klaytn/contracts/token/KIP17/IKIP17Metadata.sol\":\"IKIP17Metadata\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/node_modules/@klaytn/contracts/introspection/IKIP13.sol\":{\"keccak256\":\"0xf7415711dbec40bc633af7d8cb5c3c0bc3d1ed97fd8c13f795a03eb3073ea219\",\"urls\":[\"bzzr://2c161a0e94debcd164c7a87e2c12c087ffefe24bc7a4a9f304f5d8ba39ed15a1\"]},\"project:/node_modules/@klaytn/contracts/token/KIP17/IKIP17.sol\":{\"keccak256\":\"0x0b30e5fe64932d8b9343c7897ebb7a0ac15a15577ce5ec1f18c3ba4396120de0\",\"urls\":[\"bzzr://7027ab2da185a775cc0697e60a6d17db910959fa365c5337dce50d2bf380c4fc\"]},\"project:/node_modules/@klaytn/contracts/token/KIP17/IKIP17Metadata.sol\":{\"keccak256\":\"0xad2c2abcd4cb881620f297edcdf9cd491effc1ace2f12f468bf3546f940d1bf4\",\"urls\":[\"bzzr://f2de7f30fb22e7238dd752bbd1ac67648cc3f6236348a63d0224fbb659090d48\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.6+commit.b259423e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[{\"name\":\"interfaceId\",\"type\":\"bytes4\"}],\"name\":\"supportsInterface\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"getApproved\",\"outputs\":[{\"name\":\"operator\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"to\",\"type\":\"address\"},{\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"from\",\"type\":\"address\"},{\"name\":\"to\",\"type\":\"address\"},{\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"from\",\"type\":\"address\"},{\"name\":\"to\",\"type\":\"address\"},{\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"safeTransferFrom\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"ownerOf\",\"outputs\":[{\"name\":\"owner\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"operator\",\"type\":\"address\"},{\"name\":\"_approved\",\"type\":\"bool\"}],\"name\":\"setApprovalForAll\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"from\",\"type\":\"address\"},{\"name\":\"to\",\"type\":\"address\"},{\"name\":\"tokenId\",\"type\":\"uint256\"},{\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"safeTransferFrom\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"tokenURI\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"owner\",\"type\":\"address\"},{\"name\":\"operator\",\"type\":\"address\"}],\"name\":\"isApprovedForAll\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"to\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"approved\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"approved\",\"type\":\"bool\"}],\"name\":\"ApprovalForAll\",\"type\":\"event\"}],\"devdoc\":{\"details\":\"See http://kips.klaytn.com/KIPs/kip-17-non_fungible_token\",\"methods\":{\"balanceOf(address)\":{\"details\":\"Returns the number of NFTs in `owner`'s account.\"},\"ownerOf(uint256)\":{\"details\":\"Returns the owner of the NFT specified by `tokenId`.\"},\"safeTransferFrom(address,address,uint256)\":{\"details\":\"Transfers a specific NFT (`tokenId`) from one account (`from`) to another (`to`).     * Requirements: - `from`, `to` cannot be zero. - `tokenId` must be owned by `from`. - If the caller is not `from`, it must be have been allowed to move this NFT by either `approve` or `setApproveForAll`.\"},\"supportsInterface(bytes4)\":{\"details\":\"Returns true if this contract implements the interface defined by `interfaceId`. See the corresponding [KIP-13 section](http://kips.klaytn.com/KIPs/kip-13-interface_query_standard#how-interface-identifiers-are-defined) to learn more about how these ids are created.     * This function call must use less than 30 000 gas.\"},\"transferFrom(address,address,uint256)\":{\"details\":\"Transfers a specific NFT (`tokenId`) from one account (`from`) to another (`to`).     * Requirements: - If the caller is not `from`, it must be approved to move this NFT by either `approve` or `setApproveForAll`.\"}},\"title\":\"KIP-17 Non-Fungible Token Standard, optional metadata extension\"},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"@klaytn/contracts/token/KIP17/IKIP17Metadata.sol\":\"IKIP17Metadata\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@klaytn/contracts/introspection/IKIP13.sol\":{\"keccak256\":\"0xf7415711dbec40bc633af7d8cb5c3c0bc3d1ed97fd8c13f795a03eb3073ea219\",\"urls\":[\"bzzr://2c161a0e94debcd164c7a87e2c12c087ffefe24bc7a4a9f304f5d8ba39ed15a1\"]},\"@klaytn/contracts/token/KIP17/IKIP17.sol\":{\"keccak256\":\"0x0b30e5fe64932d8b9343c7897ebb7a0ac15a15577ce5ec1f18c3ba4396120de0\",\"urls\":[\"bzzr://7027ab2da185a775cc0697e60a6d17db910959fa365c5337dce50d2bf380c4fc\"]},\"@klaytn/contracts/token/KIP17/IKIP17Metadata.sol\":{\"keccak256\":\"0xad2c2abcd4cb881620f297edcdf9cd491effc1ace2f12f468bf3546f940d1bf4\",\"urls\":[\"bzzr://f2de7f30fb22e7238dd752bbd1ac67648cc3f6236348a63d0224fbb659090d48\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity ^0.5.0;\n\nimport \"./IKIP17.sol\";\n\n/**\n * @title KIP-17 Non-Fungible Token Standard, optional metadata extension\n * @dev See http://kips.klaytn.com/KIPs/kip-17-non_fungible_token\n */\ncontract IKIP17Metadata is IKIP17 {\n    function name() external view returns (string memory);\n    function symbol() external view returns (string memory);\n    function tokenURI(uint256 tokenId) external view returns (string memory);\n}\n",
-  "sourcePath": "/Users/baekdonghyun/Desktop/beb-03-DND/contract/node_modules/@klaytn/contracts/token/KIP17/IKIP17Metadata.sol",
+  "sourcePath": "@klaytn\\contracts\\token\\KIP17\\IKIP17Metadata.sol",
   "ast": {
-    "absolutePath": "project:/node_modules/@klaytn/contracts/token/KIP17/IKIP17Metadata.sol",
+    "absolutePath": "@klaytn/contracts/token/KIP17/IKIP17Metadata.sol",
     "exportedSymbols": {
       "IKIP17Metadata": [
-        3244
+        651
       ]
     },
-    "id": 3245,
+    "id": 652,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 3223,
+        "id": 630,
         "literals": [
           "solidity",
           "^",
@@ -346,16 +346,16 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:23:25"
+        "src": "0:23:9"
       },
       {
-        "absolutePath": "project:/node_modules/@klaytn/contracts/token/KIP17/IKIP17.sol",
+        "absolutePath": "@klaytn/contracts/token/KIP17/IKIP17.sol",
         "file": "./IKIP17.sol",
-        "id": 3224,
+        "id": 631,
         "nodeType": "ImportDirective",
-        "scope": 3245,
-        "sourceUnit": 3195,
-        "src": "25:22:25",
+        "scope": 652,
+        "sourceUnit": 602,
+        "src": "25:22:9",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -365,33 +365,33 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 3225,
+              "id": 632,
               "name": "IKIP17",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3194,
-              "src": "224:6:25",
+              "referencedDeclaration": 601,
+              "src": "224:6:9",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IKIP17_$3194",
+                "typeIdentifier": "t_contract$_IKIP17_$601",
                 "typeString": "contract IKIP17"
               }
             },
-            "id": 3226,
+            "id": 633,
             "nodeType": "InheritanceSpecifier",
-            "src": "224:6:25"
+            "src": "224:6:9"
           }
         ],
         "contractDependencies": [
-          2836,
-          3194
+          243,
+          601
         ],
         "contractKind": "contract",
         "documentation": "@title KIP-17 Non-Fungible Token Standard, optional metadata extension\n@dev See http://kips.klaytn.com/KIPs/kip-17-non_fungible_token",
         "fullyImplemented": false,
-        "id": 3244,
+        "id": 651,
         "linearizedBaseContracts": [
-          3244,
-          3194,
-          2836
+          651,
+          601,
+          243
         ],
         "name": "IKIP17Metadata",
         "nodeType": "ContractDefinition",
@@ -399,29 +399,29 @@
           {
             "body": null,
             "documentation": null,
-            "id": 3231,
+            "id": 638,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "name",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3227,
+              "id": 634,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "250:2:25"
+              "src": "250:2:9"
             },
             "returnParameters": {
-              "id": 3230,
+              "id": 637,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3229,
+                  "id": 636,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3231,
-                  "src": "276:13:25",
+                  "scope": 638,
+                  "src": "276:13:9",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
@@ -429,10 +429,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 3228,
+                    "id": 635,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "276:6:25",
+                    "src": "276:6:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -442,10 +442,10 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "275:15:25"
+              "src": "275:15:9"
             },
-            "scope": 3244,
-            "src": "237:54:25",
+            "scope": 651,
+            "src": "237:54:9",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
@@ -453,29 +453,29 @@
           {
             "body": null,
             "documentation": null,
-            "id": 3236,
+            "id": 643,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "symbol",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3232,
+              "id": 639,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "311:2:25"
+              "src": "311:2:9"
             },
             "returnParameters": {
-              "id": 3235,
+              "id": 642,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3234,
+                  "id": 641,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3236,
-                  "src": "337:13:25",
+                  "scope": 643,
+                  "src": "337:13:9",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
@@ -483,10 +483,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 3233,
+                    "id": 640,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "337:6:25",
+                    "src": "337:6:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -496,10 +496,10 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "336:15:25"
+              "src": "336:15:9"
             },
-            "scope": 3244,
-            "src": "296:56:25",
+            "scope": 651,
+            "src": "296:56:9",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
@@ -507,23 +507,23 @@
           {
             "body": null,
             "documentation": null,
-            "id": 3243,
+            "id": 650,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "tokenURI",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3239,
+              "id": 646,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3238,
+                  "id": 645,
                   "name": "tokenId",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3243,
-                  "src": "375:15:25",
+                  "scope": 650,
+                  "src": "375:15:9",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -531,10 +531,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 3237,
+                    "id": 644,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "375:7:25",
+                    "src": "375:7:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -544,19 +544,19 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "374:17:25"
+              "src": "374:17:9"
             },
             "returnParameters": {
-              "id": 3242,
+              "id": 649,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3241,
+                  "id": 648,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3243,
-                  "src": "415:13:25",
+                  "scope": 650,
+                  "src": "415:13:9",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
@@ -564,10 +564,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 3240,
+                    "id": 647,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "415:6:25",
+                    "src": "415:6:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -577,27 +577,27 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "414:15:25"
+              "src": "414:15:9"
             },
-            "scope": 3244,
-            "src": "357:73:25",
+            "scope": 651,
+            "src": "357:73:9",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 3245,
-        "src": "197:235:25"
+        "scope": 652,
+        "src": "197:235:9"
       }
     ],
-    "src": "0:433:25"
+    "src": "0:433:9"
   },
   "legacyAST": {
     "attributes": {
-      "absolutePath": "project:/node_modules/@klaytn/contracts/token/KIP17/IKIP17Metadata.sol",
+      "absolutePath": "@klaytn/contracts/token/KIP17/IKIP17Metadata.sol",
       "exportedSymbols": {
         "IKIP17Metadata": [
-          3244
+          651
         ]
       }
     },
@@ -611,41 +611,41 @@
             ".0"
           ]
         },
-        "id": 3223,
+        "id": 630,
         "name": "PragmaDirective",
-        "src": "0:23:25"
+        "src": "0:23:9"
       },
       {
         "attributes": {
-          "SourceUnit": 3195,
-          "absolutePath": "project:/node_modules/@klaytn/contracts/token/KIP17/IKIP17.sol",
+          "SourceUnit": 602,
+          "absolutePath": "@klaytn/contracts/token/KIP17/IKIP17.sol",
           "file": "./IKIP17.sol",
-          "scope": 3245,
+          "scope": 652,
           "symbolAliases": [
             null
           ],
           "unitAlias": ""
         },
-        "id": 3224,
+        "id": 631,
         "name": "ImportDirective",
-        "src": "25:22:25"
+        "src": "25:22:9"
       },
       {
         "attributes": {
           "contractDependencies": [
-            2836,
-            3194
+            243,
+            601
           ],
           "contractKind": "contract",
           "documentation": "@title KIP-17 Non-Fungible Token Standard, optional metadata extension\n@dev See http://kips.klaytn.com/KIPs/kip-17-non_fungible_token",
           "fullyImplemented": false,
           "linearizedBaseContracts": [
-            3244,
-            3194,
-            2836
+            651,
+            601,
+            243
           ],
           "name": "IKIP17Metadata",
-          "scope": 3245
+          "scope": 652
         },
         "children": [
           {
@@ -657,17 +657,17 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "IKIP17",
-                  "referencedDeclaration": 3194,
+                  "referencedDeclaration": 601,
                   "type": "contract IKIP17"
                 },
-                "id": 3225,
+                "id": 632,
                 "name": "UserDefinedTypeName",
-                "src": "224:6:25"
+                "src": "224:6:9"
               }
             ],
-            "id": 3226,
+            "id": 633,
             "name": "InheritanceSpecifier",
-            "src": "224:6:25"
+            "src": "224:6:9"
           },
           {
             "attributes": {
@@ -680,7 +680,7 @@
                 null
               ],
               "name": "name",
-              "scope": 3244,
+              "scope": 651,
               "stateMutability": "view",
               "superFunction": null,
               "visibility": "external"
@@ -693,9 +693,9 @@
                   ]
                 },
                 "children": [],
-                "id": 3227,
+                "id": 634,
                 "name": "ParameterList",
-                "src": "250:2:25"
+                "src": "250:2:9"
               },
               {
                 "children": [
@@ -703,7 +703,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "",
-                      "scope": 3231,
+                      "scope": 638,
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "type": "string",
@@ -716,24 +716,24 @@
                           "name": "string",
                           "type": "string"
                         },
-                        "id": 3228,
+                        "id": 635,
                         "name": "ElementaryTypeName",
-                        "src": "276:6:25"
+                        "src": "276:6:9"
                       }
                     ],
-                    "id": 3229,
+                    "id": 636,
                     "name": "VariableDeclaration",
-                    "src": "276:13:25"
+                    "src": "276:13:9"
                   }
                 ],
-                "id": 3230,
+                "id": 637,
                 "name": "ParameterList",
-                "src": "275:15:25"
+                "src": "275:15:9"
               }
             ],
-            "id": 3231,
+            "id": 638,
             "name": "FunctionDefinition",
-            "src": "237:54:25"
+            "src": "237:54:9"
           },
           {
             "attributes": {
@@ -746,7 +746,7 @@
                 null
               ],
               "name": "symbol",
-              "scope": 3244,
+              "scope": 651,
               "stateMutability": "view",
               "superFunction": null,
               "visibility": "external"
@@ -759,9 +759,9 @@
                   ]
                 },
                 "children": [],
-                "id": 3232,
+                "id": 639,
                 "name": "ParameterList",
-                "src": "311:2:25"
+                "src": "311:2:9"
               },
               {
                 "children": [
@@ -769,7 +769,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "",
-                      "scope": 3236,
+                      "scope": 643,
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "type": "string",
@@ -782,24 +782,24 @@
                           "name": "string",
                           "type": "string"
                         },
-                        "id": 3233,
+                        "id": 640,
                         "name": "ElementaryTypeName",
-                        "src": "337:6:25"
+                        "src": "337:6:9"
                       }
                     ],
-                    "id": 3234,
+                    "id": 641,
                     "name": "VariableDeclaration",
-                    "src": "337:13:25"
+                    "src": "337:13:9"
                   }
                 ],
-                "id": 3235,
+                "id": 642,
                 "name": "ParameterList",
-                "src": "336:15:25"
+                "src": "336:15:9"
               }
             ],
-            "id": 3236,
+            "id": 643,
             "name": "FunctionDefinition",
-            "src": "296:56:25"
+            "src": "296:56:9"
           },
           {
             "attributes": {
@@ -812,7 +812,7 @@
                 null
               ],
               "name": "tokenURI",
-              "scope": 3244,
+              "scope": 651,
               "stateMutability": "view",
               "superFunction": null,
               "visibility": "external"
@@ -824,7 +824,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "tokenId",
-                      "scope": 3243,
+                      "scope": 650,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -837,19 +837,19 @@
                           "name": "uint256",
                           "type": "uint256"
                         },
-                        "id": 3237,
+                        "id": 644,
                         "name": "ElementaryTypeName",
-                        "src": "375:7:25"
+                        "src": "375:7:9"
                       }
                     ],
-                    "id": 3238,
+                    "id": 645,
                     "name": "VariableDeclaration",
-                    "src": "375:15:25"
+                    "src": "375:15:9"
                   }
                 ],
-                "id": 3239,
+                "id": 646,
                 "name": "ParameterList",
-                "src": "374:17:25"
+                "src": "374:17:9"
               },
               {
                 "children": [
@@ -857,7 +857,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "",
-                      "scope": 3243,
+                      "scope": 650,
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "type": "string",
@@ -870,42 +870,42 @@
                           "name": "string",
                           "type": "string"
                         },
-                        "id": 3240,
+                        "id": 647,
                         "name": "ElementaryTypeName",
-                        "src": "415:6:25"
+                        "src": "415:6:9"
                       }
                     ],
-                    "id": 3241,
+                    "id": 648,
                     "name": "VariableDeclaration",
-                    "src": "415:13:25"
+                    "src": "415:13:9"
                   }
                 ],
-                "id": 3242,
+                "id": 649,
                 "name": "ParameterList",
-                "src": "414:15:25"
+                "src": "414:15:9"
               }
             ],
-            "id": 3243,
+            "id": 650,
             "name": "FunctionDefinition",
-            "src": "357:73:25"
+            "src": "357:73:9"
           }
         ],
-        "id": 3244,
+        "id": 651,
         "name": "ContractDefinition",
-        "src": "197:235:25"
+        "src": "197:235:9"
       }
     ],
-    "id": 3245,
+    "id": 652,
     "name": "SourceUnit",
-    "src": "0:433:25"
+    "src": "0:433:9"
   },
   "compiler": {
     "name": "solc",
     "version": "0.5.6+commit.b259423e.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.4.5",
-  "updatedAt": "2022-05-12T06:07:46.356Z",
+  "schemaVersion": "3.4.7",
+  "updatedAt": "2022-05-31T01:50:09.164Z",
   "devdoc": {
     "details": "See http://kips.klaytn.com/KIPs/kip-17-non_fungible_token",
     "methods": {

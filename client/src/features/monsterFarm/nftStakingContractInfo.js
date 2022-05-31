@@ -1,5 +1,5 @@
 module.exports = {
-  nftFactoryAddress: "0x37698Df7FE3C639222276EBbe347413c502D6cB6",
+  nftFactoryAddress: "0x3BB5623705B5BF5aE1A936FF18300bCB66cBed4b",
   nftFactoryABI: [
     {
       constant: true,
