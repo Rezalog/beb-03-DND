@@ -303,7 +303,7 @@ const V2SwapModal = () => {
       getToken0();
       getToken1();
     }
-  }, [account, token0, token1]);
+  }, [tokens, token0, token1]);
 
   return (
     <ModalCenter>
