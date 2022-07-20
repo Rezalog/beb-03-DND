@@ -23,4 +23,4 @@ Dungeon & De-Fi, DND는 De-Fi를 잘 모르는 일반 유저도 게임의 형식
 
 #### 자세한 내용은 노션 페이지에서 확인 가능합니다.<br>
 
-https://www.notion.so/10-DND-353dd0dedaa24f10819d3cdfc2a60ade
+https://www.notion.so/10-DND-2811f23441864468b2e43242147d716e
